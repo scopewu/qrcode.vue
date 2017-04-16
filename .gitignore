@@ -47,3 +47,6 @@ jspm_packages
 
 #github pages
 github-page/
+
+#project build
+dist/
