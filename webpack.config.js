@@ -55,10 +55,12 @@ const webpackConfig = {
   ],
 }
 
-if (__DEV__ && __EXAMPLE__) {
+if (__EXAMPLE__) {
   webpackConfig.entry = {
     app: helpers('example/app.js')
   }
+
+  webpackConfig.output.path = helpers('github-page')
 
   webpackConfig.plugins.push(
     new HtmlWebpackPlugin({

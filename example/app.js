@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import QrcodeVue from '../dist/qrcode.vue.min';
+import QrcodeVue from '../';
 
 Vue.config.productionTip = false;
 

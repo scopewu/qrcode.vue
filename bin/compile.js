@@ -43,14 +43,14 @@ const webpackCompiler = webpackConfig => (
 
 const compile = () => {
   Promise.resolve().then(() => {
-    debug('Rm build dir.');
-    Rimraf(helpers(config.dir_dist), error => {
-      if (error) {
-        throw new error
-      }
+    //debug('Rm build dir.');
+    //Rimraf(helpers(config.dir_dist), error => {
+    //  if (error) {
+    //    throw new error
+    //  }
 
       return webpackCompiler(webpackConfig);
-    })
+    //})
   })
     .then(stats => {
       //success

@@ -5,8 +5,9 @@
   "main": "dist/qrcode.vue.min.js",
   "scripts": {
     "start": "better-npm-run start",
-    "clean": "npm run rimraf -- dist",
+    "clean": "rimraf -- dist",
     "compile": "better-npm-run compile",
+    "github:page": "better-npm-run github:page",
     "deploy": "better-npm-run deploy",
     "deploy:min": "better-npm-run deploy:min"
   },
@@ -24,15 +25,24 @@
         "DEBUG": "app:*"
       }
     },
-    "deploy": {
+    "github:page": {
       "command": "npm run compile",
+      "env": {
+        "EXAMPLE": "example",
+        "MINIMIZE": "minimize",
+        "NODE_ENV": "production",
+        "DEBUG": "app:*"
+      }
+    },
+    "deploy": {
+      "command": "npm run clean && npm run compile",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
       }
     },
     "deploy:min": {
-      "command": "npm run compile",
+      "command": "npm run clean && npm run compile",
       "env": {
         "MINIMIZE": "minimize",
         "NODE_ENV": "production",
