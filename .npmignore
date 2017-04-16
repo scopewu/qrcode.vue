@@ -19,3 +19,4 @@ config/
 .idea/
 webpack.config.js
 example/
+github-page/

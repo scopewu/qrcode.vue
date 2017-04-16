@@ -64,7 +64,7 @@
   "bugs": {
     "url": "https://github.com/scopewu/qrcode.vue/issues"
   },
-  "homepage": "https://github.com/scopewu/qrcode.vue#readme",
+  "homepage": "https://scopewu.github.io/qrcode.vue/",
   "dependencies": {
     "qr.js": "0.0.0"
   },
