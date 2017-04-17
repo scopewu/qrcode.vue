@@ -79,7 +79,9 @@
     mounted() {
       this.render();
 
-      this.$options._propKeys.forEach(key => this.$watch(key, this.render))
+      this.$watch('$props', this.render, {deep: true})
+
+      // this.$options._propKeys.forEach(key => this.$watch(key, this.render))
     }
   }
 </script>
