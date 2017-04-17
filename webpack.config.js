@@ -17,7 +17,7 @@ const NoEmitOnErrorsPlugin = require('webpack/lib/NoEmitOnErrorsPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const webpackConfig = {
-  devtool: __DEV__ ? 'cheap-module-source-map' : 'source-map',
+  devtool: __DEV__ ? 'cheap-module-source-map' : '',
   entry: {
     'qrcode.vue': helpers('./src/index.js')
   },

@@ -1,12 +1,12 @@
 import Vue from 'vue';
-import QrcodeVue from '../';
+import QrcodeVue from '../src/index';
 
 Vue.config.productionTip = false;
 
 new Vue({
   el: '#root',
   data: {
-    value: 'https://example',
+    value: 'https://example.com',
     size: 100,
     level: 'L',
     background: '#ffffff',

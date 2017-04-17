@@ -9,7 +9,8 @@
     "compile": "better-npm-run compile",
     "github:page": "better-npm-run github:page",
     "deploy": "better-npm-run deploy",
-    "deploy:min": "better-npm-run deploy:min"
+    "deploy:min": "better-npm-run deploy:min",
+    "prepublish": "npm run deploy:min"
   },
   "betterScripts": {
     "start": {
