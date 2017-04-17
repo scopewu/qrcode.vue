@@ -13,6 +13,7 @@ const ProgressPlugin = require('webpack/lib/ProgressPlugin');
 const HotModuleReplacementPlugin = require('webpack/lib/HotModuleReplacementPlugin');
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const NoEmitOnErrorsPlugin = require('webpack/lib/NoEmitOnErrorsPlugin');
+const BannerPlugin = require('webpack/lib/BannerPlugin');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -125,7 +126,8 @@ if (__PROD__ && __MINIMIZE__) {
         join_vars: true,
         negate_iife: false // we need this for lazy v8
       },
-    })
+    }),
+    new BannerPlugin('qrcode.vue, Author: scopewu, MIT License: http://www.opensource.org/licenses/mit-license.php')
   )
 }
 
