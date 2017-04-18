@@ -30,7 +30,7 @@
         default: ''
       },
       size: {
-        type: Number,
+        type: Number | String,
         default: 100
       },
       level: {
@@ -50,6 +50,7 @@
     methods: {
       render() {
         const {value, size, level, background, foreground} = this;
+        const _size = size >>> 0; // size to number
 
         // We'll use type===-1 to force QRCode to automatically pick the best type
         const qrCode = new QRCode(-1, ErrorCorrectLevel[level]);
@@ -60,10 +61,10 @@
 
         const ctx = canvas.getContext('2d');
         const cells = qrCode.modules;
-        const tileW = size / cells.length;
-        const tileH = size / cells.length;
+        const tileW = _size / cells.length;
+        const tileH = _size / cells.length;
         const scale = (window.devicePixelRatio || 1) / getBackingStorePixelRatio(ctx);
-        canvas.height = canvas.width = size * scale;
+        canvas.height = canvas.width = _size * scale;
         ctx.scale(scale, scale);
 
         cells.forEach(function (row, rdx) {
@@ -80,8 +81,6 @@
       this.render();
 
       this.$watch('$props', this.render, {deep: true})
-
-      // this.$options._propKeys.forEach(key => this.$watch(key, this.render))
     }
   }
 </script>
