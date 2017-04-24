@@ -33,7 +33,7 @@ const webpackConfig = {
     extensions: ['.js', '.vue', '.json'],
     modules: [helpers('src'), helpers('node_modules')],
     alias: {
-      'vue': helpers('node_modules/vue/dist/vue.js')
+      'vue': helpers(`node_modules/vue/dist/vue.${ __PROD__ ? 'min.' : ''}js`)
     }
   },
   module: {
@@ -68,7 +68,7 @@ if (__EXAMPLE__) {
       template: helpers('example/index.html'),
       inject: 'body',
       minify: {
-        collapseWhitespace: false
+        collapseWhitespace: __PROD__
       }
     })
   )
@@ -127,7 +127,7 @@ if (__PROD__ && __MINIMIZE__) {
         negate_iife: false // we need this for lazy v8
       },
     }),
-    new BannerPlugin('qrcode.vue, Author: scopewu, MIT License: http://www.opensource.org/licenses/mit-license.php')
+    new BannerPlugin('qrcode.vue, Author: scopewu, MIT License: https://github.com/scopewu/qrcode.vue/blob/master/LICENSE')
   )
 }
 
