@@ -16,13 +16,36 @@ import QrcodeVue from 'qrcode.vue';
 new Vue({
   el: '#root',
   data: {
-    value: 'https://example'
+    value: 'https://example.com'
   },
-  template: `<qrcode-vue :value="value"></qrcode-vue>`,
+  template: '<qrcode-vue :value="value"></qrcode-vue>',
   components: {
     QrcodeVue
   }
 })
+```
+Or single-file components with a *.vue extension:
+```html
+<template>
+<div>
+  <qrcode-vue :value="value" :size="size" level="H"></qrcode-vue>
+</div>
+</template>
+<script>
+import QrcodeVue from 'qrcode.vue';
+
+export default {
+  data() {
+    return {
+      value: 'https://example.com',
+      size: 300
+    }
+  },
+  components: {
+    QrcodeVue
+  }
+}
+</script>
 ```
 
 ## Component props
