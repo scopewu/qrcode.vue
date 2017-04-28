@@ -1,7 +1,7 @@
 {
   "name": "qrcode.vue",
   "version": "0.3.0",
-  "description": "A Vue component for QR_code.",
+  "description": "A Vue component for QRCode.",
   "main": "dist/qrcode.vue.min.js",
   "scripts": {
     "start": "better-npm-run start",
