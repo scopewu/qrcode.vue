@@ -1,5 +1,5 @@
 # qrcode.vue
-A Vue component for QR_code.
+A Vue component for QRCode.
 
 ## Start quick
 the `qrcode.vue` component can use in you Vue app.
