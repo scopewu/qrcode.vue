@@ -1,8 +1,9 @@
-import Vue from 'vue';
-import QrcodeVue from '../src/index';
+import Vue from 'vue'
+import QrcodeVue from '../src/index'
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
 
+/* eslint-disable no-new */
 new Vue({
   el: '#root',
   data: {

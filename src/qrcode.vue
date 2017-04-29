@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-  import QRCode from 'qr.js/lib/QRCode';
+  import QRCode from 'qr.js/lib/QRCode'
   import ErrorCorrectLevel from 'qr.js/lib/ErrorCorrectLevel'
 
   function getBackingStorePixelRatio(ctx) {
@@ -15,7 +15,7 @@
       ctx.oBackingStorePixelRatio ||
       ctx.backingStorePixelRatio ||
       1
-    );
+    )
   }
 
   export default {
@@ -49,36 +49,36 @@
     },
     methods: {
       render() {
-        const {value, size, level, background, foreground} = this;
-        const _size = size >>> 0; // size to number
+        const {value, size, level, background, foreground} = this
+        const _size = size >>> 0 // size to number
 
         // We'll use type===-1 to force QRCode to automatically pick the best type
-        const qrCode = new QRCode(-1, ErrorCorrectLevel[level]);
-        qrCode.addData(value);
-        qrCode.make();
+        const qrCode = new QRCode(-1, ErrorCorrectLevel[level])
+        qrCode.addData(value)
+        qrCode.make()
 
-        const canvas = this.$refs['qrcode-vue'];
+        const canvas = this.$refs['qrcode-vue']
 
-        const ctx = canvas.getContext('2d');
-        const cells = qrCode.modules;
-        const tileW = _size / cells.length;
-        const tileH = _size / cells.length;
-        const scale = (window.devicePixelRatio || 1) / getBackingStorePixelRatio(ctx);
-        canvas.height = canvas.width = _size * scale;
-        ctx.scale(scale, scale);
+        const ctx = canvas.getContext('2d')
+        const cells = qrCode.modules
+        const tileW = _size / cells.length
+        const tileH = _size / cells.length
+        const scale = (window.devicePixelRatio || 1) / getBackingStorePixelRatio(ctx)
+        canvas.height = canvas.width = _size * scale
+        ctx.scale(scale, scale)
 
         cells.forEach(function (row, rdx) {
           row.forEach(function (cell, cdx) {
-            ctx.fillStyle = cell ? foreground : background;
-            const w = (Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW));
-            const h = (Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH));
-            ctx.fillRect(Math.round(cdx * tileW), Math.round(rdx * tileH), w, h);
-          });
-        });
+            ctx.fillStyle = cell ? foreground : background
+            const w = (Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW))
+            const h = (Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH))
+            ctx.fillRect(Math.round(cdx * tileW), Math.round(rdx * tileH), w, h)
+          })
+        })
       }
     },
     mounted() {
-      this.render();
+      this.render()
 
       this.$watch('$props', this.render, {deep: true})
     }
