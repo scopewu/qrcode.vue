@@ -1,21 +1,21 @@
-const helpers = require('./config/helpers');
-const config = require('./config');
-const debug = require('debug')('app:webpack');
+const helpers = require('./config/helpers')
+const config = require('./config')
+const debug = require('debug')('app:webpack')
 
-const {__DEV__, __PROD__, __EXAMPLE__, __MINIMIZE__} = config.globals;
+const {__DEV__, __PROD__, __EXAMPLE__, __MINIMIZE__} = config.globals
 
 /*
  * webpack plugins
  * **/
-const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
-const DefinePlugin = require('webpack/lib/DefinePlugin');
-const ProgressPlugin = require('webpack/lib/ProgressPlugin');
-const HotModuleReplacementPlugin = require('webpack/lib/HotModuleReplacementPlugin');
-const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
-const NoEmitOnErrorsPlugin = require('webpack/lib/NoEmitOnErrorsPlugin');
-const BannerPlugin = require('webpack/lib/BannerPlugin');
+const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin')
+const DefinePlugin = require('webpack/lib/DefinePlugin')
+const ProgressPlugin = require('webpack/lib/ProgressPlugin')
+const HotModuleReplacementPlugin = require('webpack/lib/HotModuleReplacementPlugin')
+const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin')
+const NoEmitOnErrorsPlugin = require('webpack/lib/NoEmitOnErrorsPlugin')
+const BannerPlugin = require('webpack/lib/BannerPlugin')
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const webpackConfig = {
   devtool: __DEV__ ? 'cheap-module-source-map' : '',
@@ -33,7 +33,7 @@ const webpackConfig = {
     extensions: ['.js', '.vue', '.json'],
     modules: [helpers('src'), helpers('node_modules')],
     alias: {
-      'vue': helpers(`node_modules/vue/dist/vue.${ __PROD__ ? 'min.' : ''}js`)
+      'vue': helpers(`node_modules/vue/dist/vue.${__PROD__ ? 'min.' : ''}js`)
     }
   },
   module: {
@@ -62,7 +62,7 @@ const webpackConfig = {
   plugins: [
     new DefinePlugin(config.globals),
     new ProgressPlugin()
-  ],
+  ]
 }
 
 if (__EXAMPLE__) {
@@ -91,8 +91,8 @@ if (__DEV__) {
   )
 
   webpackConfig.devServer = {
-    //port: '',
-    //host: '',
+    // port: '',
+    // host: '',
     hot: true,
     inline: true,
     historyApiFallback: true,
@@ -134,7 +134,7 @@ if (__PROD__ && __MINIMIZE__) {
         if_return: true,
         join_vars: true,
         negate_iife: false // we need this for lazy v8
-      },
+      }
     }),
     new BannerPlugin('qrcode.vue, Author: scopewu, MIT License: https://github.com/scopewu/qrcode.vue/blob/master/LICENSE')
   )
