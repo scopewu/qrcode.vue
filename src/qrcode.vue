@@ -1,6 +1,6 @@
 <template>
-  <div :class="className">
-    <canvas :style="{width: size, height: size}" :height="size" :width="size" ref="qrcode-vue"></canvas>
+  <div :class="className" :value="value" :level="level" :background="background" :foreground="foreground">
+    <canvas :style="{width: `${size}px`, height: `${size}px`}" :height="size" :width="size" ref="qrcode-vue"></canvas>
   </div>
 </template>
 <script>
@@ -31,7 +31,8 @@
       },
       size: {
         type: Number | String,
-        default: 100
+        default: 100,
+        validator: s => isNaN(Number(s)) !== true
       },
       level: {
         type: String,
@@ -77,10 +78,11 @@
         })
       }
     },
+    updated() {
+      this.render()
+    },
     mounted() {
       this.render()
-
-      this.$watch('$props', this.render, {deep: true})
     }
   }
 </script>

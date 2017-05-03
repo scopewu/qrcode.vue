@@ -15,13 +15,13 @@ new Vue({
   },
   template: `<div><ul>
   <li>
-  <label>Value: 
+  <label>Value:
   <textarea v-model="value" cols="50" rows="5"></textarea>
   </label>
   </li>
-  <li><label>Size: 
+  <li><label>Size:
   <input type="range" v-model="size" min="100" max="800"></label></li>
-  <li><label>Level: 
+  <li><label>Level:
   <select v-model="level">
   <option value="L">L</option>
   <option value="Q">Q</option>
