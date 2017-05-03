@@ -1,6 +1,6 @@
 <template>
   <div :class="className" :value="value" :level="level" :background="background" :foreground="foreground">
-    <canvas :style="{width: `${size}px`, height: `${size}px`}" :height="size" :width="size" ref="qrcode-vue"></canvas>
+    <canvas :height="size" :width="size" ref="qrcode-vue"></canvas>
   </div>
 </template>
 <script>
