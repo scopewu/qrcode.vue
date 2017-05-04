@@ -10,6 +10,7 @@
     "github:page": "better-npm-run github:page",
     "deploy": "better-npm-run deploy",
     "deploy:min": "better-npm-run deploy:min",
+    "build": "npm run clean && npm run deploy && npm run deploy:min",
     "lint": "better-npm-run lint",
     "prepublish": "npm run deploy:min"
   },
@@ -37,14 +38,14 @@
       }
     },
     "deploy": {
-      "command": "npm run clean && npm run compile",
+      "command": "npm run compile",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
       }
     },
     "deploy:min": {
-      "command": "npm run clean && npm run compile",
+      "command": "npm run compile",
       "env": {
         "MINIMIZE": "minimize",
         "NODE_ENV": "production",

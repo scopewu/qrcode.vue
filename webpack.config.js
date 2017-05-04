@@ -3,6 +3,7 @@ const config = require('./config')
 const debug = require('debug')('app:webpack')
 
 const {__DEV__, __PROD__, __EXAMPLE__, __MINIMIZE__} = config.globals
+const {version} = require('./package.json')
 
 /*
  * webpack plugins
@@ -25,7 +26,7 @@ const webpackConfig = {
   output: {
     path: helpers(config.dir_dist),
     publicPath: '',
-    filename: __DEV__ ? '[name].js' : '[name].min.js',
+    filename: __PROD__ && __MINIMIZE__ ? '[name].min.js' : '[name].js',
     library: '[name]',
     libraryTarget: 'umd'
   },
@@ -135,9 +136,12 @@ if (__PROD__ && __MINIMIZE__) {
         join_vars: true,
         negate_iife: false // we need this for lazy v8
       }
-    }),
-    new BannerPlugin('qrcode.vue, Author: scopewu, MIT License: https://github.com/scopewu/qrcode.vue/blob/master/LICENSE')
+    })
   )
+}
+
+if (__PROD__) {
+  webpackConfig.plugins.push(new BannerPlugin(`qrcode.vue v${version}, Author: scopewu, MIT License: https://github.com/scopewu/qrcode.vue/blob/master/LICENSE`))
 }
 
 module.exports = webpackConfig
