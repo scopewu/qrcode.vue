@@ -1,6 +1,9 @@
 # qrcode.vue
 A Vue component for QRCode.
 
+[![Build Status](https://travis-ci.org/scopewu/qrcode.vue.svg?branch=master)](https://travis-ci.org/scopewu/qrcode.vue)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/scopewu/qrcode.vue/master/LICENSE)
+
 ## Start quick
 the `qrcode.vue` component can use in you Vue app.
 ```bash
