@@ -3,6 +3,10 @@
 
 const isProd = process.env.NODE_ENV === 'production'
 
+const ERROR = 2
+const WARN = 1
+const OFF = 0
+
 module.exports = {
   root: true,
   parser: 'babel-eslint',
@@ -26,21 +30,21 @@ module.exports = {
   // add your custom rules here
   'rules': {
     // allow paren-less arrow functions
-    'arrow-parens': 0,
+    'arrow-parens': OFF,
     // allow async-await
-    'generator-star-spacing': 0,
+    'generator-star-spacing': OFF,
     // allow debugger during development
-    'no-debugger': isProd ? 2 : 0,
+    'no-debugger': isProd ? ERROR : OFF,
     // see: http://eslint.org/docs/rules/space-before-function-paren
-    'space-before-function-paren': ['error', {'anonymous': 'always', 'named': 'never', 'asyncArrow': 'always'}],
-    'consistent-return': ['error', {'treatUndefinedAsUnspecified': true}],
+    'space-before-function-paren': [ERROR, {'anonymous': 'always', 'named': 'never', 'asyncArrow': 'always'}],
+    'consistent-return': [ERROR, {'treatUndefinedAsUnspecified': true}],
     // see: http://eslint.org/docs/rules/no-await-in-loop
-    'no-await-in-loop': 2,
+    'no-await-in-loop': ERROR,
     // use let or const instead
-    'no-var': 2,
-    'no-prototype-builtins': 1,
-    'no-multiple-empty-lines': isProd ? 1 : 0,
-    'no-unused-vars': isProd ? 2 : 1,
-    'one-var': 0
+    'no-var': ERROR,
+    'no-prototype-builtins': WARN,
+    'no-multiple-empty-lines': isProd ? WARN : OFF,
+    'no-unused-vars': isProd ? ERROR : WARN,
+    'one-var': OFF
   }
 }
