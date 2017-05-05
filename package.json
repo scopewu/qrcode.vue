@@ -12,7 +12,7 @@
     "deploy:min": "better-npm-run deploy:min",
     "build": "npm run clean && npm run deploy && npm run deploy:min",
     "lint": "better-npm-run lint",
-    "prepublish": "npm run deploy:min"
+    "prepublish": "npm run build"
   },
   "betterScripts": {
     "start": {
