@@ -2,7 +2,7 @@
   "name": "qrcode.vue",
   "version": "1.1.1",
   "description": "A Vue component for QRCode.",
-  "main": "dist/qrcode.vue.min.js",
+  "main": "dist/qrcode.vue.js",
   "scripts": {
     "start": "better-npm-run start",
     "clean": "rimraf -- dist",
