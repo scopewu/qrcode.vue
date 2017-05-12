@@ -34,7 +34,7 @@ const webpackConfig = {
     extensions: ['.js', '.vue', '.json'],
     modules: [helpers('src'), helpers('node_modules')],
     alias: {
-      'vue': helpers(`node_modules/vue/dist/vue.${__PROD__ ? 'min.' : ''}js`)
+      'vue': helpers(`node_modules/vue/dist/vue.esm.js`)
     }
   },
   module: {
