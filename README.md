@@ -1,13 +1,13 @@
 # qrcode.vue
-A Vue component for QRCode.
+A Vue.js component for QRCode.
 
 [![Build Status](https://travis-ci.org/scopewu/qrcode.vue.svg?branch=master)](https://travis-ci.org/scopewu/qrcode.vue)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/scopewu/qrcode.vue/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
 
 ## Start quick
-the `qrcode.vue` component can use in you Vue app.
+the `qrcode.vue` component can use in you Vue.js app.
 ```bash
-npm install --save qrcode.vue
+npm install --save qrcode.vue # yarn add qrcode.vue
 ```
 
 ## Usage
@@ -62,7 +62,7 @@ export default {
 |`background`|`String`|`#fff`| qrcode background color|
 |`foreground`|`String`|`#000`| qrcode color|
 
-## thanks
+## Thanks
 ["qr.js"](https://github.com/defunctzombie/qr.js) ["qrcode.react"](https://github.com/zpao/qrcode.react)
 
 ## License
