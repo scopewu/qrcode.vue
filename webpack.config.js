@@ -27,7 +27,7 @@ const webpackConfig = {
     path: helpers(config.dir_dist),
     publicPath: '',
     filename: __PROD__ && __MINIMIZE__ ? '[name].min.js' : '[name].js',
-    library: '[name]',
+    library: 'QrcodeVue',
     libraryTarget: 'umd'
   },
   resolve: {
