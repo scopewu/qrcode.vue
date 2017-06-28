@@ -15,6 +15,7 @@ const HotModuleReplacementPlugin = require('webpack/lib/HotModuleReplacementPlug
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin')
 const NoEmitOnErrorsPlugin = require('webpack/lib/NoEmitOnErrorsPlugin')
 const BannerPlugin = require('webpack/lib/BannerPlugin')
+const ModuleConcatenationPlugin = require('webpack/lib/optimize/ModuleConcatenationPlugin')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
@@ -62,7 +63,8 @@ const webpackConfig = {
   },
   plugins: [
     new DefinePlugin(config.globals),
-    new ProgressPlugin()
+    new ProgressPlugin(),
+    new ModuleConcatenationPlugin()
   ]
 }
 
