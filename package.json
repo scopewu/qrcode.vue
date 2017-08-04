@@ -12,7 +12,7 @@
     "deploy:min": "better-npm-run deploy:min",
     "build": "npm run clean && npm run deploy && npm run deploy:min",
     "lint": "better-npm-run lint",
-    "prepublish": "npm run build"
+    "rollup": "rollup -c ./config/rollup.config.js"
   },
   "betterScripts": {
     "start": {
@@ -101,6 +101,7 @@
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-replace": "^1.1.1",
     "vue": "^2.4.1",
     "webpack": "^3.3.0",
     "webpack-dev-server": "^2.5.1"
