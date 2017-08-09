@@ -87,7 +87,7 @@ export default {
   format: 'umd',
   moduleName: 'QrcodeVue',
   external: ['vue'],
-  sourceMap: true,
+  sourceMap: false,
   plugins: [
     resolve({
       jsnext: true,
