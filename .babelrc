@@ -3,6 +3,7 @@
     ["es2015", {"modules": false}]
   ],
   "plugins": [
-    "syntax-dynamic-import"
+    "syntax-dynamic-import",
+    "transform-vue-jsx"
   ]
 }
