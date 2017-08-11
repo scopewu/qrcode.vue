@@ -38,6 +38,9 @@ const webpackConfig = {
       'vue': helpers(`node_modules/vue/dist/vue.esm.js`)
     }
   },
+  externals: {
+    vue: 'Vue'
+  },
   module: {
     rules: [
       {
@@ -56,8 +59,27 @@ const webpackConfig = {
       {
         test: /\.js$/,
         use: 'babel-loader',
-        include: [helpers('src'), helpers('example')],
-        exclude: [/node_modules/]
+        include: [helpers('src'), helpers('example')]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader',
+            options: {
+              minimize: __PROD__,
+              sourceMap: __DEV__
+            }
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              minimize: __PROD__,
+              sourceMap: __DEV__
+            }
+          }
+        ],
+        include: [helpers('src'), helpers('example')]
       }
     ]
   },
