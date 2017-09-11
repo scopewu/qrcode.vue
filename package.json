@@ -12,7 +12,8 @@
     "deploy:min": "better-npm-run deploy:min",
     "build": "better-npm-run build",
     "lint": "better-npm-run lint",
-    "rollup": "rollup -c ./config/rollup.config.js"
+    "rollup": "rollup -c ./config/rollup.config.js",
+    "prepublish": "npm run lint && npm run rollup"
   },
   "betterScripts": {
     "start": {
@@ -82,6 +83,9 @@
     "url": "https://github.com/scopewu/qrcode.vue/issues"
   },
   "homepage": "https://scopewu.github.io/qrcode.vue/",
+  "peerDependencies": {
+    "vue": "^2.0.0"
+  },
   "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.25.0",
