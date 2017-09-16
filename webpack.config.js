@@ -39,7 +39,7 @@ const webpackConfig = {
     }
   },
   externals: {
-    vue: 'Vue'
+    // vue: 'Vue'
   },
   module: {
     rules: [
@@ -165,6 +165,8 @@ if (__PROD__ && __MINIMIZE__) {
 }
 
 if (__PROD__) {
+  webpackConfig.externals.vue = 'Vue'
+
   webpackConfig.plugins.push(new BannerPlugin(`qrcode.vue v${version}, Author: scopewu, MIT License: https://github.com/scopewu/qrcode.vue/blob/master/LICENSE`))
 }
 
