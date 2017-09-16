@@ -13,7 +13,7 @@
     "build": "better-npm-run build",
     "lint": "better-npm-run lint",
     "rollup": "rollup -c ./config/rollup.config.js",
-    "prepublish": "npm run lint && npm run rollup"
+    "prepublish": "npm run build"
   },
   "betterScripts": {
     "start": {
@@ -54,7 +54,7 @@
       }
     },
     "build": {
-      "command": "npm run clean && npm run rollup",
+      "command": "npm run clean && npm run lint && npm run rollup",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
