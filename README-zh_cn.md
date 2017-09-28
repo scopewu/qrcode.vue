@@ -1,19 +1,16 @@
 # qrcode.vue
-A Vue.js component for QRCode.
+一款 Vue.js 二维码组件.
 
 [![Build Status](https://travis-ci.org/scopewu/qrcode.vue.svg?branch=master)](https://travis-ci.org/scopewu/qrcode.vue)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
 
-## Language
-[中文简体](./README-zh_cn.md)
-
-## Start quick
-the `qrcode.vue` component can use in you Vue.js app.
+## 快速开始
+快速添加 `qrcode.vue` 组件到 app 中
 ```bash
 npm install --save qrcode.vue # yarn add qrcode.vue
 ```
 
-## Usage
+## 使用例子
 e.g.
 ```javascript
 import Vue from 'vue';
@@ -30,7 +27,7 @@ new Vue({
   }
 })
 ```
-Or single-file components with a *.vue extension:
+或者，在独有单文件扩展 *.vue 中使用：
 ```html
 <template>
 <div>
@@ -56,17 +53,17 @@ export default {
 
 ## Component props
 
-| prop | type | default value | expain |
+| 属性 | 类型 | 默认值 | 属性描述 |
 |------|------|--------------|---------|
-|`value`|`String`|`''`| qrcode value |
-|`className`|`String`|`''`| qrcode element className |
-|`size`|`Number`|`100`| qrcode element size |
-|`level`|`String`|`L`| Error correction level ('L', 'M', 'Q', 'H') |
-|`background`|`String`|`#fff`| qrcode background color|
-|`foreground`|`String`|`#000`| qrcode color|
+| value | String |`''`| qrcode value |
+| className | String |`''`| qrcode element className |
+| size | Number |`100`| qrcode element size |
+| level | String |`L`| Error correction level ('L', 'M', 'Q', 'H') |
+| background | String |`#fff`| qrcode background color|
+| foreground | String |`#000`| qrcode color|
 
-## Thanks
+## 参考代码
 ["qr.js"](https://github.com/defunctzombie/qr.js) ["qrcode.react"](https://github.com/zpao/qrcode.react)
 
-## License
+## 软件许可
 copyright &copy; 2017 scopewu, license by [MIT](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
