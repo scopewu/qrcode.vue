@@ -12,28 +12,31 @@ const banner =
 
 const rollupConfig = {
   'umd': {
-    entry: helpers('src/index.js'),
-    dest: helpers(config.dir_dist, 'qrcode.vue.js'),
-    format: 'umd',
-    sourceMap: false
+    input: helpers('src/index.js'),
+    output: {
+      file: helpers(config.dir_dist, 'qrcode.vue.js'),
+      format: 'umd'
+    },
+    sourcemap: false
   },
   'es': {
-    entry: helpers('src/index.js'),
-    dest: helpers(config.dir_dist, 'qrcode.vue.es.js'),
-    format: 'es',
-    sourceMap: false
+    input: helpers('src/index.js'),
+    output: {
+      file: helpers(config.dir_dist, 'qrcode.vue.es.js'),
+      format: 'es'
+    },
+    sourcemap: false
   }
 }
 
 function getConfig(option) {
   return {
-    entry: option.entry,
-    dest: option.dest,
-    format: option.format,
+    input: option.input,
+    output: option.output,
     banner,
-    moduleName: 'QrcodeVue',
+    name: 'QrcodeVue',
     external: ['vue'],
-    sourceMap: option.sourceMap,
+    sourcemap: option.sourcemap,
     plugins: [
       resolve({
         jsnext: true,
@@ -82,12 +85,14 @@ module.exports = {
 }
 
 export default {
-  entry: helpers('src/index.js'),
-  dest: helpers(config.dir_dist, 'qrcode.vue.js'),
-  format: 'umd',
-  moduleName: 'QrcodeVue',
+  input: helpers('src/index.js'),
+  output: {
+    file: helpers(config.dir_dist, 'qrcode.vue.js'),
+    format: 'umd'
+  },
+  name: 'QrcodeVue',
   external: ['vue'],
-  sourceMap: false,
+  sourcemap: false,
   plugins: [
     resolve({
       jsnext: true,
