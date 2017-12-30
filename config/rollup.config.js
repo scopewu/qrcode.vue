@@ -5,10 +5,15 @@ const replace = require('rollup-plugin-replace')
 
 const helpers = require('./helpers')
 const config = require('./index')
-const {version} = require('../package.json')
+const {version, description} = require('../package.json')
 
 const banner =
-  '/*! qrcode.vue v' + version + ', (c) 2017-' + new Date().getFullYear() + ' scopewu, MIT License.*/'
+  '/*!' +
+  '\n * qrcode.vue v' + version +
+  '\n * ' + description +
+  '\n * © 2017-' + new Date().getFullYear() + ' @scopewu' +
+  '\n * MIT License.' +
+  '\n */'
 
 const rollupConfig = {
   'umd': {
@@ -88,11 +93,12 @@ export default {
   input: helpers('src/index.js'),
   output: {
     file: helpers(config.dir_dist, 'qrcode.vue.js'),
-    format: 'umd'
+    format: 'umd',
+    name: 'QrcodeVue',
+    sourcemap: false,
+    banner
   },
-  name: 'QrcodeVue',
   external: ['vue'],
-  sourcemap: false,
   plugins: [
     resolve({
       jsnext: true,

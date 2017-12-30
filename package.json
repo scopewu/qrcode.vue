@@ -114,7 +114,7 @@
     "html-webpack-plugin": "^2.30.1",
     "qr.js": "0.0.0",
     "rimraf": "^2.6.2",
-    "rollup": "^0.50.0",
+    "rollup": "^0.53.1",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.0",
