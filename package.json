@@ -3,6 +3,9 @@
   "version": "1.5.1",
   "description": "A Vue component for QRCode.",
   "main": "dist/qrcode.vue.js",
+  "module": "dist/qrcode.vue.esm.js",
+  "unpkg": "dist/qrcode.vue.js",
+  "jsdelivr": "dist/qrcode.vue.js",
   "scripts": {
     "start": "better-npm-run start",
     "clean": "rimraf -- dist",
@@ -13,6 +16,7 @@
     "build": "better-npm-run build",
     "lint": "better-npm-run lint",
     "rollup": "rollup -c ./config/rollup.config.js",
+    "compress": "uglifyjs ./dist/qrcode.vue.js -o ./dist/qrcode.vue.min.js -c -m --comments /^!/ --source-map url=qrcode.vue.min.js.map",
     "prepublish": "npm run build"
   },
   "betterScripts": {
@@ -54,7 +58,7 @@
       }
     },
     "build": {
-      "command": "npm run clean && npm run lint && npm run rollup",
+      "command": "npm run clean && npm run lint && npm run rollup && npm run compress",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
@@ -120,6 +124,7 @@
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-replace": "^2.0.0",
     "style-loader": "^0.19.0",
+    "uglify-js": "^3.3.5",
     "vue": "^2.5.2",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.3"

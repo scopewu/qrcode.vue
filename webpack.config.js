@@ -34,6 +34,7 @@ const webpackConfig = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     modules: [helpers('src'), helpers('node_modules')],
+    mainFields: ['module', 'main'],
     alias: {
       'vue': helpers(`node_modules/vue/dist/vue.esm.js`)
     }
