@@ -13,12 +13,26 @@ function getBackingStorePixelRatio(ctx) {
 }
 
 const QrcodeVue = {
-  render(h) {
+  render(createElement) {
     const {className, value, level, background, foreground, size} = this
-    return (
-      <div class={className} value={value} level={level} background={background} foreground={foreground}>
-        <canvas height={size} width={size} style={{width: `${size}px`, height: `${size}px`}} ref='qrcode-vue' />
-      </div>
+
+    return createElement(
+      'div',
+      {
+        'class': className,
+        attrs: {value, level, background, foreground}
+      },
+      [
+        createElement(
+          'canvas',
+          {
+            attrs: {height: size, width: size},
+            style: {width: size + 'px', height: size + 'px'},
+            ref: 'qrcode-vue'
+          },
+          []
+        )
+      ]
     )
   },
   props: {
