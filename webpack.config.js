@@ -66,6 +66,7 @@ const webpackConfig = {
           {
             loader: 'css-loader',
             options: {
+              minimize: __PROD__,
               sourceMap: __DEV__
             }
           }
