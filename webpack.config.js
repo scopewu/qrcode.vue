@@ -2,8 +2,7 @@ const helpers = require('./config/helpers')
 const config = require('./config')
 const debug = require('debug')('app:webpack')
 
-const {__DEV__, __PROD__, __EXAMPLE__, __MINIMIZE__} = config.globals
-const {version} = require('./package.json')
+const {__DEV__, __PROD__} = config.globals
 
 /*
  * webpack plugins
@@ -14,22 +13,19 @@ const ProgressPlugin = require('webpack/lib/ProgressPlugin')
 const HotModuleReplacementPlugin = require('webpack/lib/HotModuleReplacementPlugin')
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin')
 const NoEmitOnErrorsPlugin = require('webpack/lib/NoEmitOnErrorsPlugin')
-const BannerPlugin = require('webpack/lib/BannerPlugin')
 const ModuleConcatenationPlugin = require('webpack/lib/optimize/ModuleConcatenationPlugin')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const webpackConfig = {
-  devtool: __DEV__ ? 'cheap-module-source-map' : '',
+  devtool: __DEV__ ? 'cheap-module-source-map' : false,
   entry: {
-    'qrcode.vue': helpers('./src/index.js')
+    'main': helpers('example/app.js')
   },
   output: {
     path: helpers(config.dir_dist),
     publicPath: '',
-    filename: __PROD__ && __MINIMIZE__ ? '[name].min.js' : '[name].js',
-    library: 'QrcodeVue',
-    libraryTarget: 'umd'
+    filename: __PROD__ ? '[name].[hash:8].js' : '[name].js',
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
@@ -54,10 +50,6 @@ const webpackConfig = {
         }
       },
       {
-        test: /\.vue$/,
-        use: 'vue-loader'
-      },
-      {
         test: /\.js$/,
         use: 'babel-loader',
         include: [helpers('src'), helpers('example')]
@@ -68,14 +60,12 @@ const webpackConfig = {
           {
             loader: 'style-loader',
             options: {
-              minimize: __PROD__,
               sourceMap: __DEV__
             }
           },
           {
             loader: 'css-loader',
             options: {
-              minimize: __PROD__,
               sourceMap: __DEV__
             }
           }
@@ -87,18 +77,7 @@ const webpackConfig = {
   plugins: [
     new DefinePlugin(config.globals),
     new ProgressPlugin(),
-    new ModuleConcatenationPlugin()
-  ]
-}
-
-if (__EXAMPLE__) {
-  webpackConfig.entry = {
-    app: helpers('example/app.js')
-  }
-
-  webpackConfig.output.path = helpers('github-page')
-
-  webpackConfig.plugins.push(
+    new ModuleConcatenationPlugin(),
     new HtmlWebpackPlugin({
       template: helpers('example/index.html'),
       inject: 'body',
@@ -106,7 +85,7 @@ if (__EXAMPLE__) {
         collapseWhitespace: __PROD__
       }
     })
-  )
+  ]
 }
 
 if (__DEV__) {
@@ -129,12 +108,9 @@ if (__DEV__) {
   }
 }
 
-if (__PROD__ && !__MINIMIZE__) {
-  //
-}
-
-if (__PROD__ && __MINIMIZE__) {
+if (__PROD__) {
   debug('code minimize')
+  webpackConfig.externals.vue = 'Vue'
   webpackConfig.plugins.push(
     new UglifyJsPlugin({
       sourceMap: true,
@@ -163,12 +139,6 @@ if (__PROD__ && __MINIMIZE__) {
       }
     })
   )
-}
-
-if (__PROD__) {
-  webpackConfig.externals.vue = 'Vue'
-
-  webpackConfig.plugins.push(new BannerPlugin(`qrcode.vue v${version}, Author: scopewu, MIT License: https://github.com/scopewu/qrcode.vue/blob/master/LICENSE`))
 }
 
 module.exports = webpackConfig

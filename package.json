@@ -7,70 +7,15 @@
   "unpkg": "dist/qrcode.vue.js",
   "jsdelivr": "dist/qrcode.vue.js",
   "scripts": {
-    "start": "better-npm-run start",
+    "start": "webpack-dev-server --config webpack.config.js --open --progress --profile --watch --content-base src/",
     "clean": "rimraf -- dist",
-    "compile": "better-npm-run compile",
-    "github:page": "better-npm-run github:page",
-    "deploy": "better-npm-run deploy",
-    "deploy:min": "better-npm-run deploy:min",
-    "build": "better-npm-run build",
-    "lint": "better-npm-run lint",
-    "rollup": "rollup -c ./config/rollup.config.js",
-    "compress": "uglifyjs ./dist/qrcode.vue.js -o ./dist/qrcode.vue.min.js -c -m --comments /^!/ --source-map url=qrcode.vue.min.js.map",
+    "compile": "npm run lint && cross-env NODE_ENV=production node ./bin/compile",
+    "build:es": "cross-env NODE_ENV=es rollup -c",
+    "build:umd": "cross-env NODE_ENV=development rollup -c",
+    "build:umd:min": "cross-env NODE_ENV=production rollup -c",
+    "build": "npm run build:es && npm run build:umd && npm run build:umd:min",
+    "lint": "eslint --ext .js,.vue src",
     "prepublish": "npm run build"
-  },
-  "betterScripts": {
-    "start": {
-      "command": "webpack-dev-server --config webpack.config.js --open --progress --profile --watch --content-base src/",
-      "env": {
-        "EXAMPLE": "example",
-        "DEBUG": "app:*"
-      }
-    },
-    "compile": {
-      "command": "npm run lint && node ./bin/compile",
-      "env": {
-        "DEBUG": "app:*"
-      }
-    },
-    "github:page": {
-      "command": "rimraf -- github-page && npm run compile",
-      "env": {
-        "EXAMPLE": "example",
-        "MINIMIZE": "minimize",
-        "NODE_ENV": "production",
-        "DEBUG": "app:*"
-      }
-    },
-    "deploy": {
-      "command": "npm run compile",
-      "env": {
-        "NODE_ENV": "production",
-        "DEBUG": "app:*"
-      }
-    },
-    "deploy:min": {
-      "command": "npm run compile",
-      "env": {
-        "MINIMIZE": "minimize",
-        "NODE_ENV": "production",
-        "DEBUG": "app:*"
-      }
-    },
-    "build": {
-      "command": "npm run clean && npm run lint && npm run rollup && npm run compress",
-      "env": {
-        "NODE_ENV": "production",
-        "DEBUG": "app:*"
-      }
-    },
-    "lint": {
-      "command": "eslint --ext .js,.vue src",
-      "env": {
-        "NODE_ENV": "production",
-        "DEBUG": "app:*"
-      }
-    }
   },
   "repository": {
     "type": "git",
@@ -94,37 +39,37 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.39",
-    "@babel/polyfill": "^7.0.0-beta.39",
-    "@babel/preset-env": "^7.0.0-beta.39",
-    "@babel/preset-stage-1": "^7.0.0-beta.39",
-    "@babel/preset-stage-2": "^7.0.0-beta.39",
-    "babel-eslint": "^8.2.1",
-    "babel-loader": "^8.0.0-beta.0",
-    "better-npm-run": "0.1.0",
-    "css-loader": "^0.28.7",
+    "@babel/core": "^7.0.0-beta.44",
+    "@babel/polyfill": "^7.0.0-beta.44",
+    "@babel/preset-env": "^7.0.0-beta.44",
+    "@babel/preset-stage-1": "^7.0.0-beta.44",
+    "@babel/preset-stage-2": "^7.0.0-beta.44",
+    "babel-eslint": "^8.2.2",
+    "babel-loader": "^8.0.0-beta.2",
+    "cross-env": "^5.1.4",
+    "css-loader": "^0.28.11",
     "debug": "^3.1.0",
-    "eslint": "^4.10.0",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-friendly-formatter": "^3.0.0",
-    "eslint-loader": "^1.9.0",
-    "eslint-plugin-html": "^3.2.2",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-node": "^5.2.1",
-    "eslint-plugin-promise": "^3.6.0",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-friendly-formatter": "^4.0.0",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-html": "^4.0.2",
+    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
-    "html-webpack-plugin": "^2.30.1",
-    "qr.js": "0.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "qr.js": "^0.0.0",
     "rimraf": "^2.6.2",
-    "rollup": "^0.53.1",
+    "rollup": "^0.57.1",
     "rollup-plugin-babel": "v4.0.0-beta.1",
-    "rollup-plugin-commonjs": "^8.2.6",
-    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-replace": "^2.0.0",
-    "style-loader": "^0.19.0",
-    "uglify-js": "^3.3.5",
-    "vue": "^2.5.2",
-    "webpack": "^3.8.1",
+    "rollup-plugin-uglify": "^3.0.0",
+    "style-loader": "^0.20.3",
+    "vue": "^2.5.16",
+    "webpack": "^3.11.0",
     "webpack-dev-server": "^2.9.3"
   }
 }

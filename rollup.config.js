@@ -1,11 +1,12 @@
-const resolve = require('rollup-plugin-node-resolve')
-const commonjs = require('rollup-plugin-commonjs')
-const babel = require('rollup-plugin-babel')
-const replace = require('rollup-plugin-replace')
+import resolve from 'rollup-plugin-node-resolve'
+import commonjs from 'rollup-plugin-commonjs'
+import babel from 'rollup-plugin-babel'
+import replace from 'rollup-plugin-replace'
+import uglify from 'rollup-plugin-uglify'
 
-const helpers = require('./helpers')
-const config = require('./index')
-const {version, description} = require('../package.json')
+import {version, description} from './package.json'
+
+const env = process.env.NODE_ENV
 
 const banner =
   '/*!' +
@@ -15,24 +16,8 @@ const banner =
   '\n * MIT License.' +
   '\n */'
 
-export default {
-  input: helpers('src/index.js'),
-  output: [
-    {
-      file: helpers(config.dir_dist, 'qrcode.vue.js'),
-      format: 'umd',
-      name: 'QrcodeVue',
-      sourcemap: false,
-      banner
-    },
-    {
-      file: helpers(config.dir_dist, 'qrcode.vue.esm.js'),
-      format: 'es',
-      name: 'QrcodeVue',
-      sourcemap: false,
-      banner
-    }
-  ],
+const config = {
+  input: 'src/index.js',
   external: ['vue'],
   plugins: [
     resolve({
@@ -73,3 +58,54 @@ export default {
     })
   ]
 }
+
+if (env === 'es') {
+  config.output = {
+    file: 'dist/qrcode.vue.esm.js',
+    format: 'es',
+    name: 'QrcodeVue',
+    sourcemap: false,
+    banner
+  }
+}
+
+if (env === 'development') {
+  config.output = {
+    file: 'dist/qrcode.vue.js',
+    format: 'umd',
+    name: 'QrcodeVue',
+    sourcemap: false,
+    banner
+  }
+}
+
+if (env === 'production') {
+  config.output = {
+    file: 'dist/qrcode.vue.min.js',
+    format: 'umd',
+    name: 'QrcodeVue',
+    sourcemap: false,
+    banner
+  }
+  config.plugins.push(
+    replace({
+      'process.env.NODE_ENV': JSON.stringify(env)
+    }),
+    uglify({
+      output: {
+        comments(node, comment) {
+          const {value, type} = comment
+          return type === 'comment2' && /^!/.test(value)
+        }
+      },
+      compress: {
+        pure_getters: true,
+        unsafe: true,
+        unsafe_comps: true,
+        warnings: false
+      }
+    })
+  )
+}
+
+export default config
