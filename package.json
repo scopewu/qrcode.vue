@@ -13,7 +13,7 @@
     "build:es": "cross-env NODE_ENV=es rollup -c",
     "build:umd": "cross-env NODE_ENV=development rollup -c",
     "build:umd:min": "cross-env NODE_ENV=production rollup -c",
-    "build": "npm run build:es && npm run build:umd && npm run build:umd:min",
+    "build": "npm run clean && npm run build:es && npm run build:umd && npm run build:umd:min",
     "lint": "eslint --ext .js,.vue src",
     "prepublish": "npm run build"
   },

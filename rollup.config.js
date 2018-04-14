@@ -15,6 +15,8 @@ const banner =
   '\n * © 2017-' + new Date().getFullYear() + ' @scopewu' +
   '\n * MIT License.' +
   '\n */'
+const sourcemap = false
+const indent = false
 
 const config = {
   input: 'src/index.js',
@@ -64,7 +66,8 @@ if (env === 'es') {
     file: 'dist/qrcode.vue.esm.js',
     format: 'es',
     name: 'QrcodeVue',
-    sourcemap: false,
+    sourcemap,
+    indent,
     banner
   }
 }
@@ -74,7 +77,8 @@ if (env === 'development') {
     file: 'dist/qrcode.vue.js',
     format: 'umd',
     name: 'QrcodeVue',
-    sourcemap: false,
+    sourcemap,
+    indent,
     banner
   }
 }

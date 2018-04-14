@@ -12,6 +12,41 @@ function getBackingStorePixelRatio(ctx) {
   )
 }
 
+/**
+ * Encode UTF16 to UTF8.
+ * See: http://jonisalonen.com/2012/from-utf-16-to-utf-8-in-javascript/
+ * @param str {string}
+ * @returns {string}
+ */
+function toUTF8String(str) {
+  let utf8Str = ''
+  for (let i = 0; i < str.length; i++) {
+    let charCode = str.charCodeAt(i)
+    if (charCode < 0x0080) {
+      utf8Str += String.fromCharCode(charCode)
+    } else if (charCode < 0x0800) {
+      utf8Str += String.fromCharCode(0xc0 | (charCode >> 6))
+      utf8Str += String.fromCharCode(0x80 | (charCode & 0x3f))
+    } else if (charCode < 0xd800 || charCode >= 0xe000) {
+      utf8Str += String.fromCharCode(0xe0 | (charCode >> 12))
+      utf8Str += String.fromCharCode(0x80 | ((charCode >> 6) & 0x3f))
+      utf8Str += String.fromCharCode(0x80 | (charCode & 0x3f))
+    } else {
+      // surrogate pair
+      i++
+      // UTF-16 encodes 0x10000-0x10FFFF by
+      // subtracting 0x10000 and splitting the
+      // 20 bits of 0x0-0xFFFFF into two halves
+      charCode = 0x10000 + (((charCode & 0x3ff) << 10) | (str.charCodeAt(i) & 0x3ff))
+      utf8Str += String.fromCharCode(0xf0 | (charCode >> 18))
+      utf8Str += String.fromCharCode(0x80 | ((charCode >> 12) & 0x3f))
+      utf8Str += String.fromCharCode(0x80 | ((charCode >> 6) & 0x3f))
+      utf8Str += String.fromCharCode(0x80 | (charCode & 0x3f))
+    }
+  }
+  return utf8Str
+}
+
 const QrcodeVue = {
   render(createElement) {
     const {className, value, level, background, foreground, size} = this
@@ -71,7 +106,7 @@ const QrcodeVue = {
 
       // We'll use type===-1 to force QRCode to automatically pick the best type
       const qrCode = new QRCode(-1, ErrorCorrectLevel[level])
-      qrCode.addData(value)
+      qrCode.addData(toUTF8String(value))
       qrCode.make()
 
       const canvas = this.$refs['qrcode-vue']
