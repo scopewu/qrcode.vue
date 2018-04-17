@@ -28,6 +28,10 @@
     "code",
     "qrcode"
   ],
+  "files": [
+    "dist",
+    "src"
+  ],
   "author": "scope.wu <scope.wu@gmail.com>",
   "license": "MIT",
   "bugs": {
