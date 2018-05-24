@@ -2,11 +2,11 @@ import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 import babel from 'rollup-plugin-babel'
 import replace from 'rollup-plugin-replace'
-import uglify from 'rollup-plugin-uglify'
+import { uglify } from 'rollup-plugin-uglify'
 
-import {version, description} from './package.json'
+import { version, description } from './package.json'
 
-const env = process.env.NODE_ENV
+const env = process.env.NODE_ENV || 'development'
 
 const banner =
   '/*!' +
@@ -106,7 +106,7 @@ if (env === 'production') {
         pure_getters: true,
         unsafe: true,
         unsafe_comps: true,
-        warnings: false
+        drop_console: true
       }
     })
   )

@@ -1,7 +1,6 @@
-// const helpers = require('./index')
+const env = process.env.NODE_ENV || 'development'
 
 const config = {
-  env: process.env.NODE_ENV || 'development',
   dir_client: 'src',
   dir_dist: 'example/dist',
   dir_public: ''
@@ -9,11 +8,11 @@ const config = {
 
 config.globals = {
   'process.env': {
-    'NODE_ENV': JSON.stringify(config.env)
+    'NODE_ENV': JSON.stringify(env)
   },
-  'NODE_ENV': config.env,
-  '__DEV__': config.env === 'development',
-  '__PROD__': config.env === 'production',
+  'NODE_ENV': env,
+  '__DEV__': env === 'development',
+  '__PROD__': env === 'production',
 }
 
 module.exports = config

@@ -2,15 +2,10 @@
   "presets": [
     ["@babel/preset-env", {
       "modules": false,
-      "useBuiltIns": "usage",
-      "loose": true,
       "targets": {
         "browsers": ["last 3 versions", "not ie < 9"]
-      },
-      "shippedProposals": true
-    }],
-    ["@babel/preset-stage-1"],
-    ["@babel/preset-stage-2"]
+      }
+    }]
   ],
   "plugins": []
 }

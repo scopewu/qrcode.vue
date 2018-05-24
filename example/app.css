@@ -5,14 +5,6 @@ body {
   color: #333;
 }
 
-.fork {
-  width: 150px;
-  height: 150px;
-  position: absolute;
-  top: 0;
-  right: 0
-}
-
 @media screen and (min-width: 768px) {
   .container-fluid {
     max-width: 798px;
@@ -22,10 +14,5 @@ body {
 @media screen and (max-width: 470px) {
   h1 {
     font-size: 26px;
-  }
-
-  .fork {
-    width: 120px;
-    height: 120px;
   }
 }
