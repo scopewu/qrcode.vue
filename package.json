@@ -9,7 +9,6 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack.config.js --open --progress --profile --watch --content-base src/",
     "clean": "rimraf -- dist",
-    "compile": "npm run lint && cross-env NODE_ENV=production node ./bin/compile",
     "build:es": "cross-env NODE_ENV=es rollup -c",
     "build:umd": "cross-env NODE_ENV=development rollup -c",
     "build:umd:min": "cross-env NODE_ENV=production rollup -c",

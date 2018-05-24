@@ -45,8 +45,5 @@ jspm_packages
 #OS
 .DS_STORE
 
-#github pages
-github-page/
-
 #project build
 dist/
