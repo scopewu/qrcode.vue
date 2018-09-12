@@ -49,20 +49,20 @@ function toUTF8String(str) {
 
 const QrcodeVue = {
   render(createElement) {
-    const {className, value, level, background, foreground, size} = this
+    const { className, value, level, background, foreground, size } = this
 
     return createElement(
       'div',
       {
         'class': className,
-        attrs: {value, level, background, foreground}
+        attrs: { value, level, background, foreground }
       },
       [
         createElement(
           'canvas',
           {
-            attrs: {height: size, width: size},
-            style: {width: size + 'px', height: size + 'px'},
+            attrs: { height: size, width: size },
+            style: { width: size + 'px', height: size + 'px' },
             ref: 'qrcode-vue'
           },
           []
@@ -101,7 +101,7 @@ const QrcodeVue = {
   },
   methods: {
     render() {
-      const {value, size, level, background, foreground} = this
+      const { value, size, level, background, foreground } = this
       const _size = size >>> 0 // size to number
 
       // We'll use type===-1 to force QRCode to automatically pick the best type
