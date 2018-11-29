@@ -37,7 +37,8 @@ function toUTF8String(str) {
       // UTF-16 encodes 0x10000-0x10FFFF by
       // subtracting 0x10000 and splitting the
       // 20 bits of 0x0-0xFFFFF into two halves
-      charCode = 0x10000 + (((charCode & 0x3ff) << 10) | (str.charCodeAt(i) & 0x3ff))
+      charCode =
+        0x10000 + (((charCode & 0x3ff) << 10) | (str.charCodeAt(i) & 0x3ff))
       utf8Str += String.fromCharCode(0xf0 | (charCode >> 18))
       utf8Str += String.fromCharCode(0x80 | ((charCode >> 12) & 0x3f))
       utf8Str += String.fromCharCode(0x80 | ((charCode >> 6) & 0x3f))
@@ -54,8 +55,8 @@ const QrcodeVue = {
     return createElement(
       'div',
       {
-        'class': className,
-        attrs: { value, level, background, foreground }
+        class: className,
+        attrs: { value, level, background, foreground },
       },
       [
         createElement(
@@ -63,10 +64,10 @@ const QrcodeVue = {
           {
             attrs: { height: size, width: size },
             style: { width: size + 'px', height: size + 'px' },
-            ref: 'qrcode-vue'
+            ref: 'qrcode-vue',
           },
           []
-        )
+        ),
       ]
     )
   },
@@ -74,30 +75,30 @@ const QrcodeVue = {
     value: {
       type: String,
       required: true,
-      default: ''
+      default: '',
     },
     className: {
       type: String,
-      default: ''
+      default: '',
     },
     size: {
       type: [Number, String],
       default: 100,
-      validator: s => isNaN(Number(s)) !== true
+      validator: (s) => isNaN(Number(s)) !== true,
     },
     level: {
       type: String,
       default: 'L',
-      validator: l => ['L', 'Q', 'M', 'H'].indexOf(l) > -1
+      validator: (l) => ['L', 'Q', 'M', 'H'].indexOf(l) > -1,
     },
     background: {
       type: String,
-      default: '#fff'
+      default: '#fff',
     },
     foreground: {
       type: String,
-      default: '#000'
-    }
+      default: '#000',
+    },
   },
   methods: {
     render() {
@@ -115,26 +116,27 @@ const QrcodeVue = {
       const cells = qrCode.modules
       const tileW = _size / cells.length
       const tileH = _size / cells.length
-      const scale = (window.devicePixelRatio || 1) / getBackingStorePixelRatio(ctx)
+      const scale =
+        (window.devicePixelRatio || 1) / getBackingStorePixelRatio(ctx)
       canvas.height = canvas.width = _size * scale
       ctx.scale(scale, scale)
 
-      cells.forEach(function (row, rdx) {
-        row.forEach(function (cell, cdx) {
+      cells.forEach(function(row, rdx) {
+        row.forEach(function(cell, cdx) {
           ctx.fillStyle = cell ? foreground : background
-          const w = (Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW))
-          const h = (Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH))
+          const w = Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW)
+          const h = Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH)
           ctx.fillRect(Math.round(cdx * tileW), Math.round(rdx * tileH), w, h)
         })
       })
-    }
+    },
   },
   updated() {
     this.render()
   },
   mounted() {
     this.render()
-  }
+  },
 }
 
 export default QrcodeVue

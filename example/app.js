@@ -13,7 +13,7 @@ new Vue({
     size: 100,
     level: 'L',
     background: '#ffffff',
-    foreground: '#000000'
+    foreground: '#000000',
   },
   template: `<form class="form-horizontal">
       <div class="form-group">
@@ -67,6 +67,6 @@ new Vue({
       </div>
     </form>`,
   components: {
-    QrcodeVue
-  }
+    QrcodeVue,
+  },
 })

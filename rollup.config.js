@@ -10,9 +10,13 @@ const env = process.env.NODE_ENV || 'development'
 
 const banner =
   '/*!' +
-  '\n * qrcode.vue v' + version +
-  '\n * ' + description +
-  '\n * © 2017-' + new Date().getFullYear() + ' @scopewu' +
+  '\n * qrcode.vue v' +
+  version +
+  '\n * ' +
+  description +
+  '\n * © 2017-' +
+  new Date().getFullYear() +
+  ' @scopewu' +
   '\n * MIT License.' +
   '\n */'
 const sourcemap = false
@@ -25,7 +29,7 @@ const config = {
     resolve({
       jsnext: true,
       module: true,
-      main: true
+      main: true,
     }),
     commonjs({
       // non-CommonJS modules will be ignored, but you can also
@@ -56,9 +60,9 @@ const config = {
       // ignore: ['conditional-runtime-dependency']
     }),
     babel({
-      exclude: 'node_module/**'
-    })
-  ]
+      exclude: 'node_module/**',
+    }),
+  ],
 }
 
 if (env === 'es') {
@@ -68,7 +72,7 @@ if (env === 'es') {
     name: 'QrcodeVue',
     sourcemap,
     indent,
-    banner
+    banner,
   }
 }
 
@@ -79,7 +83,7 @@ if (env === 'development') {
     name: 'QrcodeVue',
     sourcemap,
     indent,
-    banner
+    banner,
   }
 }
 
@@ -89,25 +93,25 @@ if (env === 'production') {
     format: 'umd',
     name: 'QrcodeVue',
     sourcemap: false,
-    banner
+    banner,
   }
   config.plugins.push(
     replace({
-      'process.env.NODE_ENV': JSON.stringify(env)
+      'process.env.NODE_ENV': JSON.stringify(env),
     }),
     uglify({
       output: {
         comments(node, comment) {
-          const {value, type} = comment
+          const { value, type } = comment
           return type === 'comment2' && /^!/.test(value)
-        }
+        },
       },
       compress: {
         pure_getters: true,
         unsafe: true,
         unsafe_comps: true,
-        drop_console: true
-      }
+        drop_console: true,
+      },
     })
   )
 }

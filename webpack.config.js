@@ -15,7 +15,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpackConfig = {
   devtool: 'cheap-module-source-map',
   entry: {
-    'main': helpers('example/app.js')
+    main: helpers('example/app.js'),
   },
   output: {
     path: helpers(config.dir_dist),
@@ -27,8 +27,8 @@ const webpackConfig = {
     modules: [helpers('src'), helpers('node_modules')],
     mainFields: ['module', 'main'],
     alias: {
-      'vue': helpers(`node_modules/vue/dist/vue.esm.js`)
-    }
+      vue: helpers(`node_modules/vue/dist/vue.esm.js`),
+    },
   },
   externals: {
     // vue: 'Vue'
@@ -36,18 +36,9 @@ const webpackConfig = {
   module: {
     rules: [
       {
-        test: /\.(js|vue)$/,
-        loader: 'eslint-loader',
-        enforce: 'pre',
-        include: [helpers('src'), helpers('test')],
-        options: {
-          formatter: require('eslint-friendly-formatter')
-        }
-      },
-      {
         test: /\.js$/,
         use: 'babel-loader',
-        include: [helpers('src'), helpers('example')]
+        include: [helpers('src'), helpers('example')],
       },
       {
         test: /\.css$/,
@@ -55,20 +46,20 @@ const webpackConfig = {
           {
             loader: 'style-loader',
             options: {
-              sourceMap: true
-            }
+              sourceMap: true,
+            },
           },
           {
             loader: 'css-loader',
             options: {
               minimize: false,
-              sourceMap: true
-            }
-          }
+              sourceMap: true,
+            },
+          },
         ],
-        include: [helpers('src'), helpers('example')]
-      }
-    ]
+        include: [helpers('src'), helpers('example')],
+      },
+    ],
   },
   plugins: [
     new DefinePlugin(config.globals),
@@ -80,9 +71,9 @@ const webpackConfig = {
       template: helpers('example/index.html'),
       inject: 'body',
       minify: {
-        collapseWhitespace: false
-      }
-    })
+        collapseWhitespace: false,
+      },
+    }),
   ],
   devServer: {
     // port: '',
@@ -92,9 +83,9 @@ const webpackConfig = {
     historyApiFallback: true,
     watchOptions: {
       aggregateTimeout: 300,
-      poll: 1000
-    }
-  }
+      poll: 1000,
+    },
+  },
 }
 
 module.exports = webpackConfig
