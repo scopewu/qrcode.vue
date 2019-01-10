@@ -13,6 +13,7 @@ const NoEmitOnErrorsPlugin = require('webpack/lib/NoEmitOnErrorsPlugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const webpackConfig = {
+  mode: 'development',
   devtool: 'cheap-module-source-map',
   entry: {
     main: helpers('example/app.js'),
@@ -52,7 +53,6 @@ const webpackConfig = {
           {
             loader: 'css-loader',
             options: {
-              minimize: false,
               sourceMap: true,
             },
           },
