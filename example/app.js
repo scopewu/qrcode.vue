@@ -5,7 +5,6 @@ import './app.css'
 
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
 new Vue({
   el: '#root',
   data: {

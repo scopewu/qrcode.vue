@@ -27,9 +27,7 @@ const config = {
   external: ['vue'],
   plugins: [
     resolve({
-      jsnext: true,
-      module: true,
-      main: true,
+      mainFields: ['module', 'main'],
     }),
     commonjs({
       // non-CommonJS modules will be ignored, but you can also
@@ -47,7 +45,7 @@ const config = {
       ignoreGlobal: false, // Default: false
 
       // if false then skip sourceMap generation for CommonJS modules
-      sourceMap: true, // Default: true
+      sourceMap: sourcemap, // Default: true
 
       // explicitly specify unresolvable named exports
       // (see below for more details)
