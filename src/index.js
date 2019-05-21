@@ -1,17 +1,6 @@
 import QRCode from 'qr.js/lib/QRCode'
 import ErrorCorrectLevel from 'qr.js/lib/ErrorCorrectLevel'
 
-function getBackingStorePixelRatio(ctx) {
-  return (
-    ctx.webkitBackingStorePixelRatio ||
-    ctx.mozBackingStorePixelRatio ||
-    ctx.msBackingStorePixelRatio ||
-    ctx.oBackingStorePixelRatio ||
-    ctx.backingStorePixelRatio ||
-    1
-  )
-}
-
 /**
  * Encode UTF16 to UTF8.
  * See: http://jonisalonen.com/2012/from-utf-16-to-utf-8-in-javascript/
@@ -116,8 +105,7 @@ const QrcodeVue = {
       const cells = qrCode.modules
       const tileW = _size / cells.length
       const tileH = _size / cells.length
-      const scale =
-        (window.devicePixelRatio || 1) / getBackingStorePixelRatio(ctx)
+      const scale = window.devicePixelRatio || 1
       canvas.height = canvas.width = _size * scale
       ctx.scale(scale, scale)
 
