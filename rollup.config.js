@@ -16,7 +16,7 @@ const banner =
   description +
   '\n * © 2017-' +
   new Date().getFullYear() +
-  ' @scopewu' +
+  ' @scopewu(https://github.com/scopewu)' +
   '\n * MIT License.' +
   '\n */'
 const sourcemap = false
