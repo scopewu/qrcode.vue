@@ -9,9 +9,9 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack.config.js --open",
     "clean": "rimraf -- dist",
-    "build:es": "NODE_ENV=es rollup -c",
-    "build:umd": "NODE_ENV=development rollup -c",
-    "build:umd:min": "NODE_ENV=production rollup -c",
+    "build:es": "cross-env NODE_ENV=es rollup -c",
+    "build:umd": "cross-env NODE_ENV=development rollup -c",
+    "build:umd:min": "cross-env NODE_ENV=production rollup -c",
     "build": "npm run clean && npm run build:es && npm run build:umd && npm run build:umd:min",
     "prepublish": "npm run build"
   },
@@ -45,6 +45,7 @@
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
     "babel-loader": "^8.0.6",
+    "cross-env": "^5.2.0",
     "css-loader": "^2.1.1",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^2.3.0",
