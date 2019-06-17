@@ -44,7 +44,7 @@ const QrcodeVue = {
     return createElement(
       'div',
       {
-        class: className,
+        class: this.class || className,
         attrs: { value, level, background, foreground },
       },
       [
@@ -67,6 +67,10 @@ const QrcodeVue = {
       default: '',
     },
     className: {
+      type: String,
+      default: '',
+    },
+    class: {
       type: String,
       default: '',
     },
