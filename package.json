@@ -4,8 +4,6 @@
   "description": "A Vue component for QRCode.",
   "main": "dist/qrcode.vue.js",
   "module": "dist/qrcode.vue.esm.js",
-  "unpkg": "dist/qrcode.vue.js",
-  "jsdelivr": "dist/qrcode.vue.js",
   "scripts": {
     "start": "webpack-dev-server --config webpack.config.js --open",
     "clean": "rimraf -- dist",

@@ -60,7 +60,7 @@ new Vue({
         <label for="inputPassword3" class="col-sm-2 control-label">QR_CODE:</label>
         <div class="col-sm-10">
           <div class="form-control-static">
-            <qrcode-vue className="qrcode" :value="value" :size="size" :level="level" :background="background" :foreground="foreground"/>
+            <qrcode-vue class="qrcode" :value="value" :size="size" :level="level" :background="background" :foreground="foreground"/>
           </div>
         </div>
       </div>
