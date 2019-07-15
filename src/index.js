@@ -70,10 +70,6 @@ const QrcodeVue = {
       type: String,
       default: '',
     },
-    class: {
-      type: String,
-      default: '',
-    },
     size: {
       type: [Number, String],
       default: 100,

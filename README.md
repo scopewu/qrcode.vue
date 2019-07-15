@@ -97,12 +97,12 @@ The background color of qrcode.
 
 The foreground color of qrcode.
 
-### class
+### className
 
 - Type: `string`
 - Default: `''`
 
-The class name of qrcode element. Now `className` is renamed to `class`, Its will expire.
+The class name of qrcode element.
 
 ## License
 
