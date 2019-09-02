@@ -16,3 +16,7 @@ body {
     font-size: 26px;
   }
 }
+
+textarea {
+  resize: vertical;
+}

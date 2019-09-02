@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import QrcodeVue from '../src/index'
+import QrcodeVue from '../../src'
 
 import './app.css'
 

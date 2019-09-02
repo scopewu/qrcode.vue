@@ -97,7 +97,7 @@ The background color of qrcode.
 
 The foreground color of qrcode.
 
-### className
+### class || className
 
 - Type: `string`
 - Default: `''`

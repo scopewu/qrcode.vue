@@ -26,7 +26,8 @@
   ],
   "files": [
     "dist",
-    "src"
+    "src",
+    "docs"
   ],
   "author": "scope.wu <scope.wu@gmail.com>",
   "license": "MIT",
@@ -39,28 +40,28 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
     "babel-loader": "^8.0.6",
-    "cross-env": "^5.2.0",
-    "css-loader": "^2.1.1",
+    "cross-env": "^5.2.1",
+    "css-loader": "^3.2.0",
     "html-webpack-plugin": "^3.2.0",
-    "husky": "^2.3.0",
-    "prettier": "1.17.1",
-    "pretty-quick": "^1.11.0",
+    "husky": "^3.0.5",
+    "prettier": "1.18.2",
+    "pretty-quick": "^1.11.1",
     "qr.js": "^0.0.0",
-    "rimraf": "^2.6.3",
-    "rollup": "^1.12.3",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.20.3",
     "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.0.0",
     "rollup-plugin-replace": "^2.2.0",
-    "rollup-plugin-uglify": "^6.0.2",
-    "style-loader": "^0.23.1",
+    "rollup-plugin-uglify": "^6.0.3",
+    "style-loader": "^1.0.0",
     "vue": "^2.6.10",
-    "webpack": "^4.32.2",
-    "webpack-cli": "^3.3.2",
-    "webpack-dev-server": "^3.4.1"
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7",
+    "webpack-dev-server": "^3.8.0"
   },
   "husky": {
     "hooks": {

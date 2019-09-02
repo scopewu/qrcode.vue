@@ -16,7 +16,7 @@ const webpackConfig = {
   mode: 'development',
   devtool: 'cheap-module-source-map',
   entry: {
-    main: helpers('example/app.js'),
+    main: helpers('docs/example/app.js'),
   },
   output: {
     path: helpers(config.dir_dist),
@@ -28,7 +28,7 @@ const webpackConfig = {
     modules: [helpers('src'), helpers('node_modules')],
     mainFields: ['module', 'main'],
     alias: {
-      vue: helpers(`node_modules/vue/dist/vue.esm.js`),
+      vue: helpers('node_modules/vue/dist/vue.esm.js'),
     },
   },
   externals: {
@@ -39,7 +39,7 @@ const webpackConfig = {
       {
         test: /\.js$/,
         use: 'babel-loader',
-        include: [helpers('src'), helpers('example')],
+        include: [helpers('src'), helpers('docs')],
       },
       {
         test: /\.css$/,
@@ -47,7 +47,7 @@ const webpackConfig = {
           {
             loader: 'style-loader',
             options: {
-              sourceMap: true,
+              //sourceMap: true,
             },
           },
           {
@@ -57,7 +57,7 @@ const webpackConfig = {
             },
           },
         ],
-        include: [helpers('src'), helpers('example')],
+        include: [helpers('src'), helpers('docs')],
       },
     ],
   },
@@ -68,7 +68,7 @@ const webpackConfig = {
     new NamedModulesPlugin(),
     new NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugin({
-      template: helpers('example/index.html'),
+      template: helpers('docs/example/index.html'),
       inject: 'body',
       minify: {
         collapseWhitespace: false,
