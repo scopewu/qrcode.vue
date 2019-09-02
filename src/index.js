@@ -37,29 +37,8 @@ function toUTF8String(str) {
   return utf8Str
 }
 
+// @vue/component
 const QrcodeVue = {
-  render(createElement) {
-    const { className, value, level, background, foreground, size } = this
-
-    return createElement(
-      'div',
-      {
-        class: this.class || className,
-        attrs: { value, level, background, foreground },
-      },
-      [
-        createElement(
-          'canvas',
-          {
-            attrs: { height: size, width: size },
-            style: { width: size + 'px', height: size + 'px' },
-            ref: 'qrcode-vue',
-          },
-          []
-        ),
-      ]
-    )
-  },
   props: {
     value: {
       type: String,
@@ -88,6 +67,12 @@ const QrcodeVue = {
       type: String,
       default: '#000',
     },
+  },
+  updated() {
+    this.render()
+  },
+  mounted() {
+    this.render()
   },
   methods: {
     render() {
@@ -119,11 +104,27 @@ const QrcodeVue = {
       })
     },
   },
-  updated() {
-    this.render()
-  },
-  mounted() {
-    this.render()
+  render(createElement) {
+    const { className, value, level, background, foreground, size } = this
+
+    return createElement(
+      'div',
+      {
+        class: this.class || className,
+        attrs: { value, level, background, foreground },
+      },
+      [
+        createElement(
+          'canvas',
+          {
+            attrs: { height: size, width: size },
+            style: { width: size + 'px', height: size + 'px' },
+            ref: 'qrcode-vue',
+          },
+          []
+        ),
+      ]
+    )
   },
 }
 

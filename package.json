@@ -11,6 +11,7 @@
     "build:umd": "cross-env NODE_ENV=development rollup -c",
     "build:umd:min": "cross-env NODE_ENV=production rollup -c",
     "build": "npm run clean && npm run build:es && npm run build:umd && npm run build:umd:min",
+    "lint": "eslint --ext .js,.vue src",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -45,6 +46,8 @@
     "babel-loader": "^8.0.6",
     "cross-env": "^5.2.1",
     "css-loader": "^3.2.0",
+    "eslint": "^6.3.0",
+    "eslint-plugin-vue": "^5.2.3",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^3.0.5",
     "prettier": "1.18.2",
@@ -74,5 +77,13 @@
     "printWidth": 80,
     "arrowParens": "always",
     "semi": false
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:vue/recommended"
+    ],
+    "rules": {
+      "vue/no-unused-vars": "error"
+    }
   }
 }
