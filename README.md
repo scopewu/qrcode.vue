@@ -35,7 +35,7 @@ new Vue({
 })
 ```
 
-Or single-file components with a \*.vue extension:
+Or single-file components with a `*.vue` extension:
 
 ```html
 <template>
@@ -74,7 +74,7 @@ The value content of qrcode
 - Type: `string`
 - Default: `L`
 
-qrcode Error correction level (one of 'L', 'M', 'Q', 'H').
+qrcode Error correction level (one of 'L', 'M', 'Q', 'H'). Know more, [wikipedia: QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction)
 
 ### size
 

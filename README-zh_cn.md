@@ -1,69 +1,107 @@
 # qrcode.vue
+
 一款 Vue.js 二维码组件.
 
 [![Build Status](https://travis-ci.org/scopewu/qrcode.vue.svg?branch=master)](https://travis-ci.org/scopewu/qrcode.vue)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
 
 ## 快速开始
-快速添加 `qrcode.vue` 组件到 app 中
+
+快速添加 `qrcode.vue` 组件到项目中
+
 ```bash
 npm install --save qrcode.vue # yarn add qrcode.vue
 ```
 
-## 使用例子
+## 使用
+
 e.g.
+
 ```javascript
-import Vue from 'vue';
-import QrcodeVue from 'qrcode.vue';
+import Vue from 'vue'
+import QrcodeVue from 'qrcode.vue'
 
 new Vue({
   el: '#root',
   data: {
-    value: 'https://example.com'
+    value: 'https://example.com',
   },
   template: '<qrcode-vue :value="value"></qrcode-vue>',
   components: {
-    QrcodeVue
-  }
+    QrcodeVue,
+  },
 })
 ```
-或者，在独有单文件扩展 *.vue 中使用：
+
+或者，在独有单文件扩展 `*.vue` 中使用：
+
 ```html
 <template>
-<div>
-  <qrcode-vue :value="value" :size="size" level="H"></qrcode-vue>
-</div>
+  <div>
+    <qrcode-vue :value="value" :size="size" level="H"></qrcode-vue>
+  </div>
 </template>
 <script>
-import QrcodeVue from 'qrcode.vue';
+  import QrcodeVue from 'qrcode.vue'
 
-export default {
-  data() {
-    return {
-      value: 'https://example.com',
-      size: 300
-    }
-  },
-  components: {
-    QrcodeVue
+  export default {
+    data() {
+      return {
+        value: 'https://example.com',
+        size: 300,
+      }
+    },
+    components: {
+      QrcodeVue,
+    },
   }
-}
 </script>
 ```
 
 ## Component props
 
-| 属性 | 类型 | 默认值 | 属性描述 |
-|------|------|--------------|---------|
-| value | String |`''`| qrcode value |
-| className | String |`''`| qrcode element className |
-| size | Number |`100`| qrcode element size |
-| level | String |`L`| Error correction level ('L', 'M', 'Q', 'H') |
-| background | String |`#fff`| qrcode background color|
-| foreground | String |`#000`| qrcode color|
+### value
 
-## 参考代码
-["qr.js"](https://github.com/defunctzombie/qr.js) ["qrcode.react"](https://github.com/zpao/qrcode.react)
+- Type: `string`
+- Default: `''`
+
+二维码的内容值。
+
+### level
+
+- Type: `string`
+- Default: `L`
+
+二维码的容错能力等级，取值为 'L', 'M', 'Q', 'H' 之一。了解更多，[维基百科：QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction)。
+
+### size
+
+- Type: `number`
+- Default: `100`
+
+二维码大小。
+
+### background
+
+- Type: `string`
+- Default: `#ffffff`
+
+二维码背景颜色。
+
+### foreground
+
+- Type: `string`
+- Default: `#000000`
+
+二维码前景颜色。
+
+### class || className
+
+- Type: `string`
+- Default: `''`
+
+传递给二维码根元素的类名。
 
 ## 软件许可
+
 copyright &copy; 2017 scopewu, license by [MIT](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
