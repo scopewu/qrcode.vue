@@ -1,3 +1,10 @@
+## [1.6.3] - 2019-09-16
+
+### Update
+
+- Perfect documentation.
+- Add eslint check.
+
 ## [1.6.2] - 2019-05-21
 
 ### Remove:
