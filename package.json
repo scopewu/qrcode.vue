@@ -26,9 +26,10 @@
     "qrcode"
   ],
   "files": [
-    "dist",
-    "src",
-    "docs"
+    "/dist",
+    "/src",
+    "/docs",
+    "README-zh_cn.md"
   ],
   "author": "scope.wu <scope.wu@gmail.com>",
   "license": "MIT",
