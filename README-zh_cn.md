@@ -81,6 +81,13 @@ new Vue({
 
 二维码大小。
 
+### renderAs
+
+- Type: `string`
+- Default: `canvas`
+
+生成二维码的 HTML 标签，可选 `canvas` 或 `svg`。
+
 ### background
 
 - Type: `string`

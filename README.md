@@ -1,6 +1,6 @@
 # qrcode.vue
 
-A Vue.js component for [QRCode](https://en.wikipedia.org/wiki/QR_code).
+A Vue.js component to generate [QRCode](https://en.wikipedia.org/wiki/QR_code).
 
 [![Build Status](https://travis-ci.org/scopewu/qrcode.vue.svg?branch=master)](https://travis-ci.org/scopewu/qrcode.vue)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
@@ -82,6 +82,13 @@ qrcode Error correction level (one of 'L', 'M', 'Q', 'H'). Know more, [wikipedia
 - Default: `100`
 
 The size of qrcode element.
+
+### renderAs
+
+- Type: `string`
+- Default: `canvas`
+
+Generate QRcode as `canvas` or `svg`.
 
 ### background
 

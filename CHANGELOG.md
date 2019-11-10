@@ -1,3 +1,9 @@
+## [1.7.0]
+
+### Feature
+
+- Support generate Qrcode as svg.
+
 ## [1.6.3] - 2019-09-16
 
 ### Update
