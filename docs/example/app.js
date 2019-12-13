@@ -32,7 +32,7 @@ new Vue({
             <input type="range" v-model="size" min="100" max="800" step="20">
           </div>
         </div>
-      </div>  
+      </div>
       <div class="form-group">
         <label class="col-sm-2 control-label">Level:</label>
         <div class="col-sm-10">
