@@ -102,7 +102,7 @@ new Vue({
 
 二维码前景颜色。
 
-### class || className
+### class
 
 - Type: `string`
 - Default: `''`
