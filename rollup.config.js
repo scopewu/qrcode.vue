@@ -2,7 +2,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import babel from '@rollup/plugin-babel'
 import replace from '@rollup/plugin-replace'
-import { uglify } from 'rollup-plugin-uglify'
+import { terser } from 'rollup-plugin-terser'
 
 import { version, description } from './package.json'
 
@@ -98,9 +98,9 @@ if (env === 'production') {
     replace({
       'process.env.NODE_ENV': JSON.stringify(env),
     }),
-    uglify({
-      output: {
-        comments(node, comment) {
+    terser({
+      format: {
+        comments: function (node, comment) {
           const { value, type } = comment
           return type === 'comment2' && /^!/.test(value)
         },
