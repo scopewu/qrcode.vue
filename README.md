@@ -1,5 +1,9 @@
 # qrcode.vue
 
+⚠️ Now when you are using Vue 3.x, please upgrade `qrcode.vue` to `3.x`;
+
+🔒 if you are using Vue 2.x, please keep using version `1.x`;
+
 A Vue.js component to generate [QRCode](https://en.wikipedia.org/wiki/QR_code).
 
 [![Build Status](https://travis-ci.org/scopewu/qrcode.vue.svg?branch=master)](https://travis-ci.org/scopewu/qrcode.vue)

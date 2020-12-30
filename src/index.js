@@ -39,9 +39,9 @@ function toUTF8String(str) {
 
 function generatePath(modules, margin = 0) {
   const ops = []
-  modules.forEach(function(row, y) {
+  modules.forEach(function (row, y) {
     let start = null
-    row.forEach(function(cell, x) {
+    row.forEach(function (cell, x) {
       if (!cell && start !== null) {
         // M0 0h7v1H0z injects the space with the move and drops the comma,
         // saving a char per operation
@@ -65,8 +65,9 @@ function generatePath(modules, margin = 0) {
         } else {
           // Otherwise finish the current line.
           ops.push(
-            `M${start + margin},${y + margin} h${x + 1 - start}v1H${start +
-              margin}z`
+            `M${start + margin},${y + margin} h${x + 1 - start}v1H${
+              start + margin
+            }z`
           )
         }
         return
@@ -161,8 +162,8 @@ const QrcodeVue = {
         canvas.height = canvas.width = _size * scale
         ctx.scale(scale, scale)
 
-        cells.forEach(function(row, rdx) {
-          row.forEach(function(cell, cdx) {
+        cells.forEach(function (row, rdx) {
+          row.forEach(function (cell, cdx) {
             ctx.fillStyle = cell ? foreground : background
             const w = Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW)
             const h = Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH)
@@ -172,62 +173,14 @@ const QrcodeVue = {
       }
     },
   },
-  render(createElement) {
-    const {
-      className,
-      value,
-      level,
-      background,
-      foreground,
-      size,
-      renderAs,
-      numCells,
-      fgPath,
-    } = this
-
-    return createElement(
-      'div',
-      {
-        class: this.class || className,
-        attrs: { value, level, background, foreground },
-      },
-      [
-        renderAs === 'svg'
-          ? createElement(
-              'svg',
-              {
-                attrs: {
-                  height: size,
-                  width: size,
-                  shapeRendering: 'crispEdges',
-                  viewBox: `0 0 ${numCells} ${numCells}`,
-                },
-                style: { width: size + 'px', height: size + 'px' },
-              },
-              [
-                createElement('path', {
-                  attrs: {
-                    fill: background,
-                    d: `M0,0 h${numCells}v${numCells}H0z`,
-                  },
-                }),
-                createElement('path', {
-                  attrs: { fill: foreground, d: fgPath },
-                }),
-              ]
-            )
-          : createElement(
-              'canvas',
-              {
-                attrs: { height: size, width: size },
-                style: { width: size + 'px', height: size + 'px' },
-                ref: 'qrcode-vue',
-              },
-              []
-            ),
-      ]
-    )
-  },
+  template:
+    "<div :value='value' :level='level' :background='background' :foreground='foreground'>" +
+    "<svg v-if='renderAs===\"svg\"' :width='size' :height='size' shape-rendering='crispEdges' :viewBox='\"0 0 \" + numCells + \" \" + numCells'>" +
+    '<path :fill=\'background\' :d=\'"M0,0 h" + numCells + "v" + numCells + "H0z"\'></path>' +
+    "<path :fill='foreground' :d='fgPath'></path>" +
+    '</svg>' +
+    "<canvas v-else ref='qrcode-vue' :width='size' :height='size' :style='{ width: size + \"px\", height: size + \"px\" }'></canvas>" +
+    '</div>',
 }
 
 export default QrcodeVue

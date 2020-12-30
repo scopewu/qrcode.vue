@@ -28,7 +28,7 @@ const webpackConfig = {
     modules: [helpers('src'), helpers('node_modules')],
     mainFields: ['module', 'main'],
     alias: {
-      vue: helpers('node_modules/vue/dist/vue.esm.js'),
+      vue: helpers('node_modules/vue/dist/vue.esm-bundler.js'),
     },
   },
   externals: {

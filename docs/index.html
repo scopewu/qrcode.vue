@@ -58,13 +58,13 @@
       }
     </style>
     <script
-      src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
-      integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY="
+      src="https://cdn.jsdelivr.net/npm/vue@3.0.4/dist/vue.global.prod.js"
+      integrity="sha256-ZUS0/GPBtqh6O8SEMapeXWO6j5wmb7Krpag5U+s+WMk="
       crossorigin="anonymous"
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/qrcode.vue@1.7.0/dist/qrcode.vue.min.js"
-      integrity="sha256-a+8cD9QMTPH1TQVwRYe0yH00ArRdbXtgEg9pDKge4ME="
+      src="https://cdn.jsdelivr.net/npm/qrcode.vue@3.0.0/dist/qrcode.vue.min.js"
+      integrity="sha256-OQSYSwXU+fQs/SLZGb84pTgWWc2AWqEkVWkafyhb2fg="
       crossorigin="anonymous"
     ></script>
   </head>
@@ -91,15 +91,16 @@
       </a>
     </div>
     <script>
-      new Vue({
-        el: '#root',
-        data: {
-          value: 'https://example.com',
-          size: 100,
-          level: 'L',
-          background: '#ffffff',
-          foreground: '#000000',
-          renderAs: 'svg',
+      Vue.createApp({
+        data() {
+          return {
+            value: 'https://example.com',
+            size: 100,
+            level: 'L',
+            background: '#ffffff',
+            foreground: '#000000',
+            renderAs: 'svg',
+          }
         },
         template:
           '<form class="form-horizontal">' +
@@ -136,7 +137,7 @@
         components: {
           QrcodeVue: QrcodeVue,
         },
-      })
+      }).mount('#root')
     </script>
   </body>
   <script async defer src="https://buttons.github.io/buttons.js"></script>

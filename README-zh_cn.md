@@ -1,5 +1,9 @@
 # qrcode.vue
 
+⚠️ 如果你正在使用 Vue 3，请升级 `qrcode.vue` 到 `3.x`;
+
+🔒 如果你正在使用 Vue 2，请保持 `qrcode.vue` 的版本为 `1.x`;
+
 一款 Vue.js 二维码组件.
 
 [![Build Status](https://travis-ci.org/scopewu/qrcode.vue.svg?branch=master)](https://travis-ci.org/scopewu/qrcode.vue)

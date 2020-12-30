@@ -1,22 +1,21 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import QrcodeVue from '../../src'
 
 import './app.css'
 
-Vue.config.productionTip = false
-
-new Vue({
-  el: '#root',
+createApp({
   components: {
     QrcodeVue,
   },
-  data: {
-    value: 'https://example.com',
-    size: 100,
-    level: 'L',
-    background: '#ffffff',
-    foreground: '#000000',
-    renderAs: 'svg',
+  data() {
+    return {
+      value: 'https://example.com',
+      size: 100,
+      level: 'L',
+      background: '#ffffff',
+      foreground: '#000000',
+      renderAs: 'svg',
+    }
   },
   template: `<form class="form-horizontal">
       <div class="form-group">
@@ -78,4 +77,4 @@ new Vue({
         </div>
       </div>
     </form>`,
-})
+}).mount('#root')

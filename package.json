@@ -1,6 +1,6 @@
 {
   "name": "qrcode.vue",
-  "version": "1.7.0",
+  "version": "3.0.0",
   "description": "A Vue.js component to generate QRCode.",
   "main": "dist/qrcode.vue.js",
   "module": "dist/qrcode.vue.esm.js",
@@ -39,7 +39,7 @@
   },
   "homepage": "https://scopewu.github.io/qrcode.vue/",
   "peerDependencies": {
-    "vue": "^2.0.0"
+    "vue": "^3.0.0"
   },
   "dependencies": {},
   "devDependencies": {
@@ -52,8 +52,8 @@
     "babel-loader": "^8.2.2",
     "cross-env": "^7.0.3",
     "css-loader": "^4.3.0",
-    "eslint": "^6.8.0",
-    "eslint-plugin-vue": "^7.3.0",
+    "eslint": "^7.16.0",
+    "eslint-plugin-vue": "^7.4.0",
     "html-webpack-plugin": "^4.5.0",
     "husky": "^4.3.6",
     "prettier": "2.2.1",
@@ -63,7 +63,7 @@
     "rollup": "^2.35.1",
     "rollup-plugin-terser": "^7.0.2",
     "style-loader": "^1.2.1",
-    "vue": "^2.6.12",
+    "vue": "^3.0.4",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
