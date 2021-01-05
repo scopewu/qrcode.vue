@@ -117,6 +117,11 @@ const QrcodeVue = {
       default: 'canvas',
       validator: (as) => ['canvas', 'svg'].indexOf(as) > -1,
     },
+    margin: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -132,8 +137,17 @@ const QrcodeVue = {
   },
   methods: {
     render() {
-      const { value, size, level, background, foreground, renderAs } = this
+      const {
+        value,
+        size,
+        level,
+        background,
+        foreground,
+        renderAs,
+        margin: _margin,
+      } = this
       const _size = size >>> 0 // size to number
+      const margin = _margin >>> 0 // size to number
 
       // We'll use type===-1 to force QRCode to automatically pick the best type
       const qrCode = new QRCode(-1, ErrorCorrectLevel[level])
@@ -141,12 +155,11 @@ const QrcodeVue = {
       qrCode.make()
 
       const cells = qrCode.modules
-      const tileW = _size / cells.length
-      const tileH = _size / cells.length
-      const scale = window.devicePixelRatio || 1
+      const numCells = cells.length + margin * 2
+      const devicePixelRatio = window.devicePixelRatio || 1
 
       if (renderAs === 'svg') {
-        this.numCells = cells.length
+        this.numCells = numCells
 
         // Drawing strategy: instead of a rect per module, we're going to create a
         // single path for the dark modules and layer that on top of a light rect,
@@ -154,33 +167,40 @@ const QrcodeVue = {
         // way faster than DOM ops.
         // For level 1, 441 nodes -> 2
         // For level 40, 31329 -> 2
-        this.fgPath = generatePath(cells)
+        this.fgPath = generatePath(cells, margin)
       } else {
         const canvas = this.$refs['qrcode-vue']
         const ctx = canvas.getContext('2d')
 
-        canvas.height = canvas.width = _size * scale
+        const scale = (_size / numCells) * devicePixelRatio
+        canvas.height = canvas.width = _size * devicePixelRatio
         ctx.scale(scale, scale)
 
-        cells.forEach(function (row, rdx) {
-          row.forEach(function (cell, cdx) {
-            ctx.fillStyle = cell ? foreground : background
-            const w = Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW)
-            const h = Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH)
-            ctx.fillRect(Math.round(cdx * tileW), Math.round(rdx * tileH), w, h)
+        ctx.fillStyle = background
+        ctx.fillRect(0, 0, numCells, numCells)
+
+        ctx.fillStyle = foreground
+
+        if (typeof Path2D === 'function') {
+          ctx.fill(new Path2D(generatePath(cells, margin)))
+        } else {
+          cells.forEach(function (row, rdx) {
+            row.forEach(function (cell, cdx) {
+              if (cell) {
+                ctx.fillRect(cdx + margin, rdx + margin, 1, 1)
+              }
+            })
           })
-        })
+        }
       }
     },
   },
   template:
-    "<div :value='value' :level='level' :background='background' :foreground='foreground'>" +
     "<svg v-if='renderAs===\"svg\"' :width='size' :height='size' shape-rendering='crispEdges' :viewBox='\"0 0 \" + numCells + \" \" + numCells'>" +
     '<path :fill=\'background\' :d=\'"M0,0 h" + numCells + "v" + numCells + "H0z"\'></path>' +
     "<path :fill='foreground' :d='fgPath'></path>" +
     '</svg>' +
-    "<canvas v-else ref='qrcode-vue' :width='size' :height='size' :style='{ width: size + \"px\", height: size + \"px\" }'></canvas>" +
-    '</div>',
+    "<canvas v-else ref='qrcode-vue' :width='size' :height='size' :style='{ width: size + \"px\", height: size + \"px\" }'></canvas>",
 }
 
 export default QrcodeVue

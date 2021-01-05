@@ -15,6 +15,7 @@ createApp({
       background: '#ffffff',
       foreground: '#000000',
       renderAs: 'svg',
+      margin: 0,
     }
   },
   template: `<form class="form-horizontal">
@@ -30,6 +31,12 @@ createApp({
           <div class="form-control-static">
             <input type="range" v-model="size" min="100" max="800" step="20">
           </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Margin:</label>
+        <div class="col-sm-10">
+          <input type="number" v-model="margin" min="0" max="10" class="form-control">
         </div>
       </div>
       <div class="form-group">
@@ -72,7 +79,7 @@ createApp({
         <label class="col-sm-2 control-label">QR_CODE:</label>
         <div class="col-sm-10">
           <div class="form-control-static">
-            <qrcode-vue class="qrcode" :value="value" :renderAs="renderAs" :size="size" :level="level" :background="background" :foreground="foreground"/>
+            <qrcode-vue class="qrcode" :value="value" :margin='margin' :renderAs="renderAs" :size="size" :level="level" :background="background" :foreground="foreground"/>
           </div>
         </div>
       </div>

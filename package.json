@@ -1,6 +1,6 @@
 {
   "name": "qrcode.vue",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A Vue.js component to generate QRCode.",
   "main": "dist/qrcode.vue.js",
   "module": "dist/qrcode.vue.esm.js",
@@ -24,6 +24,7 @@
     "component",
     "code",
     "qrcode",
+    "QR code",
     "二维码"
   ],
   "files": [

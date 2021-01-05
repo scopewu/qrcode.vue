@@ -63,7 +63,7 @@
       crossorigin="anonymous"
     ></script>
     <script
-      src="https://cdn.jsdelivr.net/npm/qrcode.vue@3.0.0/dist/qrcode.vue.min.js"
+      src="https://cdn.jsdelivr.net/npm/qrcode.vue@3.0.1/dist/qrcode.vue.min.js"
       integrity="sha256-OQSYSwXU+fQs/SLZGb84pTgWWc2AWqEkVWkafyhb2fg="
       crossorigin="anonymous"
     ></script>
@@ -92,6 +92,9 @@
     </div>
     <script>
       Vue.createApp({
+        components: {
+          QrcodeVue: QrcodeVue,
+        },
         data() {
           return {
             value: 'https://example.com',
@@ -100,6 +103,7 @@
             background: '#ffffff',
             foreground: '#000000',
             renderAs: 'svg',
+            margin: 0,
           }
         },
         template:
@@ -110,6 +114,9 @@
           '<div class="form-group"><label class="col-sm-2 control-label">Size:</label>' +
           '<div class="col-sm-10"><div class="form-control-static">' +
           '<input type="range" v-model="size" min="100" max="800" step="20"></div></div></div>' +
+          '<div class="form-group"><label class="col-sm-2 control-label">Margin:</label>' +
+          '<div class="col-sm-10">' +
+          '<input type="number" v-model="margin" min="0" max="15" class="form-control"></div></div>' +
           '<div class="form-group"><label class="col-sm-2 control-label">Level:</label>' +
           '<div class="col-sm-10">' +
           '<select v-model="level" class="form-control">' +
@@ -132,11 +139,8 @@
           '<input type="color" v-model="foreground"></div></div></div>' +
           '<div class="form-group"><label class="col-sm-2 control-label">QR_CODE:</label>' +
           '<div class="col-sm-10"><div class="form-control-static">' +
-          '<qrcode-vue class="qrcode" :value="value" :renderAs="renderAs" :size="size" :level="level" :background="background" :foreground="foreground"></qrcode-vue>' +
+          '<qrcode-vue class="qrcode" :value="value" :margin="margin" :renderAs="renderAs" :size="size" :level="level" :background="background" :foreground="foreground"></qrcode-vue>' +
           '</div></div></div></form>',
-        components: {
-          QrcodeVue: QrcodeVue,
-        },
       }).mount('#root')
     </script>
   </body>
