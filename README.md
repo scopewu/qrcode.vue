@@ -103,6 +103,13 @@ qrcode Error correction level (one of 'L', 'M', 'Q', 'H'). Know more, [wikipedia
 
 The size of qrcode element.
 
+### margin
+
+- Type: `number`
+- Default: `0`
+
+Define how much wide the quiet zone should be.
+
 ### renderAs
 
 - Type: `string`

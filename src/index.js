@@ -1,6 +1,16 @@
 import QRCode from 'qr.js/lib/QRCode'
 import ErrorCorrectLevel from 'qr.js/lib/ErrorCorrectLevel'
 
+// Thanks the `qrcode.react`
+const SUPPORTS_PATH2D = (function () {
+  try {
+    new Path2D().addPath(new Path2D())
+  } catch (e) {
+    return false
+  }
+  return true
+})()
+
 /**
  * Encode UTF16 to UTF8.
  * See: http://jonisalonen.com/2012/from-utf-16-to-utf-8-in-javascript/
@@ -181,7 +191,7 @@ const QrcodeVue = {
 
         ctx.fillStyle = foreground
 
-        if (typeof Path2D === 'function') {
+        if (SUPPORTS_PATH2D) {
           ctx.fill(new Path2D(generatePath(cells, margin)))
         } else {
           cells.forEach(function (row, rdx) {

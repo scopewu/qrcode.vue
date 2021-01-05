@@ -85,6 +85,13 @@ new Vue({
 
 二维码大小。
 
+### margin
+
+- Type: `number`
+- Default: `0`
+
+定义空白区的宽度应该是多少。
+
 ### renderAs
 
 - Type: `string`

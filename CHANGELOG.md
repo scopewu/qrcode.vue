@@ -1,3 +1,9 @@
+## [3.1.0] - 2020-12-20
+
+### Feature
+
+- Add support margin for QRcode.
+
 ## [3.0.0] - 2020-12-20
 
 ### Feature
