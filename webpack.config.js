@@ -7,7 +7,6 @@ const config = require('./config')
 const DefinePlugin = require('webpack/lib/DefinePlugin')
 const ProgressPlugin = require('webpack/lib/ProgressPlugin')
 const HotModuleReplacementPlugin = require('webpack/lib/HotModuleReplacementPlugin')
-const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin')
 const NoEmitOnErrorsPlugin = require('webpack/lib/NoEmitOnErrorsPlugin')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -65,7 +64,6 @@ const webpackConfig = {
     new DefinePlugin(config.globals),
     new ProgressPlugin(),
     new HotModuleReplacementPlugin(),
-    new NamedModulesPlugin(),
     new NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugin({
       template: helpers('docs/example/index.html'),
