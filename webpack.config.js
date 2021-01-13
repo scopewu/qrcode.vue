@@ -1,89 +1,52 @@
-const helpers = require('./config/helpers')
-const config = require('./config')
-
-/*
- * webpack plugins
- * **/
-const DefinePlugin = require('webpack/lib/DefinePlugin')
-const ProgressPlugin = require('webpack/lib/ProgressPlugin')
-const HotModuleReplacementPlugin = require('webpack/lib/HotModuleReplacementPlugin')
-const NoEmitOnErrorsPlugin = require('webpack/lib/NoEmitOnErrorsPlugin')
-
+const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 
-const webpackConfig = {
-  mode: 'development',
-  devtool: 'cheap-module-source-map',
-  entry: {
-    main: helpers('docs/example/app.js'),
-  },
-  output: {
-    path: helpers(config.dir_dist),
-    publicPath: '',
-    filename: '[name].js',
-  },
-  resolve: {
-    extensions: ['.js', '.vue', '.json'],
-    modules: [helpers('src'), helpers('node_modules')],
-    mainFields: ['module', 'main'],
-    alias: {
-      vue: helpers('node_modules/vue/dist/vue.esm-bundler.js'),
+module.exports = (env, { mode = 'production' }) => {
+  return {
+    mode: mode,
+    devtool: 'cheap-module-source-map',
+    entry: {
+      main: './example/webpack-entry.ts',
     },
-  },
-  externals: {
-    // vue: 'Vue'
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        use: 'babel-loader',
-        include: [helpers('src'), helpers('docs')],
+    output: {
+      path: path.resolve(__dirname, './example/dist'),
+      filename: mode === 'production' ? '[name].[contenthash].js' : '[name].js',
+    },
+    resolve: {
+      extensions: ['.ts', '.js'],
+      alias: {
+        vue$: 'vue/dist/vue.esm-browser.js'
       },
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: 'style-loader',
-            options: {
-              //sourceMap: true,
-            },
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true,
-            },
-          },
-        ],
-        include: [helpers('src'), helpers('docs')],
-      },
+    },
+    module: {
+      rules: [
+        {
+          test: /\.vue$/,
+          loader: 'vue-loader',
+        },
+        {
+          test: /\.ts$/,
+          loader: 'ts-loader',
+          options: {
+            appendTsSuffixTo: [/\.vue$/],
+          }
+        },
+        {
+          test: /\.svg$/,
+          loader: 'file-loader',
+        },
+      ],
+    },
+    plugins: [
+      new VueLoaderPlugin(),
+      new HtmlWebpackPlugin({
+        template: 'example/webpack.html',
+      }),
     ],
-  },
-  plugins: [
-    new DefinePlugin(config.globals),
-    new ProgressPlugin(),
-    new HotModuleReplacementPlugin(),
-    new NoEmitOnErrorsPlugin(),
-    new HtmlWebpackPlugin({
-      template: helpers('docs/example/index.html'),
-      inject: 'body',
-      minify: {
-        collapseWhitespace: false,
-      },
-    }),
-  ],
-  devServer: {
-    // port: '',
-    // host: '',
-    hot: true,
-    inline: true,
-    historyApiFallback: true,
-    watchOptions: {
-      aggregateTimeout: 300,
-      poll: 1000,
+    devServer: {
+      overlay: true,
+      historyApiFallback: true,
     },
-  },
+  }
 }
-
-module.exports = webpackConfig
