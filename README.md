@@ -35,6 +35,14 @@ the `qrcode.vue` component can use in you Vue.js app.
 npm install --save qrcode.vue # yarn add qrcode.vue
 ```
 
+```
+dist/
+|--- qrcode.vue.cjs.js         // CommonJS
+|--- qrcode.vue.esm.js         // ES module
+|--- qrcode.vue.browser.js     // IIFE for browser
+|--- qrcode.vue.browser.min.js // IIFE Minimum size for browser 
+```
+
 ## Usage
 
 e.g.
@@ -92,7 +100,7 @@ The value content of qrcode
 ### level
 
 - Type: `string`
-- Default: `L`
+- Default: `H`
 
 qrcode Error correction level (one of 'L', 'M', 'Q', 'H'). Know more, [wikipedia: QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction)
 
@@ -140,4 +148,4 @@ The class name of qrcode element.
 
 ## License
 
-copyright &copy; 2017 @scopewu, license by [MIT](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
+copyright &copy; 2021 @scopewu, license by [MIT](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)

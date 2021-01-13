@@ -74,7 +74,7 @@ new Vue({
 ### level
 
 - Type: `string`
-- Default: `L`
+- Default: `H`
 
 二维码的容错能力等级，取值为 'L', 'M', 'Q', 'H' 之一。了解更多，[维基百科：QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction)。
 
@@ -122,4 +122,4 @@ new Vue({
 
 ## 软件许可
 
-copyright &copy; 2017 scopewu, license by [MIT](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
+copyright &copy; 2021 scopewu, license by [MIT](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
