@@ -48,11 +48,10 @@ dist/
 e.g.
 
 ```javascript
-import Vue from 'vue'
+import { createApp } from 'vue'
 import QrcodeVue from 'qrcode.vue'
 
-new Vue({
-  el: '#root',
+createApp({
   data: {
     value: 'https://example.com',
   },
@@ -60,16 +59,14 @@ new Vue({
   components: {
     QrcodeVue,
   },
-})
+}).mount('#root')
 ```
 
 Or single-file components with a `*.vue` extension:
 
 ```html
 <template>
-  <div>
-    <qrcode-vue :value="value" :size="size" level="H"></qrcode-vue>
-  </div>
+  <qrcode-vue :value="value" :size="size" level="H" />
 </template>
 <script>
   import QrcodeVue from 'qrcode.vue'

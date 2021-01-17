@@ -217,12 +217,6 @@ const QRCodeCanvas = defineComponent({
     )
   },
   props: QRCodeProps,
-  data() {
-    return {
-      numCells: 0,
-      fgPath: '',
-    }
-  },
   mounted() {
     this.generate()
   },

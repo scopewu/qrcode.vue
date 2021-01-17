@@ -22,11 +22,10 @@ npm install --save qrcode.vue # yarn add qrcode.vue
 e.g.
 
 ```javascript
-import Vue from 'vue'
+import { createApp } from 'vue'
 import QrcodeVue from 'qrcode.vue'
 
-new Vue({
-  el: '#root',
+createApp({
   data: {
     value: 'https://example.com',
   },
@@ -34,16 +33,14 @@ new Vue({
   components: {
     QrcodeVue,
   },
-})
+}).mount('#root')
 ```
 
 或者，在独有单文件扩展 `*.vue` 中使用：
 
 ```html
 <template>
-  <div>
-    <qrcode-vue :value="value" :size="size" level="H"></qrcode-vue>
-  </div>
+  <qrcode-vue :value="value" :size="size" level="H" />
 </template>
 <script>
   import QrcodeVue from 'qrcode.vue'
