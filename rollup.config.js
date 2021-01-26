@@ -79,6 +79,6 @@ const browserPlugins = [
 export default [
   createEntry({ format: 'cjs', file: pkg.main }),
   createEntry({ format: 'es', file: pkg.module }),
-  createEntry({ format: 'iife', file: pkg.browser, }),
-  createEntry({ format: 'iife', file: pkg.unpkg, plugins: browserPlugins }),
+  createEntry({ format: 'umd', file: pkg.browser, }),
+  createEntry({ format: 'umd', file: pkg.unpkg, plugins: browserPlugins }),
 ]

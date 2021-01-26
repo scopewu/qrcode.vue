@@ -39,8 +39,8 @@ npm install --save qrcode.vue # yarn add qrcode.vue
 dist/
 |--- qrcode.vue.cjs.js         // CommonJS
 |--- qrcode.vue.esm.js         // ES module
-|--- qrcode.vue.browser.js     // IIFE for browser
-|--- qrcode.vue.browser.min.js // IIFE Minimum size for browser 
+|--- qrcode.vue.browser.js     // UMD for browser or require.js or CommonJS
+|--- qrcode.vue.browser.min.js // UMD Minimum size
 ```
 
 ## Usage
