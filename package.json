@@ -7,7 +7,7 @@
   "browser": "dist/qrcode.vue.browser.js",
   "unpkg": "dist/qrcode.vue.browser.min.js",
   "jsdelivr": "dist/qrcode.vue.browser.min.js",
-  "types": "./dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "start": "webpack serve --config webpack.config.js --mode=development --open",
     "build": "rimraf dist && rollup -c",
