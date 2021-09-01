@@ -45,7 +45,11 @@ module.exports = (env, { mode = 'production' }) => {
       }),
     ],
     devServer: {
-      overlay: true,
+      hot: 'only',
+      client: {
+        overlay: true,
+        progress: true,
+      },
       historyApiFallback: true,
     },
   }
