@@ -2,22 +2,6 @@
 
 ⚠️ Now when you are using Vue 3.x, please upgrade `qrcode.vue` to `3.x`
 
-For those using vue-cli you will need to add this option into your `vue.config.js` file to enable runtime compilation
-
-```javascript
-module.exports = { runtimeCompiler: true }
-```
-
-For those using webpack you will need to set this option in your `webpack.config.js` file to enable esm bundling.
-
-```javascript
-resolve: {
-  alias: {
-    vue: 'vue/dist/vue.esm-bundler.js',
-  },
-},
-```
-
 🔒 if you are using Vue 2.x, please keep using version `1.x`;
 
 A Vue.js component to generate [QRCode](https://en.wikipedia.org/wiki/QR_code).
