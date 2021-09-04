@@ -16,7 +16,9 @@ module.exports = (env, { mode = 'production' }) => {
     resolve: {
       extensions: ['.ts', '.js'],
       alias: {
-        vue$: 'vue/dist/vue.esm-browser.js'
+        vue$: mode === 'production'
+          ? 'vue/dist/vue.esm-browser.prod.js'
+          : 'vue/dist/vue.esm-browser.js'
       },
     },
     module: {

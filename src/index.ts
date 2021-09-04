@@ -1,5 +1,7 @@
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, onMounted, onUpdated, ref } from 'vue'
 import QR, { ErrorCorrectLevel } from 'qr.js'
+
+type Modules = boolean[][]
 
 const defaultErrorCorrectLevel = 'H'
 
@@ -13,7 +15,7 @@ const SUPPORTS_PATH2D: boolean = (function () {
   return true
 })()
 
-function QRCode(data: string, errorCorrectLevel: number): { modules: boolean[][] } {
+function QRCode(data: string, errorCorrectLevel: number): { modules: Modules } {
   // We'll use type===-1 to force QRCode to automatically pick the best type
   return new QR(data, { typeNumber: -1, errorCorrectLevel })
 }
@@ -58,7 +60,7 @@ function toUTF8String(str: string): string {
   return utf8Str
 }
 
-function generatePath(modules: boolean[][], margin: number = 0): string {
+function generatePath(modules: Modules, margin: number = 0): string {
   const ops: string[] = []
   modules.forEach(function (row, y) {
     let start: number | null = null
@@ -143,54 +145,16 @@ const QRCodeVueProps = {
 } as const
 
 const QRCodeSvg = defineComponent({
-  render() {
-    const {
-      size,
-      background,
-      foreground,
-      numCells,
-      fgPath,
-    } = this
-
-    return h(
-      'svg',
-      {
-        width: size,
-        height: size,
-        'shape-rendering': `crispEdges`,
-        xmlns: 'http://www.w3.org/2000/svg',
-        viewBox: `0 0 ${numCells} ${numCells}`,
-      },
-      [
-        h('path', { fill: background, d: `M0,0 h${numCells}v${numCells}H0z` }),
-        h('path', { fill: foreground, d: fgPath }),
-      ]
-    )
-  },
   props: QRCodeProps,
-  data() {
-    return {
-      numCells: 0,
-      fgPath: '',
-    }
-  },
-  created() {
-    this.generate()
-  },
-  updated() {
-    this.generate()
-  },
-  methods: {
-    generate() {
-      const {
-        value,
-        level,
-        margin,
-      } = this
+  setup(props) {
+    const numCells = ref(0)
+    const fgPath = ref('')
+
+    const generate = () => {
+      const { value, level, margin } = props
 
       const { modules: cells } = QRCode(toUTF8String(value), ErrorCorrectLevel[level])
-
-      this.numCells = cells.length + margin * 2
+      numCells.value = cells.length + margin * 2
 
       // Drawing strategy: instead of a rect per module, we're going to create a
       // single path for the dark modules and layer that on top of a light rect,
@@ -198,45 +162,41 @@ const QRCodeSvg = defineComponent({
       // way faster than DOM ops.
       // For level 1, 441 nodes -> 2
       // For level 40, 31329 -> 2
-      this.fgPath = generatePath(cells, margin)
+      fgPath.value = generatePath(cells, margin)
     }
+
+    generate()
+
+    onUpdated(generate)
+
+    return () => h(
+      'svg',
+      {
+        width: props.size,
+        height: props.size,
+        'shape-rendering': `crispEdges`,
+        xmlns: 'http://www.w3.org/2000/svg',
+        viewBox: `0 0 ${numCells.value} ${numCells.value}`,
+      },
+      [
+        h('path', { fill: props.background, d: `M0,0 h${numCells.value}v${numCells.value}H0z` }),
+        h('path', { fill: props.foreground, d: fgPath.value }),
+      ]
+    )
   },
 })
 
 const QRCodeCanvas = defineComponent({
-  render() {
-    const {
-      size,
-    } = this
-
-    return h(
-      'canvas',
-      {
-        style: { width: `${size}px`, height: `${size}px`},
-      },
-    )
-  },
   props: QRCodeProps,
-  mounted() {
-    this.generate()
-  },
-  updated() {
-    this.generate()
-  },
-  methods: {
-    generate() {
-      const {
-        value,
-        level,
-        size,
-        margin,
-        background,
-        foreground,
-      } = this
+  setup(props) {
+    const canvasEl = ref<HTMLCanvasElement>(null!)
+
+    const generate = () => {
+      const { value, level, size, margin, background, foreground } = props
 
       const { modules: cells } = QRCode(toUTF8String(value), ErrorCorrectLevel[level])
       const numCells = cells.length + margin * 2
-      const canvas: HTMLCanvasElement = this.$el
+      const canvas = canvasEl.value
 
       if (!canvas) {
         return;
@@ -271,6 +231,17 @@ const QRCodeCanvas = defineComponent({
         })
       }
     }
+
+    onMounted(generate)
+    onUpdated(generate)
+
+    return () => h(
+      'canvas',
+      {
+        ref: canvasEl,
+        style: { width: `${props.size}px`, height: `${props.size}px`},
+      },
+    )
   },
 })
 
