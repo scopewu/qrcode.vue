@@ -71,56 +71,56 @@ Or single-file components with a `*.vue` extension:
 
 ## Component props
 
-### value
+### `value`
 
 - Type: `string`
 - Default: `''`
 
-The value content of qrcode
+The value content of qrcode.
 
-### level
-
-- Type: `string`
-- Default: `H`
-
-qrcode Error correction level (one of 'L', 'M', 'Q', 'H'). Know more, [wikipedia: QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction)
-
-### size
+### `size`
 
 - Type: `number`
 - Default: `100`
 
 The size of qrcode element.
 
-### margin
+### `render-as`
+
+- Type: `string`
+- Default: `canvas`
+
+Generate QRcode as `canvas` or `svg`. The prop `svg` can work on SSR.
+
+### `margin`
 
 - Type: `number`
 - Default: `0`
 
 Define how much wide the quiet zone should be.
 
-### renderAs
+### `level`
 
 - Type: `string`
-- Default: `canvas`
+- Default: `H`
 
-Generate QRcode as `canvas` or `svg`.
+qrcode Error correction level (one of 'L', 'M', 'Q', 'H'). Know more, [wikipedia: QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction).
 
-### background
+### `background`
 
 - Type: `string`
 - Default: `#ffffff`
 
 The background color of qrcode.
 
-### foreground
+### `foreground`
 
 - Type: `string`
 - Default: `#000000`
 
 The foreground color of qrcode.
 
-### class
+### `class`
 
 - Type: `string`
 - Default: `''`

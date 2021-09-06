@@ -69,59 +69,59 @@ createApp({
 
 ## Component props
 
-### value
+### `value`
 
-- Type: `string`
-- Default: `''`
+- 类型：`string`
+- 默认值：`''`
 
 二维码的内容值。
 
-### level
+### `size`
 
-- Type: `string`
-- Default: `H`
-
-二维码的容错能力等级，取值为 'L', 'M', 'Q', 'H' 之一。了解更多，[维基百科：QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction)。
-
-### size
-
-- Type: `number`
-- Default: `100`
+- 类型：`number`
+- 默认值：`100`
 
 二维码大小。
 
-### margin
+### `render-as`
 
-- Type: `number`
-- Default: `0`
+- 类型：`string`
+- 默认值：`canvas`
+
+生成二维码的 HTML 标签，可选 `canvas` 或 `svg`。其中 `svg` 可以用于 SSR。
+
+### `margin`
+
+- 类型：`number`
+- 默认值：`0`
 
 定义空白区的宽度应该是多少。
 
-### renderAs
+### `level`
 
-- Type: `string`
-- Default: `canvas`
+- 类型：`string`
+- 默认值：`H`
 
-生成二维码的 HTML 标签，可选 `canvas` 或 `svg`。
+二维码的容错能力等级，取值为 'L', 'M', 'Q', 'H' 之一。了解更多，[维基百科：QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction)。
 
-### background
+### `background`
 
-- Type: `string`
-- Default: `#ffffff`
+- 类型：`string`
+- 默认值：`#ffffff`
 
 二维码背景颜色。
 
-### foreground
+### `foreground`
 
-- Type: `string`
-- Default: `#000000`
+- 类型：`string`
+- 默认值：`#000000`
 
 二维码前景颜色。
 
-### class
+### `class`
 
-- Type: `string`
-- Default: `''`
+- 类型：`string`
+- 默认值：`''`
 
 传递给二维码根元素的类名。
 
