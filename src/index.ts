@@ -1,7 +1,15 @@
-import { defineComponent, h, onMounted, onUpdated, ref } from 'vue'
+import { defineComponent, h, onMounted, onUpdated, PropType, ref } from 'vue'
 import QR, { ErrorCorrectLevel } from 'qr.js'
 
 type Modules = boolean[][]
+type ErrorLevel = Readonly<{
+  L: 1,
+  M: 0,
+  Q: 3,
+  H: 2
+}>
+type ErrorCorrectLevelString = keyof ErrorLevel
+type ErrorCorrectLevelValue = ErrorLevel[ErrorCorrectLevelString]
 
 const defaultErrorCorrectLevel = 'H'
 
@@ -15,9 +23,12 @@ const SUPPORTS_PATH2D: boolean = (function () {
   return true
 })()
 
-function QRCode(data: string, errorCorrectLevel: number): { modules: Modules } {
+function QRCode(
+  data: string,
+  errorCorrectLevel: ErrorCorrectLevelValue,
+): { modules: Modules } {
   // We'll use type===-1 to force QRCode to automatically pick the best type
-  return new QR(data, { typeNumber: -1, errorCorrectLevel })
+  return QR(toUTF8String(data), { typeNumber: -1, errorCorrectLevel })
 }
 
 function validErrorCorrectLevel(level: string): boolean {
@@ -115,7 +126,7 @@ const QRCodeProps = {
     default: 100,
   },
   level: {
-    type: String,
+    type: String as PropType<ErrorCorrectLevelString>,
     default: defaultErrorCorrectLevel,
     validator: (l: any) => validErrorCorrectLevel(l),
   },
@@ -145,6 +156,7 @@ const QRCodeVueProps = {
 } as const
 
 const QRCodeSvg = defineComponent({
+  name: 'QRCodeSvg',
   props: QRCodeProps,
   setup(props) {
     const numCells = ref(0)
@@ -153,7 +165,7 @@ const QRCodeSvg = defineComponent({
     const generate = () => {
       const { value, level, margin } = props
 
-      const { modules: cells } = QRCode(toUTF8String(value), ErrorCorrectLevel[level])
+      const { modules: cells } = QRCode(value, ErrorCorrectLevel[level])
       numCells.value = cells.length + margin * 2
 
       // Drawing strategy: instead of a rect per module, we're going to create a
@@ -179,7 +191,12 @@ const QRCodeSvg = defineComponent({
         viewBox: `0 0 ${numCells.value} ${numCells.value}`,
       },
       [
-        h('path', { fill: props.background, d: `M0,0 h${numCells.value}v${numCells.value}H0z` }),
+        h(
+          'path',
+          {
+            fill: props.background,
+            d: `M0,0 h${numCells.value}v${numCells.value}H0z`,
+          }),
         h('path', { fill: props.foreground, d: fgPath.value }),
       ]
     )
@@ -187,6 +204,7 @@ const QRCodeSvg = defineComponent({
 })
 
 const QRCodeCanvas = defineComponent({
+  name: 'QRCodeCanvas',
   props: QRCodeProps,
   setup(props) {
     const canvasEl = ref<HTMLCanvasElement>(null!)
@@ -194,7 +212,7 @@ const QRCodeCanvas = defineComponent({
     const generate = () => {
       const { value, level, size, margin, background, foreground } = props
 
-      const { modules: cells } = QRCode(toUTF8String(value), ErrorCorrectLevel[level])
+      const { modules: cells } = QRCode(value, ErrorCorrectLevel[level])
       const numCells = cells.length + margin * 2
       const canvas = canvasEl.value
 
@@ -246,6 +264,7 @@ const QRCodeCanvas = defineComponent({
 })
 
 const QrcodeVue = defineComponent({
+  name: 'Qrcode',
   render() {
     const {
       renderAs,

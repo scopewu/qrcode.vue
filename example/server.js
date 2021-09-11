@@ -5,7 +5,7 @@ const QrcodeVue = require('../dist/qrcode.vue.cjs')
 
 const app = createSSRApp({
   components: { QrcodeVue },
-  template: '<QrcodeVue value="123" :size="100" renderAs="svg" />',
+  template: '<QrcodeVue value="123" :size="100" render-as="svg" />',
 });
 
 http.createServer(async (request, response) => {

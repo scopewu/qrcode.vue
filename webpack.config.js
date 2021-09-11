@@ -11,10 +11,13 @@ module.exports = (env, { mode = 'production' }) => {
     },
     output: {
       path: path.resolve(__dirname, './example/dist'),
-      filename: mode === 'production' ? '[name].[contenthash].js' : '[name].js',
+      filename: mode === 'production'
+        ? '[name].[contenthash].js'
+        : '[name].js',
     },
     resolve: {
       extensions: ['.ts', '.js'],
+      mainFields: ['module', 'main'],
       alias: {
         vue$: mode === 'production'
           ? 'vue/dist/vue.esm-browser.prod.js'

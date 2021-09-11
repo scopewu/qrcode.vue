@@ -1,3 +1,9 @@
+## [3.3.1] - 2021-09-11
+
+### BUGFIX
+
+- Fix document description error, adjust `renderAs` to `render-as`.
+
 ## [3.2.0] - 2020-12-20
 
 ### Feature
