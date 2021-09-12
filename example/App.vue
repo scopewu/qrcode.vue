@@ -31,7 +31,7 @@
           <div class='col-xs-8'>
             <input
               type="range"
-              v-model.number="size"
+              v-model="size"
               min="100"
               max="800"
               step="20"
@@ -47,7 +47,7 @@
           <div class='col-xs-8'>
             <input
               type="range"
-              v-model.number="margin"
+              v-model="margin"
               min="0"
               max="10"
               step='1'
@@ -100,9 +100,9 @@
             <QrcodeVue
               class="qrcode"
               :value="value"
-              :margin='margin'
+              :margin='Number(margin)'
               :render-as="renderAs"
-              :size="size"
+              :size="Number(size)"
               :level="level"
               :background="background"
               :foreground='foreground'
@@ -120,9 +120,9 @@ import QrcodeVue from '../src'
 
 const value = ref('https://example.com')
 const size = ref(100)
-const level = ref('L')
+const level = ref<'L' | 'Q' | 'M' | 'H'>('L')
 const background = ref('#ffffff')
 const foreground = ref('#000000')
-const renderAs = ref('svg')
+const renderAs = ref<'canvas' | 'svg'>('svg')
 const margin = ref(0)
 </script>
