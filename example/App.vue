@@ -31,7 +31,7 @@
           <div class='col-xs-8'>
             <input
               type="range"
-              v-model="size"
+              v-model.number="size"
               min="100"
               max="800"
               step="20"
@@ -47,7 +47,7 @@
           <div class='col-xs-8'>
             <input
               type="range"
-              v-model="margin"
+              v-model.number="margin"
               min="0"
               max="10"
               step='1'

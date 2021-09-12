@@ -85,7 +85,7 @@ createApp({
 
 ### `render-as`
 
-- 类型：`string`
+- 类型：`string('canvas' | 'svg')`
 - 默认值：`canvas`
 
 生成二维码的 HTML 标签，可选 `canvas` 或 `svg`。其中 `svg` 可以用于 SSR。
@@ -99,7 +99,7 @@ createApp({
 
 ### `level`
 
-- 类型：`string`
+- 类型：`string('L' | 'M' | 'Q' | 'H')`
 - 默认值：`H`
 
 二维码的容错能力等级，取值为 'L', 'M', 'Q', 'H' 之一。了解更多，[维基百科：QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction)。

@@ -87,7 +87,7 @@ The size of qrcode element.
 
 ### `render-as`
 
-- Type: `string`
+- Type: `string('canvas' | 'svg')`
 - Default: `canvas`
 
 Generate QRcode as `canvas` or `svg`. The prop `svg` can work on SSR.
@@ -101,7 +101,7 @@ Define how much wide the quiet zone should be.
 
 ### `level`
 
-- Type: `string`
+- Type: `string('L' | 'M' | 'Q' | 'H')`
 - Default: `H`
 
 qrcode Error correction level (one of 'L', 'M', 'Q', 'H'). Know more, [wikipedia: QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction).

@@ -143,17 +143,17 @@ const QRCodeProps = {
     required: false,
     default: 0,
   },
-} as const
+}
 
 const QRCodeVueProps = {
   ...QRCodeProps,
   renderAs: {
-    type: String,
+    type: String as PropType<'canvas' | 'svg'>,
     required: false,
     default: 'canvas',
     validator: (as: any) => ['canvas', 'svg'].indexOf(as) > -1,
   },
-} as const
+}
 
 const QRCodeSvg = defineComponent({
   name: 'QRCodeSvg',
