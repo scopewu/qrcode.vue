@@ -30,9 +30,7 @@ jobs:
           node-version: '14'
 
       - name: Install dependencies
-        run: |
-          npm install -g yarn
-          yarn install
+        run: yarn install
 
       - name: Build
         run: yarn webpack --mode=production
@@ -43,3 +41,4 @@ jobs:
           branch: gh-pages # The branch the action should deploy to.
           folder: example/dist # The folder the action should deploy.
           clean: true
+          single-commit: true
