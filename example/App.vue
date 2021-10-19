@@ -62,8 +62,8 @@
         <div class="col-sm-10">
           <select v-model="level" class="form-control">
             <option value="L">L</option>
-            <option value="Q">Q</option>
             <option value="M">M</option>
+            <option value="Q">Q</option>
             <option value="H">H</option>
           </select>
         </div>
@@ -120,7 +120,7 @@ import QrcodeVue from '../src'
 
 const value = ref('https://example.com')
 const size = ref(100)
-const level = ref<'L' | 'Q' | 'M' | 'H'>('L')
+const level = ref<'L' | 'M' | 'Q' | 'H'>('L')
 const background = ref('#ffffff')
 const foreground = ref('#000000')
 const renderAs = ref<'canvas' | 'svg'>('svg')

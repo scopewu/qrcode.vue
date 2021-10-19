@@ -1,5 +1,6 @@
 import { defineComponent, h, onMounted, onUpdated, PropType, ref } from 'vue'
-import QR, { ErrorCorrectLevel } from 'qr.js'
+import QR from 'qr.js/lib/QRCode.js'
+import ErrorCorrectLevel from 'qr.js/lib/ErrorCorrectLevel.js'
 
 type Modules = boolean[][]
 type Level = 'L' | 'M' | 'Q' | 'H'
@@ -20,7 +21,11 @@ function QRCode(data: string, level: Level): { modules: Modules } {
   const errorCorrectLevel = ErrorCorrectLevel[level]
 
   // We'll use type===-1 to force QRCode to automatically pick the best type
-  return QR(toUTF8String(data), { typeNumber: -1, errorCorrectLevel })
+  const qrcode = new QR(-1, errorCorrectLevel)
+  qrcode.addData(toUTF8String(data))
+  qrcode.make()
+
+  return qrcode
 }
 
 function validErrorCorrectLevel(level: string): boolean {
