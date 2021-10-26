@@ -47,6 +47,16 @@ module.exports = (env, { mode = 'production' }) => {
       new VueLoaderPlugin(),
       new HtmlWebpackPlugin({
         template: 'example/webpack.html',
+        minify: {
+          minifyCSS: true,
+          collapseWhitespace: true,
+          keepClosingSlash: true,
+          removeComments: true,
+          removeRedundantAttributes: true,
+          removeScriptTypeAttributes: true,
+          removeStyleLinkTypeAttributes: true,
+          useShortDoctype: true,
+        },
       }),
     ],
     devServer: {

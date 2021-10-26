@@ -1,5 +1,5 @@
 import {createApp, defineComponent, onMounted, ref} from 'vue'
-import QrcodeVue from "../src";
+import QrcodeVue from '../src';
 
 const App = defineComponent({
   components: { QrcodeVue },

@@ -28,11 +28,12 @@ jobs:
         uses: actions/setup-node@main
         with:
           node-version: '14'
+          cache: 'yarn'
 
       - name: Install dependencies
         run: yarn install
 
-      - name: Build
+      - name: Build GitHub Pages
         run: yarn webpack --mode=production
 
       - name: Deploy 🚀

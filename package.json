@@ -11,7 +11,7 @@
   "scripts": {
     "start": "webpack serve --config webpack.config.js --mode=development",
     "build": "rimraf dist && rollup -c",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "yarn build"
   },
   "repository": {
     "type": "git",
