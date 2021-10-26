@@ -3,6 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = (env, { mode = 'production' }) => {
+  const isProd = mode === 'production'
+
   return {
     mode: mode,
     devtool: 'cheap-module-source-map',
@@ -11,15 +13,13 @@ module.exports = (env, { mode = 'production' }) => {
     },
     output: {
       path: path.resolve(__dirname, './example/dist'),
-      filename: mode === 'production'
-        ? '[name].[contenthash].js'
-        : '[name].js',
+      filename: isProd ? '[name].[contenthash].js' : '[name].js',
     },
     resolve: {
       extensions: ['.ts', '.js'],
       mainFields: ['module', 'main'],
       alias: {
-        vue$: mode === 'production'
+        vue$: isProd
           ? 'vue/dist/vue.esm-browser.prod.js'
           : 'vue/dist/vue.esm-browser.js'
       },
