@@ -1,5 +1,5 @@
-import {createApp, defineComponent, onMounted, ref} from 'vue'
-import QrcodeVue from '../src';
+import { createApp, defineComponent, onMounted, ref } from 'vue'
+import QrcodeVue from '../src'
 
 const App = defineComponent({
   components: { QrcodeVue },
@@ -12,7 +12,7 @@ const App = defineComponent({
     const renderAs = ref<'canvas' | 'svg'>('svg')
     const margin = ref(0)
 
-    const stargazersCount = ref(290)
+    const stargazersCount = ref(400)
 
     onMounted(() => {
       fetchGitHubRepoStarCount((repoDetail: any) => {

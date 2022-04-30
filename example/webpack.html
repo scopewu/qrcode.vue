@@ -17,9 +17,10 @@
   />
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
-    integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE="
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css"
+    integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w=="
     crossorigin="anonymous"
+    referrerpolicy="no-referrer"
   />
   <style>
     body {
@@ -183,10 +184,10 @@
 <body>
 <div id="root">
   <div class="container-fluid">
-    <div class="page-header">
+    <div class="border-bottom mt-4 mb-3 pb-2">
       <h1>qrcode.vue:</h1>
       <div class='row'>
-        <div class='col-xs-4'>
+        <div class='col-4'>
           <div class="widget" v-cloak>
             <a class="btn" href="https://github.com/scopewu/qrcode.vue" rel="noopener" target="_blank" aria-label="Star qrcode.vue on GitHub">
               <svg viewBox="0 0 16 16" width="14" height="14" class="octicon octicon-mark-github" aria-hidden="true">
@@ -198,56 +199,61 @@
             <a class="social-count" href="https://github.com/scopewu/qrcode.vue/stargazers" rel="noopener" target="_blank" :aria-label="`${stargazersCount} stargazers on GitHub`">{{ stargazersCount }}</a>
           </div>
         </div>
-        <div class='col-xs-8 text-right'>
+        <div class='col-8 text-end'>
           <a
             href='https://github.com/scopewu/qrcode.vue'
+            class='link-dark'
           >Fork me on GitHub</a>
         </div>
       </div>
     </div>
-    <form class="form-horizontal">
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Value:</label>
+    <form>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Value:</label>
         <div class="col-sm-10">
           <textarea v-model="value" class="form-control" rows="3"></textarea>
         </div>
       </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Size:</label>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Size:</label>
         <div class="col-sm-10">
-          <div class='col-xs-8'>
-            <input
-              type="range"
-              v-model="size"
-              min="100"
-              max="800"
-              step="20"
-              class="form-control"
-            />
+          <div class='row'>
+            <div class='col-8'>
+              <input
+                type="range"
+                v-model="size"
+                min="100"
+                max="800"
+                step="20"
+                class="form-range"
+              />
+            </div>
+            <div class='col-auto'>{{size}}</div>
           </div>
-          <div class='col-xs-4 form-control-static'>{{size}}</div>
         </div>
       </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Margin:</label>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Margin:</label>
         <div class="col-sm-10">
-          <div class='col-xs-8'>
-            <input
-              type="range"
-              v-model="margin"
-              min="0"
-              max="10"
-              step='1'
-              class="form-control"
-            />
+          <div class='row'>
+            <div class='col-8'>
+              <input
+                type="range"
+                v-model="margin"
+                min="0"
+                max="10"
+                step='1'
+                class="form-range"
+              />
+            </div>
+            <div class='col-auto'>{{margin}}</div>
           </div>
-          <div class='col-xs-4 form-control-static'>{{margin}}</div>
         </div>
       </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Level:</label>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Level:</label>
         <div class="col-sm-10">
-          <select v-model="level" class="form-control">
+          <select v-model="level" class="form-select">
             <option value="L">L</option>
             <option value="M">M</option>
             <option value="Q">Q</option>
@@ -255,33 +261,29 @@
           </select>
         </div>
       </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">renderAs:</label>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">renderAs:</label>
         <div class="col-sm-10">
-          <select v-model="renderAs" class="form-control">
+          <select v-model="renderAs" class="form-select">
             <option value="svg">svg</option>
             <option value="canvas">canvas</option>
           </select>
         </div>
       </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Background:</label>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Background:</label>
         <div class="col-sm-10">
-          <div class="form-control-static">
-            <input type="color" v-model="background">
-          </div>
+          <input type="color" class="border border-3 rounded" v-model="background">
         </div>
       </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">Foreground:</label>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Foreground:</label>
         <div class="col-sm-10">
-          <div class="form-control-static">
-            <input type="color" v-model="foreground">
-          </div>
+          <input type="color" class="border border-3 rounded" v-model="foreground">
         </div>
       </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label">QR_CODE:</label>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">QR_CODE:</label>
         <div class="col-sm-10">
           <div class="form-control-static">
             <qrcode-vue
