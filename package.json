@@ -36,7 +36,7 @@
   "bugs": {
     "url": "https://github.com/scopewu/qrcode.vue/issues"
   },
-  "homepage": "https://scopewu.github.io/qrcode.vue/",
+  "homepage": "https://qr-vue.tie.pub",
   "peerDependencies": {
     "vue": "^3.0.0"
   },
