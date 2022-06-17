@@ -10,8 +10,7 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "start": "webpack serve --config webpack.config.js --mode=development",
-    "build": "rimraf dist && rollup -c",
-    "prepublishOnly": "yarn build"
+    "build": "rimraf dist && rollup -c"
   },
   "repository": {
     "type": "git",
