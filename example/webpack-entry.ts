@@ -12,7 +12,7 @@ const App = defineComponent({
     const renderAs = ref<'canvas' | 'svg'>('svg')
     const margin = ref(0)
 
-    const stargazersCount = ref(400)
+    const stargazersCount = ref(500)
 
     onMounted(() => {
       fetchGitHubRepoStarCount((repoDetail: any) => {
