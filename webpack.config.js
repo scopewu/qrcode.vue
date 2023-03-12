@@ -1,8 +1,10 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { VueLoaderPlugin } = require('vue-loader')
+import path from 'path'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import { VueLoaderPlugin } from 'vue-loader'
 
-module.exports = (env, { mode = 'production' }) => {
+const dirname = new URL('.', import.meta.url).pathname
+
+const config = (env, { mode = 'production' }) => {
   const isProd = mode === 'production'
 
   return {
@@ -12,7 +14,7 @@ module.exports = (env, { mode = 'production' }) => {
       main: './example/webpack-entry.ts',
     },
     output: {
-      path: path.resolve(__dirname, './example/dist'),
+      path: path.resolve(dirname, './example/dist'),
       filename: isProd ? '[name].[contenthash].js' : '[name].js',
     },
     resolve: {
@@ -69,3 +71,5 @@ module.exports = (env, { mode = 'production' }) => {
     },
   }
 }
+
+export default config

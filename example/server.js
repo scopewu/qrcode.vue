@@ -1,7 +1,7 @@
-const http = require('http')
-const { createSSRApp } = require('vue')
-const { renderToString } = require('vue/server-renderer')
-const QrcodeVue = require('../dist/qrcode.vue.cjs')
+import http from 'http'
+import { createSSRApp } from 'vue'
+import { renderToString } from 'vue/server-renderer'
+import QrcodeVue from '../dist/qrcode.vue.esm.js'
 
 const PORT = process.env.PORT || 3000
 
@@ -33,4 +33,4 @@ http.createServer(async (request, response) => {
   response.end(html)
 }).listen(PORT)
 
-console.log(`The server running at http: localhost:${PORT}`)
+console.log(`The server running at http://localhost:${PORT}`)
