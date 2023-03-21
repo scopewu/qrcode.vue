@@ -34,7 +34,7 @@ jobs:
         run: yarn webpack --mode=production
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.3.3
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: example/dist # The folder the action should deploy.

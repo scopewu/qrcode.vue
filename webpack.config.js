@@ -62,7 +62,7 @@ const config = (env, { mode = 'production' }) => {
       }),
     ],
     devServer: {
-      hot: 'only',
+      hot: true,
       client: {
         overlay: true,
         progress: true,

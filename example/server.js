@@ -3,7 +3,7 @@ import { createSSRApp } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 import QrcodeVue from '../dist/qrcode.vue.esm.js'
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT ?? 3000
 
 const app = createSSRApp({
   data: () => ({ value: 'Hello QrcodeVue', size: 100 }),
@@ -16,8 +16,9 @@ http.createServer(async (request, response) => {
 
   const html = `
     <!DOCTYPE html>
-    <html>
+    <html lang='en'>
       <head>
+      <meta charset='utf-8'>
         <title>Qrcode.vue SSR Example</title>
       </head>
       <body>
