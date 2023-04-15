@@ -121,7 +121,7 @@ const QRCodeSvg = defineComponent({
     const generate = () => {
       const { value, level, margin } = props
 
-      const cells  = QR.QrCode.encodeText(value, ErrorCorrectLevelMap[level]).getModules()
+      const cells = QR.QrCode.encodeText(value, ErrorCorrectLevelMap[level]).getModules()
       numCells.value = cells.length + margin * 2
 
       // Drawing strategy: instead of a rect per module, we're going to create a
@@ -180,7 +180,7 @@ const QRCodeCanvas = defineComponent({
         return;
       }
 
-      const cells  = QR.QrCode.encodeText(value, ErrorCorrectLevelMap[level]).getModules()
+      const cells = QR.QrCode.encodeText(value, ErrorCorrectLevelMap[level]).getModules()
       const numCells = cells.length + margin * 2
 
       const devicePixelRatio = window.devicePixelRatio || 1

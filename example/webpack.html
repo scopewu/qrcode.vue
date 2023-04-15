@@ -59,6 +59,11 @@
       max-width: 100%;
     }
 
+    .qrcode-wrap.border {
+      display: inline-block;
+      border-width: 6px !important;
+    }
+
     @media screen and (min-width: 768px) {
       .container-fluid {
         max-width: 798px;
@@ -300,16 +305,18 @@
         <label class="col-sm-2 col-form-label">QR_CODE:</label>
         <div class="col-sm-10">
           <div class="form-control-static">
-            <qrcode-vue
-              class="qrcode"
-              :value="value"
-              :margin='Number(margin)'
-              :render-as="renderAs"
-              :size="Number(size)"
-              :level="level"
-              :background="background"
-              :foreground='foreground'
-            ></qrcode-vue>
+            <div class="border qrcode-wrap">
+              <qrcode-vue
+                class="qrcode"
+                :value="value"
+                :margin='Number(margin)'
+                :render-as="renderAs"
+                :size="Number(size)"
+                :level="level"
+                :background="background"
+                :foreground='foreground'
+              ></qrcode-vue>
+            </div>
           </div>
         </div>
       </div>

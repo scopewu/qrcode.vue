@@ -1,7 +1,5 @@
 import ts from 'rollup-plugin-typescript2'
-import commonjs from '@rollup/plugin-commonjs'
 import terser from '@rollup/plugin-terser'
-import { nodeResolve } from '@rollup/plugin-node-resolve'
 
 import pkg from './package.json' assert { type: 'json' }
 
@@ -41,15 +39,6 @@ function createEntry(options) {
           },
           exclude: ['src', 'example'],
         }
-      }),
-      nodeResolve(),
-      commonjs({
-        // non-CommonJS modules will be ignored, but you can also
-        // specifically include/exclude files
-        include: 'node_modules/**', // Default: undefined
-        extensions: ['.js'], // Default: [ '.js' ]
-        ignoreGlobal: false, // Default: false
-        sourceMap: sourcemap, // Default: true
       }),
     ],
   }
