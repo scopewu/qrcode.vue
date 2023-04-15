@@ -1,3 +1,9 @@
+## [3.4.0] - 2023-04-15
+
+### Performance
+
+- remove `qr.js` dependency, use `nayuki/QR-Code-generator` instead.
+
 ## [3.3.1] - 2021-09-11
 
 ### BUGFIX

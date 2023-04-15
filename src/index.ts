@@ -1,11 +1,17 @@
 import { defineComponent, h, onMounted, onUpdated, PropType, ref } from 'vue'
-import QR from 'qr.js/lib/QRCode.js'
-import ErrorCorrectLevel from 'qr.js/lib/ErrorCorrectLevel.js'
+import QR from './qrcodegen'
 
-type Modules = boolean[][]
+type Modules = ReturnType<QR.QrCode['getModules']>
 type Level = 'L' | 'M' | 'Q' | 'H'
 
 const defaultErrorCorrectLevel = 'H'
+
+const ErrorCorrectLevelMap : Record<Level, QR.QrCode.Ecc> = {
+  L: QR.QrCode.Ecc.LOW,
+  M: QR.QrCode.Ecc.MEDIUM,
+  Q: QR.QrCode.Ecc.QUARTILE,
+  H: QR.QrCode.Ecc.HIGH,
+}
 
 // Thanks the `qrcode.react`
 const SUPPORTS_PATH2D: boolean = (function () {
@@ -17,55 +23,8 @@ const SUPPORTS_PATH2D: boolean = (function () {
   return true
 })()
 
-function QRCode(data: string, level: Level): { modules: Modules } {
-  const errorCorrectLevel = ErrorCorrectLevel[level]
-
-  // We'll use type===-1 to force QRCode to automatically pick the best type
-  const qrcode = new QR(-1, errorCorrectLevel)
-  qrcode.addData(toUTF8String(data))
-  qrcode.make()
-
-  return qrcode
-}
-
 function validErrorCorrectLevel(level: string): boolean {
-  return level in ErrorCorrectLevel
-}
-
-/**
- * Encode UTF16 to UTF8.
- * See: http://jonisalonen.com/2012/from-utf-16-to-utf-8-in-javascript/
- * @param str {string}
- * @returns {string}
- */
-function toUTF8String(str: string): string {
-  let utf8Str = ''
-  for (let i = 0; i < str.length; i++) {
-    let charCode = str.charCodeAt(i)
-    if (charCode < 0x0080) {
-      utf8Str += String.fromCharCode(charCode)
-    } else if (charCode < 0x0800) {
-      utf8Str += String.fromCharCode(0xc0 | (charCode >> 6))
-      utf8Str += String.fromCharCode(0x80 | (charCode & 0x3f))
-    } else if (charCode < 0xd800 || charCode >= 0xe000) {
-      utf8Str += String.fromCharCode(0xe0 | (charCode >> 12))
-      utf8Str += String.fromCharCode(0x80 | ((charCode >> 6) & 0x3f))
-      utf8Str += String.fromCharCode(0x80 | (charCode & 0x3f))
-    } else {
-      // surrogate pair
-      i++
-      // UTF-16 encodes 0x10000-0x10FFFF by
-      // subtracting 0x10000 and splitting the
-      // 20 bits of 0x0-0xFFFFF into two halves
-      charCode =
-        0x10000 + (((charCode & 0x3ff) << 10) | (str.charCodeAt(i) & 0x3ff))
-      utf8Str += String.fromCharCode(0xf0 | (charCode >> 18))
-      utf8Str += String.fromCharCode(0x80 | ((charCode >> 12) & 0x3f))
-      utf8Str += String.fromCharCode(0x80 | ((charCode >> 6) & 0x3f))
-      utf8Str += String.fromCharCode(0x80 | (charCode & 0x3f))
-    }
-  }
-  return utf8Str
+  return level in ErrorCorrectLevelMap
 }
 
 function generatePath(modules: Modules, margin: number = 0): string {
@@ -162,7 +121,7 @@ const QRCodeSvg = defineComponent({
     const generate = () => {
       const { value, level, margin } = props
 
-      const { modules: cells } = QRCode(value, level)
+      const cells  = QR.QrCode.encodeText(value, ErrorCorrectLevelMap[level]).getModules()
       numCells.value = cells.length + margin * 2
 
       // Drawing strategy: instead of a rect per module, we're going to create a
@@ -209,8 +168,6 @@ const QRCodeCanvas = defineComponent({
     const generate = () => {
       const { value, level, size, margin, background, foreground } = props
 
-      const { modules: cells } = QRCode(value, level)
-      const numCells = cells.length + margin * 2
       const canvas = canvasEl.value
 
       if (!canvas) {
@@ -222,6 +179,9 @@ const QRCodeCanvas = defineComponent({
       if (!ctx) {
         return;
       }
+
+      const cells  = QR.QrCode.encodeText(value, ErrorCorrectLevelMap[level]).getModules()
+      const numCells = cells.length + margin * 2
 
       const devicePixelRatio = window.devicePixelRatio || 1
 
