@@ -67,6 +67,22 @@ createApp({
 </script>
 ```
 
+在 Vue 3 中配合 `TypeScript` 使用：
+
+```html
+<template>
+  <qrcode-vue :value="value" :level="level" :render-as="renderAs" />
+</template>
+
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import QrcodeVue, { Level, RenderAs } from 'qrcode.vue'
+  
+  const value = ref<String>('qrcode')
+  const level = ref<Level>('M')
+  const renderAs = ref<RenderAs>('svg')
+</script>
+
 ## Component props
 
 ### `value`

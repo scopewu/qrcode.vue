@@ -1,3 +1,9 @@
+## [3.4.1] - 2023-08-05
+
+### BUGFIX
+
+- Fixed TypeScript type export error.
+
 ## [3.4.0] - 2023-04-15
 
 ### Performance

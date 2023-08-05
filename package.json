@@ -1,6 +1,6 @@
 {
   "name": "qrcode.vue",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "description": "A Vue.js component to generate QRCode.",
   "type": "module",
   "main": "./dist/qrcode.vue.cjs.js",

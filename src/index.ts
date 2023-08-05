@@ -2,7 +2,8 @@ import { defineComponent, h, onMounted, onUpdated, PropType, ref } from 'vue'
 import QR from './qrcodegen'
 
 type Modules = ReturnType<QR.QrCode['getModules']>
-type Level = 'L' | 'M' | 'Q' | 'H'
+export type Level = 'L' | 'M' | 'Q' | 'H'
+export type RenderAs = 'canvas' | 'svg'
 
 const defaultErrorCorrectLevel = 'H'
 
@@ -104,7 +105,7 @@ const QRCodeProps = {
 const QRCodeVueProps = {
   ...QRCodeProps,
   renderAs: {
-    type: String as PropType<'canvas' | 'svg'>,
+    type: String as PropType<RenderAs>,
     required: false,
     default: 'canvas',
     validator: (as: any) => ['canvas', 'svg'].indexOf(as) > -1,
