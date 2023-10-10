@@ -7,7 +7,7 @@ export type RenderAs = 'canvas' | 'svg'
 
 const defaultErrorCorrectLevel = 'H'
 
-const ErrorCorrectLevelMap : Record<Level, QR.QrCode.Ecc> = {
+const ErrorCorrectLevelMap : Readonly<Record<Level, QR.QrCode.Ecc>> = {
   L: QR.QrCode.Ecc.LOW,
   M: QR.QrCode.Ecc.MEDIUM,
   Q: QR.QrCode.Ecc.QUARTILE,

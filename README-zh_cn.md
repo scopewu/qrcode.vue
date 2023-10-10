@@ -6,7 +6,6 @@
 
 一款 Vue.js 二维码组件.
 
-[![Build Status](https://travis-ci.org/scopewu/qrcode.vue.svg?branch=master)](https://travis-ci.org/scopewu/qrcode.vue)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
 
 ## 快速开始
@@ -101,7 +100,7 @@ createApp({
 
 ### `render-as`
 
-- 类型：`string('canvas' | 'svg')`
+- 类型：`RenderAs('canvas' | 'svg')`
 - 默认值：`canvas`
 
 生成二维码的 HTML 标签，可选 `canvas` 或 `svg`。其中 `svg` 可以用于 SSR。
@@ -115,7 +114,7 @@ createApp({
 
 ### `level`
 
-- 类型：`string('L' | 'M' | 'Q' | 'H')`
+- 类型：`Level('L' | 'M' | 'Q' | 'H')`
 - 默认值：`H`
 
 二维码的容错能力等级，取值为 'L', 'M', 'Q', 'H' 之一。了解更多，[维基百科：QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction)。

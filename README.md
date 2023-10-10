@@ -6,7 +6,6 @@
 
 A Vue.js component to generate [QRCode](https://en.wikipedia.org/wiki/QR_code).
 
-[![Build Status](https://travis-ci.org/scopewu/qrcode.vue.svg?branch=master)](https://travis-ci.org/scopewu/qrcode.vue)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
 
 [中文](./README-zh_cn.md)
@@ -103,7 +102,7 @@ The size of qrcode element.
 
 ### `render-as`
 
-- Type: `string('canvas' | 'svg')`
+- Type: `RenderAs('canvas' | 'svg')`
 - Default: `canvas`
 
 Generate QRcode as `canvas` or `svg`. The prop `svg` can work on SSR.
@@ -117,7 +116,7 @@ Define how much wide the quiet zone should be.
 
 ### `level`
 
-- Type: `string('L' | 'M' | 'Q' | 'H')`
+- Type: `Level('L' | 'M' | 'Q' | 'H')`
 - Default: `H`
 
 qrcode Error correction level (one of 'L', 'M', 'Q', 'H'). Know more, [wikipedia: QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction).
