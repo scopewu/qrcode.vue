@@ -4,7 +4,7 @@
 
 🔒 if you are using Vue 2.x, please keep using version `1.x`;
 
-A Vue.js component to generate [QRCode](https://en.wikipedia.org/wiki/QR_code).
+A Vue.js component to generate [QRCode](https://en.wikipedia.org/wiki/QR_code). Both support Vue 2 and Vue 3.
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
 

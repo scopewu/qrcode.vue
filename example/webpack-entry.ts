@@ -1,15 +1,16 @@
 import { createApp, defineComponent, onMounted, ref } from 'vue'
 import QrcodeVue from '../src'
+import type { Level, RenderAs } from '../src'
 
 const App = defineComponent({
   components: { QrcodeVue },
   setup() {
     const value = ref('https://example.com')
     const size = ref(100)
-    const level = ref<'L' | 'M' | 'Q' | 'H'>('L')
+    const level = ref<Level>('L')
     const background = ref('#ffffff')
     const foreground = ref('#000000')
-    const renderAs = ref<'canvas' | 'svg'>('svg')
+    const renderAs = ref<RenderAs>('svg')
     const margin = ref(0)
 
     const stargazersCount = ref(500)

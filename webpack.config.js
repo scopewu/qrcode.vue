@@ -1,8 +1,8 @@
 import path from 'path'
+import { fileURLToPath } from 'url'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import { VueLoaderPlugin } from 'vue-loader'
 
-const dirname = new URL('.', import.meta.url).pathname
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const config = (env, { mode = 'production' }) => {
   const isProd = mode === 'production'
@@ -14,7 +14,7 @@ const config = (env, { mode = 'production' }) => {
       main: './example/webpack-entry.ts',
     },
     output: {
-      path: path.resolve(dirname, './example/dist'),
+      path: path.resolve(__dirname, './example/dist'),
       filename: isProd ? '[name].[contenthash].js' : '[name].js',
     },
     resolve: {
@@ -46,7 +46,6 @@ const config = (env, { mode = 'production' }) => {
       ],
     },
     plugins: [
-      new VueLoaderPlugin(),
       new HtmlWebpackPlugin({
         template: 'example/webpack.html',
         minify: {

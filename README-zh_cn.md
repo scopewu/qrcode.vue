@@ -4,7 +4,7 @@
 
 🔒 如果你正在使用 Vue 2，请保持 `qrcode.vue` 的版本为 `1.x`;
 
-一款 Vue.js 二维码组件.
+一款 Vue.js 二维码组件，同时支持 Vue 2 和 Vue 3.
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
 
