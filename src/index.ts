@@ -4,8 +4,22 @@ import QR from './qrcodegen'
 type Modules = ReturnType<QR.QrCode['getModules']>
 export type Level = 'L' | 'M' | 'Q' | 'H'
 export type RenderAs = 'canvas' | 'svg'
+export type ImageSettings = {
+  src: string,
+  x?: number,
+  y?: number,
+  height: number,
+  width: number,
+  excavate?: boolean,
+}
+type Excavation = {
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+}
 
-const defaultErrorCorrectLevel = 'H'
+const defaultErrorCorrectLevel: Level = 'L'
 
 const ErrorCorrectLevelMap : Readonly<Record<Level, QR.QrCode.Ecc>> = {
   L: QR.QrCode.Ecc.LOW,
@@ -72,6 +86,53 @@ function generatePath(modules: Modules, margin: number = 0): string {
   return ops.join('')
 }
 
+function getImageSettings(
+  cells: Modules,
+  size: number,
+  margin: number,
+  imageSettings: ImageSettings
+) : {
+  x: number
+  y: number
+  h: number
+  w: number
+  excavation: Excavation | null
+} {
+  const { width, height, x: imageX, y: imageY} = imageSettings
+  const numCells = cells.length + margin * 2
+  const defaultSize = Math.floor(size * 0.1)
+  const scale = numCells / size
+  const w = (width || defaultSize) * scale
+  const h = (height || defaultSize) * scale
+  const x = imageX == null ? cells.length / 2 - w / 2 : imageX * scale
+  const y = imageY == null ? cells.length / 2 - h / 2 : imageY * scale
+
+  let excavation = null
+  if (imageSettings.excavate) {
+    let floorX = Math.floor(x)
+    let floorY = Math.floor(y)
+    let ceilW = Math.ceil(w + x - floorX)
+    let ceilH = Math.ceil(h + y - floorY)
+    excavation = { x: floorX, y: floorY, w: ceilW, h: ceilH }
+  }
+
+  return { x, y, h, w, excavation }
+}
+
+function excavateModules(modules: Modules, excavation: Excavation): Modules {
+  return modules.slice().map((row, y) => {
+    if (y < excavation.y || y >= excavation.y + excavation.h) {
+      return row
+    }
+    return row.map((cell, x) => {
+      if (x < excavation.x || x >= excavation.x + excavation.w) {
+        return cell
+      }
+      return false
+    })
+  })
+}
+
 const QRCodeProps = {
   value: {
     type: String,
@@ -100,6 +161,11 @@ const QRCodeProps = {
     required: false,
     default: 0,
   },
+  imageSettings: {
+    type: Object as PropType<ImageSettings>,
+    required: false,
+    default: () => ({}),
+  },
 }
 
 const QRCodeVueProps = {
@@ -118,12 +184,27 @@ const QRCodeSvg = defineComponent({
   setup(props) {
     const numCells = ref(0)
     const fgPath = ref('')
+    const imageProps = ref<{ x: number, y: number, width: number, height: number }>(null!)
 
     const generate = () => {
       const { value, level, margin } = props
 
-      const cells = QR.QrCode.encodeText(value, ErrorCorrectLevelMap[level]).getModules()
+      let cells = QR.QrCode.encodeText(value, ErrorCorrectLevelMap[level]).getModules()
       numCells.value = cells.length + margin * 2
+
+      if(props.imageSettings.src) {
+        const imageSettings = getImageSettings(cells, props.size, margin, props.imageSettings)
+        imageProps.value = {
+          x: imageSettings.x,
+          y: imageSettings.y,
+          width: imageSettings.w,
+          height: imageSettings.h,
+        }
+
+        if (imageSettings.excavation) {
+          cells = excavateModules(cells, imageSettings.excavation)
+        }
+      }
 
       // Drawing strategy: instead of a rect per module, we're going to create a
       // single path for the dark modules and layer that on top of a light rect,
@@ -155,6 +236,10 @@ const QRCodeSvg = defineComponent({
             d: `M0,0 h${numCells.value}v${numCells.value}H0z`,
           }),
         h('path', { fill: props.foreground, d: fgPath.value }),
+        props.imageSettings.src && h('image', {
+          href: props.imageSettings.src,
+          ...imageProps.value,
+        }),
       ]
     )
   },
@@ -172,13 +257,13 @@ const QRCodeCanvas = defineComponent({
       const canvas = canvasEl.value
 
       if (!canvas) {
-        return;
+        return
       }
 
       const ctx = canvas.getContext('2d')
 
       if (!ctx) {
-        return;
+        return
       }
 
       const cells = QR.QrCode.encodeText(value, ErrorCorrectLevelMap[level]).getModules()
@@ -232,6 +317,7 @@ const QrcodeVue = defineComponent({
       level: _level,
       background,
       foreground,
+      imageSettings,
     } = this.$props
     const size = _size >>> 0
     const margin = _margin >>> 0
@@ -239,7 +325,7 @@ const QrcodeVue = defineComponent({
 
     return h(
       renderAs === 'svg' ? QRCodeSvg : QRCodeCanvas,
-      { value, size, margin, level, background, foreground },
+      { value, size, margin, level, background, foreground, imageSettings },
     )
   },
   props: QRCodeVueProps,
