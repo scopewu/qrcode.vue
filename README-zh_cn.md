@@ -117,7 +117,7 @@ createApp({
 ### `level`
 
 - 类型：`Level('L' | 'M' | 'Q' | 'H')`
-- 默认值：`H`
+- 默认值：`L`
 
 二维码的容错能力等级，取值为 'L', 'M', 'Q', 'H' 之一。了解更多，[维基百科：QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction)。
 

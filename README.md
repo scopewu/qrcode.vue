@@ -118,7 +118,7 @@ Define how much wide the quiet zone should be.
 ### `level`
 
 - Type: `Level('L' | 'M' | 'Q' | 'H')`
-- Default: `H`
+- Default: `L`
 
 qrcode Error correction level (one of 'L', 'M', 'Q', 'H'). Know more, [wikipedia: QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction).
 
