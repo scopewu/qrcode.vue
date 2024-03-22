@@ -75,12 +75,14 @@ createApp({
 
 <script setup lang="ts">
   import { ref } from 'vue'
-  import QrcodeVue, { Level, RenderAs } from 'qrcode.vue'
+  import QrcodeVue from 'qrcode.vue'
+  import type { Level, RenderAs } from 'qrcode.vue'
   
   const value = ref<String>('qrcode')
   const level = ref<Level>('M')
   const renderAs = ref<RenderAs>('svg')
 </script>
+```
 
 ## Component props
 

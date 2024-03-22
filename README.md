@@ -76,7 +76,8 @@ When you use the component with Vue 3 with `TypeScript`:
 </template>
 <script setup lang="ts">
   import { ref } from 'vue'
-  import QrcodeVue, { Level, RenderAs } from 'qrcode.vue'
+  import QrcodeVue from 'qrcode.vue'
+  import type { Level, RenderAs } from 'qrcode.vue'
 
   const value = ref('qrcode')
   const level = ref<Level>('M')
