@@ -1,12 +1,12 @@
-import { defineComponent, h, onMounted, onUpdated, PropType, ref } from "vue";
-import QR from "./qrcodegen";
+import { defineComponent, h, onMounted, onUpdated, PropType, ref } from 'vue';
+import QR from './qrcodegen';
 
-type Modules = ReturnType<QR.QrCode["getModules"]>;
-export type Level = "L" | "M" | "Q" | "H";
-export type RenderAs = "canvas" | "svg";
-export type GradientType = "linear" | "radial";
+type Modules = ReturnType<QR.QrCode['getModules']>;
+export type Level = 'L' | 'M' | 'Q' | 'H';
+export type RenderAs = 'canvas' | 'svg';
+export type GradientType = 'linear' | 'radial';
 
-const defaultErrorCorrectLevel = "H";
+const defaultErrorCorrectLevel = 'H';
 
 const ErrorCorrectLevelMap: Readonly<Record<Level, QR.QrCode.Ecc>> = {
   L: QR.QrCode.Ecc.LOW,
@@ -59,14 +59,14 @@ function generatePath(modules: Modules, margin: number = 0): string {
       }
     });
   });
-  return ops.join("");
+  return ops.join('');
 }
 
 const QRCodeProps = {
   value: {
     type: String,
     required: true,
-    default: "",
+    default: '',
   },
   size: {
     type: Number,
@@ -79,11 +79,11 @@ const QRCodeProps = {
   },
   background: {
     type: String,
-    default: "#fff",
+    default: '#fff',
   },
   foreground: {
     type: String,
-    default: "#000",
+    default: '#000',
   },
   margin: {
     type: Number,
@@ -98,18 +98,18 @@ const QRCodeProps = {
   gradientType: {
     type: String as PropType<GradientType>,
     required: false,
-    default: "linear",
-    validator: (t: any) => ["linear", "radial"].indexOf(t) > -1,
+    default: 'linear',
+    validator: (t: any) => ['linear', 'radial'].indexOf(t) > -1,
   },
   gradientStartColor: {
     type: String,
     required: false,
-    default: "#000",
+    default: '#000',
   },
   gradientEndColor: {
     type: String,
     required: false,
-    default: "#fff",
+    default: '#fff',
   },
 };
 
@@ -118,17 +118,17 @@ const QRCodeVueProps = {
   renderAs: {
     type: String as PropType<RenderAs>,
     required: false,
-    default: "canvas",
-    validator: (as: any) => ["canvas", "svg"].indexOf(as) > -1,
+    default: 'canvas',
+    validator: (as: any) => ['canvas', 'svg'].indexOf(as) > -1,
   },
 };
 
 const QRCodeSvg = defineComponent({
-  name: "QRCodeSvg",
+  name: 'QRCodeSvg',
   props: QRCodeProps,
   setup(props) {
     const numCells = ref(0);
-    const fgPath = ref("");
+    const fgPath = ref('');
 
     const generate = () => {
       const { value, level, margin } = props;
@@ -145,51 +145,51 @@ const QRCodeSvg = defineComponent({
 
     return () =>
       h(
-        "svg",
+        'svg',
         {
           width: props.size,
           height: props.size,
-          "shape-rendering": `crispEdges`,
-          xmlns: "http://www.w3.org/2000/svg",
+          'shape-rendering': `crispEdges`,
+          xmlns: 'http://www.w3.org/2000/svg',
           viewBox: `0 0 ${numCells.value} ${numCells.value}`,
         },
         [
           h(
-            "defs",
+            'defs',
             {},
             props.gradient
               ? h(
-                  props.gradientType === "linear"
-                    ? "linearGradient"
-                    : "radialGradient",
+                  props.gradientType === 'linear'
+                    ? 'linearGradient'
+                    : 'radialGradient',
                   {
-                    id: "grad",
-                    ...(props.gradientType === "linear"
-                      ? { x1: "0%", y1: "0%", x2: "100%", y2: "100%" }
+                    id: 'grad',
+                    ...(props.gradientType === 'linear'
+                      ? { x1: '0%', y1: '0%', x2: '100%', y2: '100%' }
                       : {
-                          cx: "50%",
-                          cy: "50%",
-                          r: "50%",
-                          fx: "50%",
-                          fy: "50%",
+                          cx: '50%',
+                          cy: '50%',
+                          r: '50%',
+                          fx: '50%',
+                          fy: '50%',
                         }),
                   },
                   [
-                    h("stop", {
-                      offset: "0%",
+                    h('stop', {
+                      offset: '0%',
                       style: { stopColor: props.gradientStartColor },
                     }),
-                    h("stop", {
-                      offset: "100%",
+                    h('stop', {
+                      offset: '100%',
                       style: { stopColor: props.gradientEndColor },
                     }),
                   ],
                 )
-              : h(""),
+              : h(''),
           ),
-          h("rect", { width: "100%", height: "100%", fill: props.background }),
-          h("path", {
-            fill: props.gradient ? "url(#grad)" : props.foreground,
+          h('rect', { width: '100%', height: '100%', fill: props.background }),
+          h('path', {
+            fill: props.gradient ? 'url(#grad)' : props.foreground,
             d: fgPath.value,
           }),
         ],
@@ -198,7 +198,7 @@ const QRCodeSvg = defineComponent({
 });
 
 const QRCodeCanvas = defineComponent({
-  name: "QRCodeCanvas",
+  name: 'QRCodeCanvas',
   props: QRCodeProps,
   setup(props) {
     const canvasEl = ref<HTMLCanvasElement | null>(null);
@@ -218,7 +218,7 @@ const QRCodeCanvas = defineComponent({
       } = props;
       const canvas = canvasEl.value;
       if (!canvas) return;
-      const ctx = canvas.getContext("2d");
+      const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
       const cells = QR.QrCode.encodeText(
@@ -236,7 +236,7 @@ const QRCodeCanvas = defineComponent({
 
       if (gradient) {
         let grad;
-        if (gradientType === "linear") {
+        if (gradientType === 'linear') {
           grad = ctx.createLinearGradient(0, 0, numCells, numCells);
         } else {
           grad = ctx.createRadialGradient(
@@ -272,7 +272,7 @@ const QRCodeCanvas = defineComponent({
     onUpdated(generate);
 
     return () =>
-      h("canvas", {
+      h('canvas', {
         ref: canvasEl,
         style: { width: `${props.size}px`, height: `${props.size}px` },
       });
@@ -280,7 +280,7 @@ const QRCodeCanvas = defineComponent({
 });
 
 const QrcodeVue = defineComponent({
-  name: "Qrcode",
+  name: 'Qrcode',
   render() {
     const {
       renderAs,
@@ -301,7 +301,7 @@ const QrcodeVue = defineComponent({
       ? _level
       : defaultErrorCorrectLevel;
 
-    return h(renderAs === "svg" ? QRCodeSvg : QRCodeCanvas, {
+    return h(renderAs === 'svg' ? QRCodeSvg : QRCodeCanvas, {
       value,
       size,
       margin,
