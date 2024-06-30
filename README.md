@@ -85,6 +85,46 @@ When you use the component with Vue 3 with `TypeScript`:
 </script>
 ```
 
+### Example Usage With Gradient
+
+To use the `QrcodeVue` component with gradient support, you can pass the gradient-related props:
+
+```html
+<template>
+  <qrcode-vue
+    :size="size"
+    :value="fullUrl"
+    :level="level"
+    :margin="margin"
+    :render-as="renderAs"
+    :background="background"
+    :gradient="true"
+    :gradient-type="gradientType"
+    :gradient-start-color="gradientStartColor"
+    :gradient-end-color="gradientEndColor"
+  />
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      size: 200,
+      fullUrl: 'https://example.com',
+      level: 'H',
+      margin: 4,
+      renderAs: 'svg', // or 'canvas'
+      background: '#ffffff',
+      gradient: true,
+      gradientType: 'linear', // or 'radial'
+      gradientStartColor: '#ff0000', // Start color of the gradient
+      gradientEndColor: '#0000ff', // End color of the gradient
+    }
+  },
+}
+</script>
+```
+
 ## Component props
 
 ### `value`
@@ -135,6 +175,34 @@ The background color of qrcode.
 - Default: `#000000`
 
 The foreground color of qrcode.
+
+### `gradient`
+
+- Type: `boolean`
+- Default: `false`
+
+Enable gradient fill for the QR code.
+
+### `gradient-type`
+
+- Type: `GradientType('linear' | 'radial')`
+- Default: `linear`
+
+Specify the type of gradient.
+
+### `gradient-start-color`
+
+- Type: `string`
+- Default: `#000000`
+
+The start color of the gradient.
+
+### `gradient-end-color`
+
+- Type: `string`
+- Default: `#ffffff`
+
+The end color of the gradient.
 
 ### `class`
 
