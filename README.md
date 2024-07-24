@@ -8,7 +8,7 @@ A Vue.js component to generate [QRCode](https://en.wikipedia.org/wiki/QR_code). 
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
 
-[中文](./README-zh_cn.md)
+[中文](./README-zh_cn.md) | [日本語](./README-ja.md)
 
 ## install
 
