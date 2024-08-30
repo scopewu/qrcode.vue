@@ -145,4 +145,4 @@ The class name of qrcode element.
 
 ## License
 
-copyright &copy; 2021 @scopewu, license by [MIT](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
+copyright &copy; 2021 @scopewu, license by [MIT](https://github.com/scopewu/qrcode.vue/blob/main/LICENSE)

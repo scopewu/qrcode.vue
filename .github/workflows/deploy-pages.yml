@@ -31,7 +31,7 @@ jobs:
         run: yarn install
 
       - name: Build GitHub Pages
-        run: yarn webpack --mode=production
+        run: yarn rsbuild build
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
