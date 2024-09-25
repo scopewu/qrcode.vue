@@ -9,14 +9,14 @@ const banner =
   pkg.version +
   '\n * ' +
   pkg.description +
-  '\n * © 2017-' +
-  new Date().getFullYear() +
+  '\n * © 2017-PRESENT' +
   ' @scopewu(https://github.com/scopewu)' +
   '\n * MIT License.' +
   '\n */'
 const sourcemap = false
 
 function createEntry(options) {
+  /** @type import('rollup').RollupOptions */
   const config = {
     input: 'src/index.ts',
     external: ['vue'],
@@ -29,6 +29,8 @@ function createEntry(options) {
         vue: 'Vue'
       },
       banner,
+      indent: false,
+      sourcemap,
     },
     plugins: [
       ts({

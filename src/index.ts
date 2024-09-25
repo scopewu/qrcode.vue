@@ -184,7 +184,7 @@ const QRCodeSvg = defineComponent({
   setup(props) {
     const numCells = ref(0)
     const fgPath = ref('')
-    const imageProps = ref<{ x: number, y: number, width: number, height: number }>(null!)
+    let imageProps: { x: number, y: number, width: number, height: number }
 
     const generate = () => {
       const { value, level, margin } = props
@@ -194,7 +194,7 @@ const QRCodeSvg = defineComponent({
 
       if(props.imageSettings.src) {
         const imageSettings = getImageSettings(cells, props.size, margin, props.imageSettings)
-        imageProps.value = {
+        imageProps = {
           x: imageSettings.x,
           y: imageSettings.y,
           width: imageSettings.w,
@@ -238,7 +238,7 @@ const QRCodeSvg = defineComponent({
         h('path', { fill: props.foreground, d: fgPath.value }),
         props.imageSettings.src && h('image', {
           href: props.imageSettings.src,
-          ...imageProps.value,
+          ...imageProps,
         }),
       ]
     )

@@ -18,7 +18,7 @@ const App = defineComponent({
       height: 30,
       // x: 10,
       // y: 10,
-      excavate: false,
+      excavate: true,
     })
 
     const stargazersCount = ref(700)
