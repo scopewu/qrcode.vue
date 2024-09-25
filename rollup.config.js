@@ -24,7 +24,7 @@ function createEntry(options) {
       name: 'QrcodeVue',
       file: options.file,
       format: options.format,
-      exports: 'default',
+      exports: 'named',
       globals: {
         vue: 'Vue'
       },

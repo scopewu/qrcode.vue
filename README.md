@@ -136,6 +136,24 @@ The background color of qrcode.
 
 The foreground color of qrcode.
 
+### `image-settings`
+
+- Type: `ImageSettings`
+- Default: `{}`
+
+  ```ts
+  export type ImageSettings = {
+    src: string, // The URL of image.
+    x?: number,  // The horizontal offset. When not specified, will center the image.
+    y?: number,  // The vertical offset. When not specified, will center the image.
+    height: number, // The height of image
+    width: number,  // The height of image
+    excavate?: boolean, // Whether or not to "excavate" the modules around the image.
+  }
+  ```
+
+The settings to support qrcode image logo.
+
 ### `class`
 
 - Type: `string`

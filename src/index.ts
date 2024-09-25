@@ -1,4 +1,4 @@
-import { defineComponent, h, onMounted, onUpdated, PropType, ref } from 'vue'
+import { defineComponent, Fragment, h, onMounted, onUpdated, PropType, ref } from 'vue'
 import QR from './qrcodegen'
 
 type Modules = ReturnType<QR.QrCode['getModules']>
@@ -98,7 +98,7 @@ function getImageSettings(
   w: number
   excavation: Excavation | null
 } {
-  const { width, height, x: imageX, y: imageY} = imageSettings
+  const { width, height, x: imageX, y: imageY } = imageSettings
   const numCells = cells.length + margin * 2
   const defaultSize = Math.floor(size * 0.1)
   const scale = numCells / size
@@ -178,7 +178,7 @@ const QRCodeVueProps = {
   },
 }
 
-const QRCodeSvg = defineComponent({
+export const QRCodeSvg = defineComponent({
   name: 'QRCodeSvg',
   props: QRCodeProps,
   setup(props) {
@@ -195,8 +195,8 @@ const QRCodeSvg = defineComponent({
       if(props.imageSettings.src) {
         const imageSettings = getImageSettings(cells, props.size, margin, props.imageSettings)
         imageProps = {
-          x: imageSettings.x,
-          y: imageSettings.y,
+          x: imageSettings.x + margin,
+          y: imageSettings.y + margin,
           width: imageSettings.w,
           height: imageSettings.h,
         }
@@ -245,11 +245,12 @@ const QRCodeSvg = defineComponent({
   },
 })
 
-const QRCodeCanvas = defineComponent({
+export const QRCodeCanvas = defineComponent({
   name: 'QRCodeCanvas',
   props: QRCodeProps,
-  setup(props) {
+  setup(props, ctx) {
     const canvasEl = ref<HTMLCanvasElement | null>(null)
+    const imageRef = ref<HTMLImageElement | null>(null)
 
     const generate = () => {
       const { value, level, size, margin, background, foreground } = props
@@ -266,8 +267,26 @@ const QRCodeCanvas = defineComponent({
         return
       }
 
-      const cells = QR.QrCode.encodeText(value, ErrorCorrectLevelMap[level]).getModules()
+      let cells = QR.QrCode.encodeText(value, ErrorCorrectLevelMap[level]).getModules()
       const numCells = cells.length + margin * 2
+
+      const image = imageRef.value
+      let imageProps = { x: 0, y: 0, width: 0, height: 0 }
+      const showImage = props.imageSettings.src && image != null && image.naturalWidth !== 0 && image.naturalHeight !== 0
+
+      if(showImage) {
+        const imageSettings = getImageSettings(cells, props.size, margin, props.imageSettings)
+        imageProps = {
+          x: imageSettings.x + margin,
+          y: imageSettings.y + margin,
+          width: imageSettings.w,
+          height: imageSettings.h,
+        }
+
+        if (imageSettings.excavation) {
+          cells = excavateModules(cells, imageSettings.excavation)
+        }
+      }
 
       const devicePixelRatio = window.devicePixelRatio || 1
 
@@ -291,17 +310,41 @@ const QRCodeCanvas = defineComponent({
           })
         })
       }
+
+      if (showImage) {
+        ctx.drawImage(
+          image,
+          imageProps.x,
+          imageProps.y,
+          imageProps.width,
+          imageProps.height
+        );
+      }
     }
 
     onMounted(generate)
     onUpdated(generate)
 
+    const { style } = ctx.attrs
+
     return () => h(
-      'canvas',
-      {
-        ref: canvasEl,
-        style: { width: `${props.size}px`, height: `${props.size}px`},
-      },
+      Fragment,
+      [
+        h(
+          'canvas',
+          {
+            ...ctx.attrs,
+            ref: canvasEl,
+            style: { ...(style as Object), width: `${props.size}px`, height: `${props.size}px`},
+          },
+        ),
+        props.imageSettings.src && h('img', {
+          ref: imageRef,
+          src: props.imageSettings.src,
+          style: {display: 'none'},
+          onLoad: generate,
+        })
+      ],
     )
   },
 })

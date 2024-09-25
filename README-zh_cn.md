@@ -135,6 +135,27 @@ createApp({
 
 二维码前景颜色。
 
+### `image-settings`
+
+- 类型: `ImageSettings`
+- 默认值: `{}`
+
+  ```ts
+  export type ImageSettings = {
+    src: string, // 图片的地址。
+    x?: number,  // 水平横向偏移。没有设定值时，图片剧中
+    y?: number,  // 垂直竖向偏移。没有设定值时，图片剧中
+    height: number, // 图片的高度
+    width: number,  // 图片的宽度
+    // 是否“挖掘”图像周围的模块。
+    // 这意味着嵌入图像重叠的任何模块都将使用背景颜色。
+    // 使用此选项可确保图像周围的边缘清晰。嵌入透明图像时也很有用。
+    excavate?: boolean,
+  }
+  ```
+
+二维码图片 logo 配置。
+
 ### `class`
 
 - 类型：`string`
