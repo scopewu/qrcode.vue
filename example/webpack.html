@@ -30,9 +30,9 @@
   <meta name="twitter:data1" content="scopewu" />
   <meta name="twitter:creator" content="@ngwwj" />
   <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   />
@@ -198,17 +198,33 @@
     .octicon-heart {
       color: #bf3989
     }
+    .space-x-2 :not(:first-of-type){
+      margin-left: 0.5rem;
+    }
     [v-cloak] {
       display: none;
     }
   </style>
-
 </head>
 <body>
 <div id="root">
-  <div class="container-fluid">
-    <div class="border-bottom mt-4 mb-3 pb-2">
-      <h1>qrcode.vue:</h1>
+  <div class="container-fluid mb-5">
+    <header class="border-bottom mt-4 mb-3 pb-2">
+      <div class='row align-items-center my-3'>
+        <h1 class='col-sm-8 m-0'>qrcode.vue:</h1>
+        <div class='col-4 space-x-2 text-end'>
+          <a
+            href='https://github.com/scopewu/qrcode.vue'
+            class='link-dark link-underline-opacity-25 link-underline-opacity-100-hover'
+          >GitHub</a>
+          <a
+            href='https://tie.pub'
+            class='link-dark link-underline-opacity-25 link-underline-opacity-100-hover'
+            target='_blank'
+            rel='noopener'
+          >Author</a>
+        </div>
+      </div>
       <div class='row'>
         <div class='col-4'>
           <div class="widget" v-cloak>
@@ -222,14 +238,8 @@
             <a class="social-count" href="https://github.com/scopewu/qrcode.vue/stargazers" rel="noopener" target="_blank" :aria-label="`${stargazersCount} stargazers on GitHub`">{{ stargazersCount }}</a>
           </div>
         </div>
-        <div class='col-8 text-end'>
-          <a
-            href='https://github.com/scopewu/qrcode.vue'
-            class='link-dark'
-          >Fork me on GitHub</a>
-        </div>
       </div>
-    </div>
+    </header>
     <form v-cloak>
       <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Value:</label>

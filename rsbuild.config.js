@@ -14,12 +14,14 @@ export default defineConfig({
     },
   },
   output: {
+    assetPrefix: 'https://cdn.jsdelivr.net/gh/scopewu/qrcode.vue@gh-pages/',
     distPath: {
       root: './example/dist',
     },
   },
   html: {
     template: './example/webpack.html',
+    scriptLoading: 'module',
   },
   server: {
     htmlFallback: 'index',

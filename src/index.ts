@@ -178,7 +178,7 @@ const QRCodeVueProps = {
   },
 }
 
-export const QRCodeSvg = defineComponent({
+export const QrcodeSvg = defineComponent({
   name: 'QRCodeSvg',
   props: QRCodeProps,
   setup(props) {
@@ -245,7 +245,7 @@ export const QRCodeSvg = defineComponent({
   },
 })
 
-export const QRCodeCanvas = defineComponent({
+export const QrcodeCanvas = defineComponent({
   name: 'QRCodeCanvas',
   props: QRCodeProps,
   setup(props, ctx) {
@@ -367,7 +367,7 @@ const QrcodeVue = defineComponent({
     const level = validErrorCorrectLevel(_level) ? _level : defaultErrorCorrectLevel
 
     return h(
-      renderAs === 'svg' ? QRCodeSvg : QRCodeCanvas,
+      renderAs === 'svg' ? QrcodeSvg : QrcodeCanvas,
       { value, size, margin, level, background, foreground, imageSettings },
     )
   },
