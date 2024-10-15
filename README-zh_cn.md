@@ -180,6 +180,49 @@ createApp({
 
 传递给二维码根元素的类名。
 
+## `QrcodeVue` 3.5+
+
+`QrcodeVue` 3.5+ 后导出独立的 `QrcodeCanvas` 和 `QrcodeSvg` 组件，为此修改了 rollup 的配置：
+
+```
+// rollup.config.js
+
+-    exports: 'default',
++    exports: 'named',
+```
+
+
+现在在 common.js 和 cdn 直接引用 `QrcodeVue` 需要使用 `default` 字段：
+
+```js
+const QrcodeVue = require('qrcode.vue').default
+const { default: QrcodeVue, QrcodeCanvas, QrcodeSvg } = require('qrcode.vue')
+```
+```html
+<!--With HTML-->
+<div id="root">
+  <p class="flex space-x">
+  <qrcode-vue :value="test" render-as="svg"></qrcode-vue>
+<qrcode-canvas :value="test"></qrcode-canvas>
+</p>
+<p><input v-model="test" /></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.global.prod.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode.vue@3.5/dist/qrcode.vue.browser.min.js"></script>
+
+<script>
+Vue.createApp({
+  data() { return {
+    test: 'Hello World',
+  }},
+  components: {
+    QrcodeVue: QrcodeVue.default,
+    QrcodeCanvas: QrcodeVue.QrcodeCanvas,
+  },
+}).mount('#root')
+</script>
+```
+
 ## 软件许可
 
 copyright &copy; 2021 scopewu, license by [MIT](https://github.com/scopewu/qrcode.vue/blob/main/LICENSE)
