@@ -187,7 +187,9 @@ export const QrcodeSvg = defineComponent({
     let imageProps: { x: number, y: number, width: number, height: number }
 
     const generate = () => {
-      const { value, level, margin } = props
+      const { value, level: _level, margin: _margin } = props
+      const margin = _margin >>> 0
+      const level = validErrorCorrectLevel(_level) ? _level : defaultErrorCorrectLevel
 
       let cells = QR.QrCode.encodeText(value, ErrorCorrectLevelMap[level]).getModules()
       numCells.value = cells.length + margin * 2
@@ -253,7 +255,9 @@ export const QrcodeCanvas = defineComponent({
     const imageRef = ref<HTMLImageElement | null>(null)
 
     const generate = () => {
-      const { value, level, size, margin, background, foreground } = props
+      const { value, level: _level, size, margin: _margin, background, foreground } = props
+      const margin = _margin >>> 0
+      const level = validErrorCorrectLevel(_level) ? _level : defaultErrorCorrectLevel
 
       const canvas = canvasEl.value
 
@@ -355,16 +359,13 @@ const QrcodeVue = defineComponent({
     const {
       renderAs,
       value,
-      size: _size,
-      margin: _margin,
-      level: _level,
+      size,
+      margin,
+      level,
       background,
       foreground,
       imageSettings,
     } = this.$props
-    const size = _size >>> 0
-    const margin = _margin >>> 0
-    const level = validErrorCorrectLevel(_level) ? _level : defaultErrorCorrectLevel
 
     return h(
       renderAs === 'svg' ? QrcodeSvg : QrcodeCanvas,
