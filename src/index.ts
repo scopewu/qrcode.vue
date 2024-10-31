@@ -190,6 +190,16 @@ const QRCodeProps = {
   },
 }
 
+const QRCodeVueProps = {
+  ...QRCodeProps,
+  renderAs: {
+    type: String as PropType<RenderAs>,
+    required: false,
+    default: 'canvas',
+    validator: (as: any) => ['canvas', 'svg'].indexOf(as) > -1,
+  },
+}
+
 export const QrcodeSvg = defineComponent({
   name: 'QRCodeSvg',
   props: QRCodeProps,
@@ -437,23 +447,40 @@ export const QrcodeCanvas = defineComponent({
 
 const QrcodeVue = defineComponent({
   name: 'Qrcode',
-  props: {
-    ...QRCodeProps,
-    renderAs: {
-      type: String as PropType<RenderAs>,
-      required: false,
-      default: 'canvas',
-      validator: (as: any) => ['canvas', 'svg'].indexOf(as) > -1,
-    },
-  },
-  setup(props) {
-    return () => h(
-      props.renderAs === 'svg' ? QrcodeSvg : QrcodeCanvas,
+  render() {
+    const {
+      renderAs,
+      value,
+      size,
+      margin,
+      level,
+      background,
+      foreground,
+      imageSettings,
+      gradient,
+      gradientType,
+      gradientStartColor,
+      gradientEndColor,
+    } = this.$props
+
+    return h(
+      renderAs === 'svg' ? QrcodeSvg : QrcodeCanvas,
       {
-        ...props,
+        value,
+        size,
+        margin,
+        level,
+        background,
+        foreground,
+        imageSettings,
+        gradient,
+        gradientType,
+        gradientStartColor,
+        gradientEndColor,
       },
     )
   },
+  props: QRCodeVueProps,
 })
 
 export default QrcodeVue
