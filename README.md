@@ -45,7 +45,7 @@ createApp({
 }).mount('#root')
 ```
 
-Or single-file components with a `*.vue` extension:
+- Or single-file components with a `*.vue` extension:
 
 ```html
 <template>
@@ -72,7 +72,47 @@ Or single-file components with a `*.vue` extension:
 </script>
 ```
 
-When you use the component with Vue 3 with `TypeScript`:
+- Example Usage With Gradient
+
+> To use the `QrcodeVue` component with gradient support, you can pass the gradient-related props:
+
+```html
+<template>
+  <qrcode-vue
+    :size="size"
+    :value="fullUrl"
+    :level="level"
+    :margin="margin"
+    :render-as="renderAs"
+    :background="background"
+    :gradient="true"
+    :gradient-type="gradientType"
+    :gradient-start-color="gradientStartColor"
+    :gradient-end-color="gradientEndColor"
+  />
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      size: 200,
+      fullUrl: 'https://example.com',
+      level: 'H',
+      margin: 4,
+      renderAs: 'svg', // or 'canvas'
+      background: '#ffffff',
+      gradient: true,
+      gradientType: 'linear', // or 'radial'
+      gradientStartColor: '#ff0000', // Start color of the gradient
+      gradientEndColor: '#0000ff', // End color of the gradient
+    }
+  },
+}
+</script>
+```
+
+- When you use the component with Vue 3 with `TypeScript`:
 
 ```html
 <template>
@@ -82,13 +122,17 @@ When you use the component with Vue 3 with `TypeScript`:
     :render-as="renderAs"
     :background="background"
     :foreground='foreground'
+    :gradient="gradient"
+    :gradient-type="gradientType"
+    :gradient-start-color="gradientStartColor"
+    :gradient-end-color="gradientEndColor"
     :image-settings='imageSettings'
   />
 </template>
 <script setup lang="ts">
   import { ref } from 'vue'
   import QrcodeVue from 'qrcode.vue'
-  import type { Level, RenderAs, ImageSettings } from 'qrcode.vue'
+  import type { Level, RenderAs, GradientType, ImageSettings } from 'qrcode.vue'
 
   const value = ref('qrcode')
   const level = ref<Level>('M')
@@ -96,6 +140,10 @@ When you use the component with Vue 3 with `TypeScript`:
   const background = ref('#ffffff')
   const foreground = ref('#000000')
   const margin = ref(0)
+  const gradient = ref(false)
+  const gradientType = ref<GradientType>('linear')
+  const gradientStartColor = ref('#000000')
+  const gradientEndColor = ref('#38bdf8')
   const imageSettings = ref<ImageSettings>({
     src: 'https://github.com/scopewu.png',
     width: 30,
@@ -158,6 +206,34 @@ The background color of qrcode.
 
 The foreground color of qrcode.
 
+### `gradient`
+
+- Type: `boolean`
+- Default: `false`
+
+Enable gradient fill for the QR code.
+
+### `gradient-type`
+
+- Type: `GradientType('linear' | 'radial')`
+- Default: `linear`
+
+Specify the type of gradient.
+
+### `gradient-start-color`
+
+- Type: `string`
+- Default: `#000000`
+
+The start color of the gradient.
+
+### `gradient-end-color`
+
+- Type: `string`
+- Default: `#ffffff`
+
+The end color of the gradient.
+
 ### `image-settings`
 
 - Type: `ImageSettings`
@@ -200,14 +276,15 @@ Direct references to `QrcodeVue` in common.js and cdn now require the `default` 
 const QrcodeVue = require('qrcode.vue').default
 const { default: QrcodeVue, QrcodeCanvas, QrcodeSvg } = require('qrcode.vue')
 ```
+
 ```html
 <!--With HTML-->
 <div id="root">
   <p class="flex space-x">
   <qrcode-vue :value="test" render-as="svg"></qrcode-vue>
-<qrcode-canvas :value="test"></qrcode-canvas>
-</p>
-<p><input v-model="test" /></p>
+  <qrcode-canvas :value="test"></qrcode-canvas>
+  </p>
+  <p><input v-model="test" /></p>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.global.prod.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode.vue@3.5/dist/qrcode.vue.browser.min.js"></script>

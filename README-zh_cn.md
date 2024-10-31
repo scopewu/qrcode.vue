@@ -43,7 +43,7 @@ createApp({
 }).mount('#root')
 ```
 
-或者，在独有单文件扩展 `*.vue` 中使用：
+- 或者，在独有单文件扩展 `*.vue` 中使用：
 
 ```html
 <template>
@@ -66,7 +66,46 @@ createApp({
 </script>
 ```
 
-在 Vue 3 中配合 `TypeScript` 使用：
+- 渐变示例用法
+
+> 要使用带渐变支持的 `QrcodeVue` 组件，你可以传入渐变相关的属性：
+
+```html
+<template>
+  <qrcode-vue
+    :size="size"
+    :value="fullUrl"
+    :level="level"
+    :margin="margin"
+    :render-as="renderAs"
+    :background="background"
+    :gradient="true"
+    :gradient-type="gradientType"
+    :gradient-start-color="gradientStartColor"
+    :gradient-end-color="gradientEndColor"
+  />
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      size: 200,
+      fullUrl: 'https://example.com',
+      level: 'H',
+      margin: 4,
+      renderAs: 'svg', // or 'canvas'
+      background: '#ffffff',
+      gradient: true,
+      gradientType: 'linear', // or 'radial'
+      gradientStartColor: '#ff0000', // 渐变的起始颜色
+      gradientEndColor: '#0000ff', // 渐变的结束颜色
+    }
+  },
+}
+</script>
+
+- 在 Vue 3 中配合 `TypeScript` 使用：
 
 ```html
 <template>
@@ -76,13 +115,17 @@ createApp({
     :render-as="renderAs"
     :background="background"
     :foreground='foreground'
+    :gradient="gradient"
+    :gradient-type="gradientType"
+    :gradient-start-color="gradientStartColor"
+    :gradient-end-color="gradientEndColor"
     :image-settings='imageSettings'
   />
 </template>
 <script setup lang="ts">
   import { ref } from 'vue'
   import QrcodeVue from 'qrcode.vue'
-  import type { Level, RenderAs, ImageSettings } from 'qrcode.vue'
+  import type { Level, RenderAs, GradientType, ImageSettings } from 'qrcode.vue'
 
   const value = ref('qrcode')
   const level = ref<Level>('M')
@@ -90,6 +133,10 @@ createApp({
   const background = ref('#ffffff')
   const foreground = ref('#000000')
   const margin = ref(0)
+  const gradient = ref(false)
+  const gradientType = ref<GradientType>('linear')
+  const gradientStartColor = ref('#000000')
+  const gradientEndColor = ref('#38bdf8')
   const imageSettings = ref<ImageSettings>({
     src: 'https://github.com/scopewu.png',
     width: 30,
@@ -152,6 +199,34 @@ createApp({
 
 二维码前景颜色。
 
+### `gradient`
+
+- 类型: `boolean`
+- 默认值: `false`
+
+启用二维码的渐变填充。
+
+### `gradient-type`
+
+- 类型: `GradientType('linear' | 'radial')`
+- 默认值: `linear`
+
+指定渐变类型。
+
+### `gradient-start-color`
+
+- 类型: `string`
+- 默认值: `#000000`
+
+渐变的起始颜色。
+
+### `gradient-end-color`
+
+- 类型: `string`
+- 默认值: `#ffffff`
+
+渐变的结束颜色。
+
 ### `image-settings`
 
 - 类型: `ImageSettings`
@@ -191,20 +266,20 @@ createApp({
 +    exports: 'named',
 ```
 
-
 现在在 common.js 和 cdn 直接引用 `QrcodeVue` 需要使用 `default` 字段：
 
 ```js
 const QrcodeVue = require('qrcode.vue').default
 const { default: QrcodeVue, QrcodeCanvas, QrcodeSvg } = require('qrcode.vue')
 ```
+
 ```html
 <!--With HTML-->
 <div id="root">
   <p class="flex space-x">
   <qrcode-vue :value="test" render-as="svg"></qrcode-vue>
-<qrcode-canvas :value="test"></qrcode-canvas>
-</p>
+  <qrcode-canvas :value="test"></qrcode-canvas>
+  </p>
 <p><input v-model="test" /></p>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.global.prod.js"></script>

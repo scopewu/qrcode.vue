@@ -28,7 +28,7 @@ dist/
 
 ## 使用方法
 
-例：
+e.g.
 
 ```javascript
 import { createApp } from 'vue'
@@ -45,7 +45,7 @@ createApp({
 }).mount('#root')
 ```
 
-または、`*.vue`拡張子の単一ファイルコンポーネントで使用します：
+- または、`*.vue`拡張子の単一ファイルコンポーネントで使用します：
 
 ```html
 <template>
@@ -68,7 +68,46 @@ createApp({
 </script>
 ```
 
-Vue 3で`TypeScript`を使用する場合：
+- グラデーションの使用例
+
+> グラデーションをサポートする `QrcodeVue` コンポーネントを使用するには、グラデーション関連のプロパティを渡すことができます：
+
+```html
+<template>
+  <qrcode-vue
+    :size="size"
+    :value="fullUrl"
+    :level="level"
+    :margin="margin"
+    :render-as="renderAs"
+    :background="background"
+    :gradient="true"
+    :gradient-type="gradientType"
+    :gradient-start-color="gradientStartColor"
+    :gradient-end-color="gradientEndColor"
+  />
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      size: 200,
+      fullUrl: 'https://example.com',
+      level: 'H',
+      margin: 4,
+      renderAs: 'svg', // or 'canvas'
+      background: '#ffffff',
+      gradient: true,
+      gradientType: 'linear', // or 'radial'
+      gradientStartColor: '#ff0000', // グラデーションの開始色
+      gradientEndColor: '#0000ff', // グラデーションの終了色
+    }
+  },
+}
+</script>
+
+- Vue 3で`TypeScript`を使用する場合：
 
 ```html
 <template>
@@ -78,13 +117,17 @@ Vue 3で`TypeScript`を使用する場合：
     :render-as="renderAs"
     :background="background"
     :foreground='foreground'
+    :gradient="gradient"
+    :gradient-type="gradientType"
+    :gradient-start-color="gradientStartColor"
+    :gradient-end-color="gradientEndColor"
     :image-settings='imageSettings'
   />
 </template>
 <script setup lang="ts">
   import { ref } from 'vue'
   import QrcodeVue from 'qrcode.vue'
-  import type { Level, RenderAs, ImageSettings } from 'qrcode.vue'
+  import type { Level, RenderAs, GradientType, ImageSettings } from 'qrcode.vue'
 
   const value = ref('qrcode')
   const level = ref<Level>('M')
@@ -92,6 +135,10 @@ Vue 3で`TypeScript`を使用する場合：
   const background = ref('#ffffff')
   const foreground = ref('#000000')
   const margin = ref(0)
+  const gradient = ref(false)
+  const gradientType = ref<GradientType>('linear')
+  const gradientStartColor = ref('#000000')
+  const gradientEndColor = ref('#38bdf8')
   const imageSettings = ref<ImageSettings>({
     src: 'https://github.com/scopewu.png',
     width: 30,
@@ -153,6 +200,34 @@ QRコードの背景色。
 - デフォルト：`#000000`
 
 QRコードの前景色。
+
+### `gradient`
+
+- タイプ：`boolean`
+- デフォルト：`false`
+
+QRコードのグラデーション塗りつぶしを有効にします。
+
+### `gradient-type`
+
+- タイプ：`GradientType('linear' | 'radial')`
+- デフォルト：`linear`
+
+グラデーションの種類を指定します。
+
+### `gradient-start-color`
+
+- タイプ：`string`
+- デフォルト：`#000000`
+
+グラデーションの開始色。
+
+### `gradient-end-color`
+
+- タイプ：`string`
+- デフォルト：`#ffffff`
+
+グラデーションの終了色。
 
 ### `image-settings`
 

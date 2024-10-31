@@ -4,6 +4,7 @@ import QR from './qrcodegen'
 type Modules = ReturnType<QR.QrCode['getModules']>
 export type Level = 'L' | 'M' | 'Q' | 'H'
 export type RenderAs = 'canvas' | 'svg'
+export type GradientType = 'linear' | 'radial'
 export type ImageSettings = {
   src: string,
   x?: number,
@@ -166,15 +167,26 @@ const QRCodeProps = {
     required: false,
     default: () => ({}),
   },
-}
-
-const QRCodeVueProps = {
-  ...QRCodeProps,
-  renderAs: {
-    type: String as PropType<RenderAs>,
+  gradient: {
+    type: Boolean,
     required: false,
-    default: 'canvas',
-    validator: (as: any) => ['canvas', 'svg'].indexOf(as) > -1,
+    default: false,
+  },
+  gradientType: {
+    type: String as PropType<GradientType>,
+    required: false,
+    default: 'linear',
+    validator: (t: any) => ['linear', 'radial'].indexOf(t) > -1,
+  },
+  gradientStartColor: {
+    type: String,
+    required: false,
+    default: '#000',
+  },
+  gradientEndColor: {
+    type: String,
+    required: false,
+    default: '#fff',
   },
 }
 
@@ -184,7 +196,7 @@ export const QrcodeSvg = defineComponent({
   setup(props) {
     const numCells = ref(0)
     const fgPath = ref('')
-    let imageProps: { x: number, y: number, width: number, height: number }
+    const imageProps = ref<{ x: number, y: number, width: number, height: number } | null>(null)
 
     const generate = () => {
       const { value, level: _level, margin: _margin } = props
@@ -196,7 +208,7 @@ export const QrcodeSvg = defineComponent({
 
       if(props.imageSettings.src) {
         const imageSettings = getImageSettings(cells, props.size, margin, props.imageSettings)
-        imageProps = {
+        imageProps.value = {
           x: imageSettings.x + margin,
           y: imageSettings.y + margin,
           width: imageSettings.w,
@@ -206,6 +218,8 @@ export const QrcodeSvg = defineComponent({
         if (imageSettings.excavation) {
           cells = excavateModules(cells, imageSettings.excavation)
         }
+      } else {
+        imageProps.value = null
       }
 
       // Drawing strategy: instead of a rect per module, we're going to create a
@@ -215,6 +229,43 @@ export const QrcodeSvg = defineComponent({
       // For level 1, 441 nodes -> 2
       // For level 40, 31329 -> 2
       fgPath.value = generatePath(cells, margin)
+    }
+
+    const renderGradient = () => {
+      if (!props.gradient) return null
+
+      const gradientProps = props.gradientType === 'linear'
+        ? {
+            x1: '0%',
+            y1: '0%',
+            x2: '100%',
+            y2: '100%',
+          }
+        : {
+            cx: '50%',
+            cy: '50%',
+            r: '50%',
+            fx: '50%',
+            fy: '50%',
+          }
+
+      return h(
+        props.gradientType === 'linear' ? 'linearGradient' : 'radialGradient',
+        {
+          id: 'qr-gradient',
+          ...gradientProps,
+        },
+        [
+          h('stop', {
+            offset: '0%',
+            style: { stopColor: props.gradientStartColor },
+          }),
+          h('stop', {
+            offset: '100%',
+            style: { stopColor: props.gradientEndColor },
+          }),
+        ]
+      )
     }
 
     generate()
@@ -231,16 +282,19 @@ export const QrcodeSvg = defineComponent({
         viewBox: `0 0 ${numCells.value} ${numCells.value}`,
       },
       [
-        h(
-          'path',
-          {
-            fill: props.background,
-            d: `M0,0 h${numCells.value}v${numCells.value}H0z`,
-          }),
-        h('path', { fill: props.foreground, d: fgPath.value }),
-        props.imageSettings.src && h('image', {
+        h('defs', {}, [renderGradient()]),
+        h('rect', {
+          width: '100%',
+          height: '100%',
+          fill: props.background,
+        }),
+        h('path', {
+          fill: props.gradient ? 'url(#qr-gradient)' : props.foreground,
+          d: fgPath.value,
+        }),
+        props.imageSettings.src && imageProps.value && h('image', {
           href: props.imageSettings.src,
-          ...imageProps,
+          ...imageProps.value,
         }),
       ]
     )
@@ -255,7 +309,18 @@ export const QrcodeCanvas = defineComponent({
     const imageRef = ref<HTMLImageElement | null>(null)
 
     const generate = () => {
-      const { value, level: _level, size, margin: _margin, background, foreground } = props
+      const {
+        value,
+        level: _level,
+        size,
+        margin: _margin,
+        background,
+        foreground,
+        gradient,
+        gradientType,
+        gradientStartColor,
+        gradientEndColor,
+      } = props
       const margin = _margin >>> 0
       const level = validErrorCorrectLevel(_level) ? _level : defaultErrorCorrectLevel
 
@@ -301,7 +366,26 @@ export const QrcodeCanvas = defineComponent({
       ctx.fillStyle = background
       ctx.fillRect(0, 0, numCells, numCells)
 
-      ctx.fillStyle = foreground
+      if (gradient) {
+        let grad
+        if (gradientType === 'linear') {
+          grad = ctx.createLinearGradient(0, 0, numCells, numCells)
+        } else {
+          grad = ctx.createRadialGradient(
+            numCells / 2,
+            numCells / 2,
+            0,
+            numCells / 2,
+            numCells / 2,
+            numCells / 2,
+          )
+        }
+        grad.addColorStop(0, gradientStartColor)
+        grad.addColorStop(1, gradientEndColor)
+        ctx.fillStyle = grad
+      } else {
+        ctx.fillStyle = foreground
+      }
 
       if (SUPPORTS_PATH2D) {
         ctx.fill(new Path2D(generatePath(cells, margin)))
@@ -355,24 +439,23 @@ export const QrcodeCanvas = defineComponent({
 
 const QrcodeVue = defineComponent({
   name: 'Qrcode',
-  render() {
-    const {
-      renderAs,
-      value,
-      size,
-      margin,
-      level,
-      background,
-      foreground,
-      imageSettings,
-    } = this.$props
-
-    return h(
-      renderAs === 'svg' ? QrcodeSvg : QrcodeCanvas,
-      { value, size, margin, level, background, foreground, imageSettings },
+  props: {
+    ...QRCodeProps,
+    renderAs: {
+      type: String as PropType<RenderAs>,
+      required: false,
+      default: 'canvas',
+      validator: (as: any) => ['canvas', 'svg'].indexOf(as) > -1,
+    },
+  },
+  setup(props) {
+    return () => h(
+      props.renderAs === 'svg' ? QrcodeSvg : QrcodeCanvas,
+      {
+        ...props,
+      },
     )
   },
-  props: QRCodeVueProps,
 })
 
 export default QrcodeVue

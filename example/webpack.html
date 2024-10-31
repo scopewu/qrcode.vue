@@ -70,7 +70,7 @@
 
     @media screen and (min-width: 768px) {
       .container-fluid {
-        max-width: 798px;
+        max-width: 898px;
       }
     }
 
@@ -305,16 +305,47 @@
       </div>
       <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Background:</label>
-        <div class="col-sm-10">
+        <div class="col-sm-10 d-flex align-items-center">
           <input type="color" class="border border-3 rounded" v-model="background">
         </div>
       </div>
-      <div class="row mb-3">
+      <div class="row mb-3" v-if="!gradient">
         <label class="col-sm-2 col-form-label">Foreground:</label>
-        <div class="col-sm-10">
+        <div class="col-sm-10 d-flex align-items-center">
           <input type="color" class="border border-3 rounded" v-model="foreground">
         </div>
       </div>
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Gradient:</label>
+        <div class="col-sm-10">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" v-model="gradient" id="gradientToggle">
+          </div>
+        </div>
+      </div>
+      <template v-if="gradient">
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">GradientType:</label>
+          <div class="col-sm-10">
+            <select v-model="gradientType" class="form-select">
+              <option value="linear">Linear</option>
+              <option value="radial">Radial</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">GradientStartColor:</label>
+          <div class="col-sm-10 d-flex align-items-center">
+            <input type="color" class="border border-3 rounded" v-model="gradientStartColor">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label">GradientEndColor:</label>
+          <div class="col-sm-10 d-flex align-items-center">
+            <input type="color" class="border border-3 rounded" v-model="gradientEndColor">
+          </div>
+        </div>
+      </template>
       <div class="row mb-3">
         <label class="col-sm-2 col-form-label">QR_CODE:</label>
         <div class="col-sm-10">
@@ -329,6 +360,10 @@
                 :level="level"
                 :background="background"
                 :foreground='foreground'
+                :gradient="gradient"
+                :gradient-type="gradientType"
+                :gradient-start-color="gradientStartColor"
+                :gradient-end-color="gradientEndColor"
                 :image-settings='imageSettings'
               ></qrcode-vue>
             </div>
