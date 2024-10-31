@@ -196,7 +196,7 @@ export const QrcodeSvg = defineComponent({
   setup(props) {
     const numCells = ref(0)
     const fgPath = ref('')
-    const imageProps = ref<{ x: number, y: number, width: number, height: number } | null>(null)
+    let imageProps: { x: number, y: number, width: number, height: number }
 
     const generate = () => {
       const { value, level: _level, margin: _margin } = props
@@ -208,7 +208,7 @@ export const QrcodeSvg = defineComponent({
 
       if(props.imageSettings.src) {
         const imageSettings = getImageSettings(cells, props.size, margin, props.imageSettings)
-        imageProps.value = {
+        imageProps = {
           x: imageSettings.x + margin,
           y: imageSettings.y + margin,
           width: imageSettings.w,
@@ -218,8 +218,6 @@ export const QrcodeSvg = defineComponent({
         if (imageSettings.excavation) {
           cells = excavateModules(cells, imageSettings.excavation)
         }
-      } else {
-        imageProps.value = null
       }
 
       // Drawing strategy: instead of a rect per module, we're going to create a
@@ -292,9 +290,9 @@ export const QrcodeSvg = defineComponent({
           fill: props.gradient ? 'url(#qr-gradient)' : props.foreground,
           d: fgPath.value,
         }),
-        props.imageSettings.src && imageProps.value && h('image', {
+        props.imageSettings.src && h('image', {
           href: props.imageSettings.src,
-          ...imageProps.value,
+          ...imageProps,
         }),
       ]
     )
