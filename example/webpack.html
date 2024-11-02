@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta
@@ -13,7 +13,7 @@
   <meta name="Keywords" content="qrcode.vue,qrcode,component" />
   <meta
     name="description"
-    content="qrcode.vue - A Vue.js component for QRCode."
+    content="qrcode.vue - A Vue.js component for QRCode. Supports both Vue 2 and Vue 3. 一款同时支援 Vue 2 和 Vue 3 的二维码组件。"
   />
   <link rel="canonical" href="https://qr-vue.tie.pub" />
   <meta property="og:site_name" content="qrcode.vue" />
@@ -21,352 +21,153 @@
   <meta property="og:title" content="QRCode Vue" />
   <meta property="og:description" content="qrcode.vue - A Vue.js component to generate QRCode" />
   <meta property="og:url" content="https://qr-vue.tie.pub" />
+  <meta property="og:image" content="https://s.tie.pub/qrcode/qrcode.vue.png" />
+  <meta property="og:image:alternative" content="link to qrcode.vue" />
 
-  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="QRCode Vue" />
   <meta name="twitter:description" content="qrcode.vue - A Vue.js component to generate QRCode" />
   <meta name="twitter:url" content="https://qr-vue.tie.pub" />
-  <meta name="twitter:label1" content="Written by" />
-  <meta name="twitter:data1" content="scopewu" />
+  <meta name="twitter:image" content="https://s.tie.pub/qrcode/qrcode.vue.png" />
+  <meta name="twitter:image:alt" content="link to qrcode.vue" />
   <meta name="twitter:creator" content="@ngwwj" />
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-  <style>
-    body {
-      font: 16px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-      'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
-      'Microsoft YaHei', SimSun, sans-serif;
-      color: #333;
-    }
 
-    h1 {
-      margin-bottom: 0.67em;
-    }
+  <script>
+    (() => {
+      "use strict"
 
-    .fork {
-      width: 150px;
-      height: 150px;
-      position: absolute;
-      top: 0;
-      right: 0;
-    }
-    .fork img {
-      max-width: 100%;
-    }
-
-    .qrcode-wrap.border {
-      display: inline-block;
-      border-width: 6px !important;
-    }
-
-    .qrcode {
-      vertical-align: middle;
-    }
-
-    @media screen and (min-width: 768px) {
-      .container-fluid {
-        max-width: 898px;
-      }
-    }
-
-    @media screen and (max-width: 470px) {
-      h1 {
-        font-size: 26px;
+      const getPreferredTheme = () => {
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
       }
 
-      .fork {
-        width: 100px;
-        height: 100px;
+      const setTheme = theme => {
+        if (theme === "auto") {
+          document.documentElement.setAttribute("data-bs-theme", (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"))
+        } else {
+          document.documentElement.setAttribute("data-bs-theme", theme)
+        }
       }
-    }
-    .widget a {
-      text-decoration: none;
-      outline: 0
-    }
 
-    .widget {
-      display: inline-block;
-      overflow: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif;
-      font-size: 0;
-      line-height: 0;
-      white-space: nowrap
-    }
+      setTheme(getPreferredTheme())
 
-    .btn, .social-count {
-      position: relative;
-      display: inline-flex;
-      height: 20px;
-      padding: 2px 5px;
-      font-size: 11px;
-      font-weight: 600;
-      line-height: 14px;
-      vertical-align: bottom;
-      cursor: pointer;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      background-repeat: repeat-x;
-      background-position: -1px -1px;
-      background-size: 110% 110%;
-      border: 1px solid
-    }
-
-    .btn {
-      border-radius: .25em
-    }
-
-    .btn:not(:last-child) {
-      border-radius: .25em 0 0 .25em
-    }
-
-    .social-count {
-      border-left: 0;
-      border-radius: 0 .25em .25em 0
-    }
-
-    .widget-lg .btn, .widget-lg .social-count {
-      height: 16px;
-      padding: 5px 10px;
-      font-size: 12px;
-      line-height: 16px
-    }
-
-    .octicon {
-      display: inline-block;
-      vertical-align: text-top;
-      fill: currentColor;
-      overflow: visible
-    }
-
-    .btn {
-      color: #24292f;
-      background-color: #ebf0f4;
-      border-color: #ccd1d5;
-      border-color: rgba(27, 31, 36, .15);
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg'%3e%3clinearGradient id='o' x2='0' y2='1'%3e%3cstop stop-color='%23f6f8fa'/%3e%3cstop offset='90%25' stop-color='%23ebf0f4'/%3e%3c/linearGradient%3e%3crect width='100%25' height='100%25' fill='url(%23o)'/%3e%3c/svg%3e");
-      background-image: -moz-linear-gradient(top, #f6f8fa, #ebf0f4 90%);
-      background-image: linear-gradient(180deg, #f6f8fa, #ebf0f4 90%);
-      filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr='#FFF6F8FA', endColorstr='#FFEAEFF3')
-    }
-
-    :root .btn {
-      filter: none
-    }
-
-    .btn:focus, .btn:hover {
-      background-color: #e9ebef;
-      background-position: 0 -0.5em;
-      border-color: #caccd1;
-      border-color: rgba(27, 31, 36, .15);
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg'%3e%3clinearGradient id='o' x2='0' y2='1'%3e%3cstop stop-color='%23f3f4f6'/%3e%3cstop offset='90%25' stop-color='%23e9ebef'/%3e%3c/linearGradient%3e%3crect width='100%25' height='100%25' fill='url(%23o)'/%3e%3c/svg%3e");
-      background-image: -moz-linear-gradient(top, #f3f4f6, #e9ebef 90%);
-      background-image: linear-gradient(180deg, #f3f4f6, #e9ebef 90%);
-      filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr='#FFF3F4F6', endColorstr='#FFE8EAEE')
-    }
-
-    :root .btn:focus, :root .btn:hover {
-      filter: none
-    }
-
-    .btn:active {
-      background-color: #e5e9ed;
-      border-color: #c7cbcf;
-      border-color: rgba(27, 31, 36, .15);
-      box-shadow: inset 0 .15em .3em rgba(27, 31, 36, .15);
-      background-image: none;
-      filter: none
-    }
-
-    .social-count {
-      color: #24292f;
-      background-color: #fff;
-      border-color: #ddddde;
-      border-color: rgba(27, 31, 36, .15)
-    }
-
-    .social-count:focus, .social-count:hover {
-      color: #0969da
-    }
-
-    .octicon-heart {
-      color: #bf3989
-    }
-    .space-x-2 :not(:first-of-type){
-      margin-left: 0.5rem;
-    }
-    [v-cloak] {
-      display: none;
-    }
-  </style>
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+        setTheme(getPreferredTheme())
+      })
+    })()
+  </script>
 </head>
 <body>
 <div id="root">
   <div class="container-fluid mb-5">
-    <header class="border-bottom mt-4 mb-3 pb-2">
-      <div class='row align-items-center my-3'>
-        <h1 class='col-sm-8 m-0'>qrcode.vue:</h1>
-        <div class='col-4 space-x-2 text-end'>
+    <header class="border-bottom mt-4 mb-3 pb-3">
+      <div class="row justify-content-between align-items-center my-3">
+        <h1 class="col-auto mb-2">qrcode.vue</h1>
+        <div class="col-auto space-x-2 mb-2">
           <a
-            href='https://github.com/scopewu/qrcode.vue'
-            class='link-dark link-underline-opacity-25 link-underline-opacity-100-hover'
+            href="https://github.com/scopewu/qrcode.vue"
+            class="link-dark link-underline-opacity-25 link-underline-opacity-100-hover"
           >GitHub</a>
           <a
-            href='https://tie.pub'
-            class='link-dark link-underline-opacity-25 link-underline-opacity-100-hover'
-            target='_blank'
-            rel='noopener'
+            href="https://tie.pub"
+            class="link-dark link-underline-opacity-25 link-underline-opacity-100-hover"
+            target="_blank"
+            rel="noopener"
           >Author</a>
         </div>
+        <div class="col-12">A Vue.js component for QRCode. Supports both Vue 2 and Vue 3.</div>
       </div>
-      <div class='row'>
-        <div class='col-4'>
-          <div class="widget" v-cloak>
-            <a class="btn" href="https://github.com/scopewu/qrcode.vue" rel="noopener" target="_blank" aria-label="Star qrcode.vue on GitHub">
-              <svg viewBox="0 0 16 16" width="14" height="14" class="octicon octicon-mark-github" aria-hidden="true">
-                <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
-              </svg>
-              <span>&nbsp;</span>
-              <span>Star</span>
-            </a>
-            <a class="social-count" href="https://github.com/scopewu/qrcode.vue/stargazers" rel="noopener" target="_blank" :aria-label="`${stargazersCount} stargazers on GitHub`">{{ stargazersCount }}</a>
-          </div>
+      <div class="row">
+        <div class="col-4 widget">
+          <a class="btn" href="https://github.com/scopewu/qrcode.vue" rel="noopener" target="_blank" aria-label="Star qrcode.vue on GitHub">
+            <svg viewBox="0 0 16 16" width="14" height="14" class="octicon octicon-mark-github" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+            </svg>
+            <span>&nbsp;</span>
+            <span>Star</span>
+          </a>
+          <a class="social-count" href="https://github.com/scopewu/qrcode.vue/stargazers" rel="noopener" target="_blank" :aria-label="`${stargazersCount} stargazers on GitHub`" v-cloak>{{ stargazersCount }}</a>
         </div>
       </div>
     </header>
-    <form v-cloak>
-      <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Value:</label>
-        <div class="col-sm-10">
-          <textarea v-model="value" class="form-control" rows="3"></textarea>
-        </div>
+    <form class="row g-3" v-cloak>
+      <div class="col-12">
+        <label for="value" class="form-label">value:</label>
+        <textarea v-model="value" class="form-control" id="value" rows="3"></textarea>
       </div>
-      <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Size:</label>
-        <div class="col-sm-10">
-          <div class='row'>
-            <div class='col-8'>
-              <input
-                type="range"
-                v-model="size"
-                min="100"
-                max="800"
-                step="20"
-                class="form-range"
-              />
-            </div>
-            <div class='col-auto'>{{size}}</div>
-          </div>
-        </div>
+      <div class="col-6">
+        <label for="size" class="form-label">size: {{size}}</label>
+        <input type="range" v-model="size" min="100" max="720" step="20" class="form-range" id="size" />
       </div>
-      <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Margin:</label>
-        <div class="col-sm-10">
-          <div class='row'>
-            <div class='col-8'>
-              <input
-                type="range"
-                v-model="margin"
-                min="0"
-                max="10"
-                step='1'
-                class="form-range"
-              />
-            </div>
-            <div class='col-auto'>{{margin}}</div>
-          </div>
-        </div>
+      <div class="col-6">
+        <label for="margin" class="form-label">margin: {{margin}}</label>
+        <input type="range" v-model="margin" min="0" max="10" step="1" class="form-range" id="margin" />
       </div>
-      <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Level:</label>
-        <div class="col-sm-10">
-          <select v-model="level" class="form-select">
-            <option value="L">L</option>
-            <option value="M">M</option>
-            <option value="Q">Q</option>
-            <option value="H">H</option>
-          </select>
-        </div>
+      <div class="col-6">
+        <label for="level" class="form-label">level:</label>
+        <select v-model="level" class="form-select" id="level">
+          <option value="L">L</option>
+          <option value="M">M</option>
+          <option value="Q">Q</option>
+          <option value="H">H</option>
+        </select>
       </div>
-      <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">renderAs:</label>
-        <div class="col-sm-10">
-          <select v-model="renderAs" class="form-select">
-            <option value="svg">svg</option>
-            <option value="canvas">canvas</option>
-          </select>
-        </div>
+      <div class="col-6">
+        <label for="RenderAs" class="form-label">render-as:</label>
+        <select v-model="renderAs" class="form-select" id="RenderAs">
+          <option value="svg">svg</option>
+          <option value="canvas">canvas</option>
+        </select>
       </div>
-      <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Background:</label>
-        <div class="col-sm-10 d-flex align-items-center">
-          <input type="color" class="border border-3 rounded" v-model="background">
-        </div>
+      <div class="col-6">
+        <label for="background" class="form-label">background:</label>
+        <input type="color" class="form-control form-control-color" id="background" v-model="background">
       </div>
-      <div class="row mb-3" v-if="!gradient">
-        <label class="col-sm-2 col-form-label">Foreground:</label>
-        <div class="col-sm-10 d-flex align-items-center">
-          <input type="color" class="border border-3 rounded" v-model="foreground">
-        </div>
+      <div class="col-6">
+        <label for="foreground" class="form-label">foreground:</label>
+        <input type="color" class="form-control form-control-color" id="foreground" v-model="foreground">
       </div>
-      <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Gradient:</label>
-        <div class="col-sm-10">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" v-model="gradient" id="gradientToggle">
-          </div>
+      <div class="col-12">
+        <div class="form-check">
+          <label for="gradient" class="form-label">gradient</label>
+          <input class="form-check-input" type="checkbox" id="gradient" v-model="gradient">
         </div>
       </div>
       <template v-if="gradient">
-        <div class="row mb-3">
-          <label class="col-sm-2 col-form-label">GradientType:</label>
-          <div class="col-sm-10">
-            <select v-model="gradientType" class="form-select">
-              <option value="linear">Linear</option>
-              <option value="radial">Radial</option>
-            </select>
-          </div>
+        <div class="col-12">
+          <label for="gradient-type" class="form-label">gradient-type:</label>
+          <select v-model="gradientType" class="form-select" id="gradient-type">
+            <option value="linear">Linear</option>
+            <option value="radial">Radial</option>
+          </select>
         </div>
-        <div class="row mb-3">
-          <label class="col-sm-2 col-form-label">GradientStartColor:</label>
-          <div class="col-sm-10 d-flex align-items-center">
-            <input type="color" class="border border-3 rounded" v-model="gradientStartColor">
-          </div>
+        <div class="col-6">
+          <label for="gradientStartColor" class="form-label">gradient-start-color:</label>
+          <input type="color" class="form-control form-control-color" id="gradientStartColor" v-model="gradientStartColor">
         </div>
-        <div class="row mb-3">
-          <label class="col-sm-2 col-form-label">GradientEndColor:</label>
-          <div class="col-sm-10 d-flex align-items-center">
-            <input type="color" class="border border-3 rounded" v-model="gradientEndColor">
-          </div>
+        <div class="col-6">
+          <label for="gradientEndColor" class="form-label">gradient-end-color:</label>
+          <input type="color" class="form-control form-control-color" id="gradientEndColor" v-model="gradientEndColor">
         </div>
       </template>
-      <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">QR_CODE:</label>
-        <div class="col-sm-10">
-          <div class="form-control-static">
-            <div class="border qrcode-wrap">
-              <qrcode-vue
-                class="qrcode"
-                :value="value"
-                :margin='Number(margin)'
-                :render-as="renderAs"
-                :size="Number(size)"
-                :level="level"
-                :background="background"
-                :foreground='foreground'
-                :gradient="gradient"
-                :gradient-type="gradientType"
-                :gradient-start-color="gradientStartColor"
-                :gradient-end-color="gradientEndColor"
-                :image-settings='imageSettings'
-              ></qrcode-vue>
-            </div>
+      <div class="col-12">
+        <label class="form-label">QR_CODE:</label>
+        <div class="form-control-static">
+          <div class="border qrcode-wrap">
+            <qrcode-vue
+              class="qrcode"
+              :value="value"
+              :margin="Number(margin)"
+              :render-as="renderAs"
+              :size="Number(size)"
+              :level="level"
+              :background="background"
+              :foreground="foreground"
+              :gradient="gradient"
+              :gradient-type="gradientType"
+              :gradient-start-color="gradientStartColor"
+              :gradient-end-color="gradientEndColor"
+              :image-settings="imageSettings"
+            ></qrcode-vue>
           </div>
         </div>
       </div>

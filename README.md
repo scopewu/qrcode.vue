@@ -6,8 +6,6 @@
 
 A Vue.js component to generate [QRCode](https://en.wikipedia.org/wiki/QR_code). Both support Vue 2 and Vue 3.
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
-
 [中文](./README-zh_cn.md) | [日本語](./README-ja.md)
 
 ## install
@@ -45,7 +43,7 @@ createApp({
 }).mount('#root')
 ```
 
-- Or single-file components with a `*.vue` extension:
+Or single-file components with a `*.vue` extension:
 
 ```html
 <template>
@@ -72,47 +70,7 @@ createApp({
 </script>
 ```
 
-- Example Usage With Gradient
-
-> To use the `QrcodeVue` component with gradient support, you can pass the gradient-related props:
-
-```html
-<template>
-  <qrcode-vue
-    :size="size"
-    :value="fullUrl"
-    :level="level"
-    :margin="margin"
-    :render-as="renderAs"
-    :background="background"
-    :gradient="true"
-    :gradient-type="gradientType"
-    :gradient-start-color="gradientStartColor"
-    :gradient-end-color="gradientEndColor"
-  />
-</template>
-
-<script>
-export default {
-  data() {
-    return {
-      size: 200,
-      fullUrl: 'https://example.com',
-      level: 'H',
-      margin: 4,
-      renderAs: 'svg', // or 'canvas'
-      background: '#ffffff',
-      gradient: true,
-      gradientType: 'linear', // or 'radial'
-      gradientStartColor: '#ff0000', // Start color of the gradient
-      gradientEndColor: '#0000ff', // End color of the gradient
-    }
-  },
-}
-</script>
-```
-
-- When you use the component with Vue 3 with `TypeScript`:
+When you use the component with Vue 3 with `TypeScript`:
 
 ```html
 <template>
@@ -140,10 +98,7 @@ export default {
   const background = ref('#ffffff')
   const foreground = ref('#000000')
   const margin = ref(0)
-  const gradient = ref(false)
-  const gradientType = ref<GradientType>('linear')
-  const gradientStartColor = ref('#000000')
-  const gradientEndColor = ref('#38bdf8')
+  
   const imageSettings = ref<ImageSettings>({
     src: 'https://github.com/scopewu.png',
     width: 30,
@@ -152,6 +107,11 @@ export default {
     // y: 10,
     excavate: true,
   })
+
+  const gradient = ref(false)
+  const gradientType = ref<GradientType>('linear')
+  const gradientStartColor = ref('#000000')
+  const gradientEndColor = ref('#38bdf8')
 </script>
 ```
 
@@ -206,6 +166,24 @@ The background color of qrcode.
 
 The foreground color of qrcode.
 
+### `image-settings`
+
+- Type: `ImageSettings`
+- Default: `{}`
+
+  ```ts
+  export type ImageSettings = {
+    src: string, // The URL of image.
+    x?: number,  // The horizontal offset. When not specified, will center the image.
+    y?: number,  // The vertical offset. When not specified, will center the image.
+    height: number, // The height of image
+    width: number,  // The height of image
+    excavate?: boolean, // Whether or not to "excavate" the modules around the image.
+  }
+  ```
+
+The settings to support qrcode image logo.
+
 ### `gradient`
 
 - Type: `boolean`
@@ -233,24 +211,6 @@ The start color of the gradient.
 - Default: `#ffffff`
 
 The end color of the gradient.
-
-### `image-settings`
-
-- Type: `ImageSettings`
-- Default: `{}`
-
-  ```ts
-  export type ImageSettings = {
-    src: string, // The URL of image.
-    x?: number,  // The horizontal offset. When not specified, will center the image.
-    y?: number,  // The vertical offset. When not specified, will center the image.
-    height: number, // The height of image
-    width: number,  // The height of image
-    excavate?: boolean, // Whether or not to "excavate" the modules around the image.
-  }
-  ```
-
-The settings to support qrcode image logo.
 
 ### `class`
 

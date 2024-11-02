@@ -1,6 +1,7 @@
 import { createApp, defineComponent, onMounted, ref } from 'vue'
 import QrcodeVue from '../src'
 import type { Level, RenderAs, GradientType, ImageSettings } from '../src'
+import './styles.scss'
 
 const App = defineComponent({
   components: { QrcodeVue },

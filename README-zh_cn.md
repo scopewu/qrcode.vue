@@ -6,7 +6,7 @@
 
 一款 Vue.js 二维码组件，同时支持 Vue 2 和 Vue 3.
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scopewu/qrcode.vue/blob/main/LICENSE)
 
 ## 快速开始
 
@@ -43,7 +43,7 @@ createApp({
 }).mount('#root')
 ```
 
-- 或者，在独有单文件扩展 `*.vue` 中使用：
+或者，在独有单文件扩展 `*.vue` 中使用：
 
 ```html
 <template>
@@ -66,46 +66,7 @@ createApp({
 </script>
 ```
 
-- 渐变示例用法
-
-> 要使用带渐变支持的 `QrcodeVue` 组件，你可以传入渐变相关的属性：
-
-```html
-<template>
-  <qrcode-vue
-    :size="size"
-    :value="fullUrl"
-    :level="level"
-    :margin="margin"
-    :render-as="renderAs"
-    :background="background"
-    :gradient="true"
-    :gradient-type="gradientType"
-    :gradient-start-color="gradientStartColor"
-    :gradient-end-color="gradientEndColor"
-  />
-</template>
-
-<script>
-export default {
-  data() {
-    return {
-      size: 200,
-      fullUrl: 'https://example.com',
-      level: 'H',
-      margin: 4,
-      renderAs: 'svg', // or 'canvas'
-      background: '#ffffff',
-      gradient: true,
-      gradientType: 'linear', // or 'radial'
-      gradientStartColor: '#ff0000', // 渐变的起始颜色
-      gradientEndColor: '#0000ff', // 渐变的结束颜色
-    }
-  },
-}
-</script>
-
-- 在 Vue 3 中配合 `TypeScript` 使用：
+在 Vue 3 中配合 `TypeScript` 使用：
 
 ```html
 <template>
@@ -133,10 +94,8 @@ export default {
   const background = ref('#ffffff')
   const foreground = ref('#000000')
   const margin = ref(0)
-  const gradient = ref(false)
-  const gradientType = ref<GradientType>('linear')
-  const gradientStartColor = ref('#000000')
-  const gradientEndColor = ref('#38bdf8')
+  
+  // 可传入二维码图片相关的属性，支持二维码 LOGO；
   const imageSettings = ref<ImageSettings>({
     src: 'https://github.com/scopewu.png',
     width: 30,
@@ -145,6 +104,12 @@ export default {
     // y: 10,
     excavate: true,
   })
+
+  // 可传入渐变相关的属性，支持渐变：
+  const gradient = ref(false)
+  const gradientType = ref<GradientType>('linear')
+  const gradientStartColor = ref('#000000')
+  const gradientEndColor = ref('#38bdf8')
 </script>
 ```
 
@@ -199,6 +164,27 @@ export default {
 
 二维码前景颜色。
 
+### `image-settings`
+
+- 类型: `ImageSettings`
+- 默认值: `{}`
+
+  ```ts
+  export type ImageSettings = {
+    src: string, // 图片的地址。
+    x?: number,  // 水平横向偏移。没有设定值时，图片剧中
+    y?: number,  // 垂直竖向偏移。没有设定值时，图片剧中
+    height: number, // 图片的高度
+    width: number,  // 图片的宽度
+    // 是否“挖掘”图像周围的模块。
+    // 这意味着嵌入图像重叠的任何模块都将使用背景颜色。
+    // 使用此选项可确保图像周围的边缘清晰。嵌入透明图像时也很有用。
+    excavate?: boolean,
+  }
+  ```
+
+二维码图片 logo 配置。
+
 ### `gradient`
 
 - 类型: `boolean`
@@ -226,27 +212,6 @@ export default {
 - 默认值: `#ffffff`
 
 渐变的结束颜色。
-
-### `image-settings`
-
-- 类型: `ImageSettings`
-- 默认值: `{}`
-
-  ```ts
-  export type ImageSettings = {
-    src: string, // 图片的地址。
-    x?: number,  // 水平横向偏移。没有设定值时，图片剧中
-    y?: number,  // 垂直竖向偏移。没有设定值时，图片剧中
-    height: number, // 图片的高度
-    width: number,  // 图片的宽度
-    // 是否“挖掘”图像周围的模块。
-    // 这意味着嵌入图像重叠的任何模块都将使用背景颜色。
-    // 使用此选项可确保图像周围的边缘清晰。嵌入透明图像时也很有用。
-    excavate?: boolean,
-  }
-  ```
-
-二维码图片 logo 配置。
 
 ### `class`
 

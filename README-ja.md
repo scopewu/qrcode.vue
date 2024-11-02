@@ -1,18 +1,18 @@
 # qrcode.vue
 
-⚠️ 現在、Vue 3.xを使用している場合は、`qrcode.vue`を`3.x`にアップグレードしてください。
+⚠️ 現在、Vue 3.xを使用している場合は、`qrcode.vue` を`3.x`にアップグレードしてください。
 
-🔒 Vue 2.xを使用している場合は、バージョン`1.x`を使用し続けてください。
+🔒 Vue 2.xを使用している場合は、バージョン `1.x` を使用し続けてください。
 
-[QRコード](https://en.wikipedia.org/wiki/QR_code)を生成するためのVue.jsコンポーネントです。Vue 2とVue 3の両方をサポートしています。
+[QRコード](https://en.wikipedia.org/wiki/QR_code)を生成するための Vue.js コンポーネントです。Vue 2 と Vue 3 の両方をサポートしています。
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scopewu/qrcode.vue/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scopewu/qrcode.vue/blob/main/LICENSE)
 
 [English](./README.md)
 
 ## インストール
 
-`qrcode.vue`コンポーネントをVue.jsアプリに使用できます。
+`qrcode.vue`コンポーネントを Vue.js アプリに使用できます。
 
 ```bash
 npm install --save qrcode.vue # yarn add qrcode.vue
@@ -45,7 +45,7 @@ createApp({
 }).mount('#root')
 ```
 
-- または、`*.vue`拡張子の単一ファイルコンポーネントで使用します：
+または、`*.vue` 拡張子の単一ファイルコンポーネントで使用します：
 
 ```html
 <template>
@@ -68,46 +68,7 @@ createApp({
 </script>
 ```
 
-- グラデーションの使用例
-
-> グラデーションをサポートする `QrcodeVue` コンポーネントを使用するには、グラデーション関連のプロパティを渡すことができます：
-
-```html
-<template>
-  <qrcode-vue
-    :size="size"
-    :value="fullUrl"
-    :level="level"
-    :margin="margin"
-    :render-as="renderAs"
-    :background="background"
-    :gradient="true"
-    :gradient-type="gradientType"
-    :gradient-start-color="gradientStartColor"
-    :gradient-end-color="gradientEndColor"
-  />
-</template>
-
-<script>
-export default {
-  data() {
-    return {
-      size: 200,
-      fullUrl: 'https://example.com',
-      level: 'H',
-      margin: 4,
-      renderAs: 'svg', // or 'canvas'
-      background: '#ffffff',
-      gradient: true,
-      gradientType: 'linear', // or 'radial'
-      gradientStartColor: '#ff0000', // グラデーションの開始色
-      gradientEndColor: '#0000ff', // グラデーションの終了色
-    }
-  },
-}
-</script>
-
-- Vue 3で`TypeScript`を使用する場合：
+Vue 3で `TypeScript` を使用する場合：
 
 ```html
 <template>
@@ -135,10 +96,8 @@ export default {
   const background = ref('#ffffff')
   const foreground = ref('#000000')
   const margin = ref(0)
-  const gradient = ref(false)
-  const gradientType = ref<GradientType>('linear')
-  const gradientStartColor = ref('#000000')
-  const gradientEndColor = ref('#38bdf8')
+  
+  // 画像の設定
   const imageSettings = ref<ImageSettings>({
     src: 'https://github.com/scopewu.png',
     width: 30,
@@ -147,6 +106,12 @@ export default {
     // y: 10,
     excavate: true,
   })
+
+  // グラデーション
+  const gradient = ref(false)
+  const gradientType = ref<GradientType>('linear')
+  const gradientStartColor = ref('#000000')
+  const gradientEndColor = ref('#38bdf8')
 </script>
 ```
 
@@ -201,6 +166,24 @@ QRコードの背景色。
 
 QRコードの前景色。
 
+### `image-settings`
+
+- タイプ: `ImageSettings`
+- デフォルト: `{}`
+
+  ```ts
+  export type ImageSettings = {
+    src: string, // The URL of image.
+    x?: number,  // The horizontal offset. When not specified, will center the image.
+    y?: number,  // The vertical offset. When not specified, will center the image.
+    height: number, // The height of image
+    width: number,  // The height of image
+    excavate?: boolean, // Whether or not to "excavate" the modules around the image.
+  }
+  ```
+
+The settings to support qrcode image logo.
+
 ### `gradient`
 
 - タイプ：`boolean`
@@ -228,24 +211,6 @@ QRコードのグラデーション塗りつぶしを有効にします。
 - デフォルト：`#ffffff`
 
 グラデーションの終了色。
-
-### `image-settings`
-
-- タイプ: `ImageSettings`
-- デフォルト: `{}`
-
-  ```ts
-  export type ImageSettings = {
-    src: string, // The URL of image.
-    x?: number,  // The horizontal offset. When not specified, will center the image.
-    y?: number,  // The vertical offset. When not specified, will center the image.
-    height: number, // The height of image
-    width: number,  // The height of image
-    excavate?: boolean, // Whether or not to "excavate" the modules around the image.
-  }
-  ```
-
-The settings to support qrcode image logo.
 
 ### `class`
 
