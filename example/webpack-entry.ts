@@ -1,6 +1,6 @@
 import { createApp, defineComponent, onMounted, ref } from 'vue'
 import QrcodeVue from '../src'
-import type { Level, RenderAs, ImageSettings } from '../src'
+import type { Level, RenderAs, GradientType, ImageSettings } from '../src'
 
 const App = defineComponent({
   components: { QrcodeVue },
@@ -20,6 +20,10 @@ const App = defineComponent({
       // y: 10,
       excavate: true,
     })
+    const gradient = ref(false)
+    const gradientType = ref<GradientType>('linear')
+    const gradientStartColor = ref('#000000')
+    const gradientEndColor = ref('#38bdf8')
 
     const stargazersCount = ref(700)
 
@@ -43,6 +47,10 @@ const App = defineComponent({
       margin,
       imageSettings,
       stargazersCount,
+      gradient,
+      gradientType,
+      gradientStartColor,
+      gradientEndColor,
     }
   }
 })
