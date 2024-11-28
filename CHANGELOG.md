@@ -1,3 +1,9 @@
+## [3.6.0] - 2024-11-03
+
+### Feature
+
+- Support `gradient` props for QRCode.
+
 ## [3.5.0] - 2024-09-26
 
 ### Feature
