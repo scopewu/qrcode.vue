@@ -39,7 +39,7 @@ function createEntry(options) {
           compilerOptions: {
             declaration: options.format === 'es',
           },
-          exclude: ['src', 'example'],
+          exclude: ['src', 'example', 'test'],
         }
       }),
     ],
