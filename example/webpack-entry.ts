@@ -26,7 +26,7 @@ const App = defineComponent({
     const gradientStartColor = ref('#000000')
     const gradientEndColor = ref('#38bdf8')
 
-    const stargazersCount = ref(700)
+    const stargazersCount = ref(750)
 
     onMounted(() => {
       fetchGitHubRepoStarCount((repoDetail: any) => {
