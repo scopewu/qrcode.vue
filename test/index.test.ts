@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@rstest/core'
 import { mount } from '@vue/test-utils'
 import QrcodeVue from '../src'
 
@@ -30,8 +31,9 @@ describe('QrcodeVue', () => {
       },
     })
     const canvas = wrapper.find('canvas')
-    expect(canvas.attributes('width')).toBe(`${size}`)
-    expect(canvas.attributes('height')).toBe(`${size}`)
+    const style = canvas.attributes('style')
+    expect(style).toContain(`width: ${size}px`)
+    expect(style).toContain(`height: ${size}px`)
   })
 
   it('renders with image settings', () => {

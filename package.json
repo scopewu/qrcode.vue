@@ -20,7 +20,7 @@
   "scripts": {
     "dev": "rsbuild dev",
     "build": "rollup -c",
-    "test": "jest"
+    "test": "rstest"
   },
   "repository": "https://github.com/scopewu/qrcode.vue.git",
   "keywords": [
@@ -49,17 +49,14 @@
   "dependencies": {},
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
-    "@rsbuild/core": "^1.6.1",
+    "@rsbuild/core": "^1.6.12",
     "@rsbuild/plugin-sass": "^1.4.0",
-    "@types/jest": "^30.0.0",
+    "@rstest/core": "^0.6.9",
     "@vue/test-utils": "^2.4.6",
     "bootstrap": "^5.3.8",
-    "jest": "^30.2.0",
-    "jest-canvas-mock": "^2.5.2",
-    "jest-environment-jsdom": "^30.2.0",
+    "happy-dom": "^20.0.11",
     "rollup": "^4.52.5",
     "rollup-plugin-typescript2": "^0.36.0",
-    "ts-jest": "^29.4.5",
     "typescript": "^5.9.3",
     "vue": "^3.5.17"
   }
