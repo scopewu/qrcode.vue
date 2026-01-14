@@ -1,31 +1,172 @@
-@import "../node_modules/bootstrap/scss/functions";
+:root {
+  --bg-color: #fff;
+  --border-color: #dee2e6;
+  --border-width: 1px;
+  --primary-color: #212529;
+  --secondary-bg: #e9ecef;
+  --gap-x: 1rem;
+  --gap-y: 1rem;
+  --border-radius: 0.3rem;
+}
 
-// Variable overrides second
-//$primary: #900;
-//$enable-shadows: true;
-//$prefix: "mo-";
+[data-bs-theme="dark"] {
+  --bg-color: #212529;
+  --border-color: #495057;
+  --primary-color: #dee2e6;
+  --secondary-bg: #343a40;
+}
 
-// Required Bootstrap imports
-@import "../node_modules/bootstrap/scss/variables";
-@import "../node_modules/bootstrap/scss/variables-dark";
-@import "../node_modules/bootstrap/scss/maps";
-@import "../node_modules/bootstrap/scss/mixins";
-@import "../node_modules/bootstrap/scss/root";
 
-@import "../node_modules/bootstrap/scss/bootstrap-reboot";
-@import "../node_modules/bootstrap/scss/bootstrap-grid";
-@import "../node_modules/bootstrap/scss/bootstrap-utilities";
-@import "../node_modules/bootstrap/scss/forms";
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--primary-color);
+  background-color: var(--bg-color);
+}
 
-body {}
+a {
+  color: inherit;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+textarea {
+  resize: vertical;
+  font-size: inherit;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.flex {
+  display: flex;
+
+  .col-auto {
+    flex: 1 1 auto;
+  }
+}
+
+.align-items-center {
+  align-items: center
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.border-bottom {
+  border-bottom: var(--border-width) solid var(--border-color);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: calc(-0.5 * var(--gap-x));
+  margin-left: calc(-0.5 * var(--gap-x));
+
+  & > [class^="col"] {
+    box-sizing: border-box;
+    max-width: 100%;
+    padding-right: calc(0.5 * var(--gap-x));
+    padding-left: calc(0.5 * var(--gap-x));
+    margin-top: var(--gap-y);
+  }
+
+  .col-6 {
+    flex: 0 0 auto;
+    width: 50%;
+  }
+
+  .col-12 {
+    width: 100%
+  }
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+}
+
+.form-label {
+  display: inline-block;
+  margin-bottom: calc(0.5 * var(--gap-y));
+}
+
+.form-range, .form-control, .form-select {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0;
+  font-size: 1rem;
+  background-color: var(--bg-color);
+  line-height: 1.5;
+}
+
+.form-range {
+  appearance: none;
+  background-color: transparent;
+  height: 1.5rem;
+
+  &::-webkit-slider-runnable-track, &::-moz-range-track {
+    color: #0000;
+    cursor: pointer;
+    background-color: var(--secondary-bg);
+    border-color: #0000;
+    border-radius: 1rem;
+    width: 100%;
+    //height: .5rem
+  }
+}
+
+.form-control {
+  width: 100%;
+  padding: .375rem .75rem;
+  color: var(--primary-color);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius);
+  display: block;
+
+  &-color {
+    appearance: none;
+    width: 3rem;
+    height: calc(1.5em + 0.75rem + calc(var(--border-width) * 2));
+    padding: 0.375rem;
+  }
+}
+
+.form-select {
+  padding: .375rem 2.25rem .375rem .75rem;
+  color: var(--primary-color);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius);
+}
+
+.form-check-input {
+  margin-left: 0.5rem;
+  border: var(--border-width) solid var(--border-color);
+}
 
 .qrcode-wrap.border {
   display: inline-block;
-  border-width: 6px !important;
+  border: 6px solid var(--border-color);
 }
 
 .qrcode {
   vertical-align: middle;
+}
+
+.container-fluid {
+  width: 100%;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 @media screen and (min-width: 768px) {
@@ -41,6 +182,7 @@ body {}
 .widget {
   display: inline-block;
   overflow: hidden;
+  margin-block: 1rem;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif;
   font-size: 0;
   line-height: 0;
@@ -55,7 +197,7 @@ body {}
 .gh-btn, .gh-star {
   position: relative;
   display: inline-flex;
-  height: 20px;
+  //height: 20px;
   padding: 2px 5px;
   font-size: 11px;
   font-weight: 600;
@@ -65,7 +207,7 @@ body {}
   background-repeat: repeat-x;
   background-position: -1px -1px;
   background-size: 110% 110%;
-  border: 1px solid;
+  border: var(--border-width) solid;
 }
 
 .octicon {

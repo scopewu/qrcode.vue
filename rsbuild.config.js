@@ -19,6 +19,7 @@ export default defineConfig({
     distPath: {
       root: './example/dist',
     },
+    inlineStyles: true,
   },
   html: {
     template: './example/webpack.html',
