@@ -1,5 +1,4 @@
 import { defineConfig } from '@rsbuild/core'
-import { pluginSass } from '@rsbuild/plugin-sass'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -28,13 +27,5 @@ export default defineConfig({
   server: {
     htmlFallback: 'index',
   },
-  plugins: [
-    pluginSass({
-      sassLoaderOptions: {
-        sassOptions: {
-          silenceDeprecations: ['import'],
-        },
-      },
-    }),
-  ],
+  plugins: [],
 })

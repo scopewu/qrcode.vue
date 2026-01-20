@@ -28,10 +28,10 @@ body {
 
 a {
   color: inherit;
+}
 
-  &:hover {
-    text-decoration: none;
-  }
+a:hover {
+  text-decoration: none;
 }
 
 textarea {
@@ -45,10 +45,10 @@ textarea {
 
 .flex {
   display: flex;
+}
 
-  .col-auto {
-    flex: 1 1 auto;
-  }
+.flex .col-auto {
+  flex: 1 1 auto;
 }
 
 .align-items-center {
@@ -68,23 +68,23 @@ textarea {
   flex-wrap: wrap;
   margin-right: calc(-0.5 * var(--gap-x));
   margin-left: calc(-0.5 * var(--gap-x));
+}
 
-  & > [class^="col"] {
-    box-sizing: border-box;
-    max-width: 100%;
-    padding-right: calc(0.5 * var(--gap-x));
-    padding-left: calc(0.5 * var(--gap-x));
-    margin-top: var(--gap-y);
-  }
+.row > [class^="col"] {
+  box-sizing: border-box;
+  max-width: 100%;
+  padding-right: calc(0.5 * var(--gap-x));
+  padding-left: calc(0.5 * var(--gap-x));
+  margin-top: var(--gap-y);
+}
 
-  .col-6 {
-    flex: 0 0 auto;
-    width: 50%;
-  }
+.col-6 {
+  flex: 0 0 auto;
+  width: 50%;
+}
 
-  .col-12 {
-    width: 100%
-  }
+.col-12 {
+  width: 100%
 }
 
 input, select, textarea {
@@ -112,16 +112,16 @@ input, select, textarea {
   appearance: none;
   background-color: transparent;
   height: 1.5rem;
+}
 
-  &::-webkit-slider-runnable-track, &::-moz-range-track {
-    color: #0000;
-    cursor: pointer;
-    background-color: var(--secondary-bg);
-    border-color: #0000;
-    border-radius: 1rem;
-    width: 100%;
-    //height: .5rem
-  }
+.form-range::-webkit-slider-runnable-track, .form-range::-moz-range-track {
+  color: #0000;
+  cursor: pointer;
+  background-color: var(--secondary-bg);
+  border-color: #0000;
+  border-radius: 1rem;
+  width: 100%;
+  /*height: .5rem*/
 }
 
 .form-control {
@@ -131,13 +131,13 @@ input, select, textarea {
   border: var(--border-width) solid var(--border-color);
   border-radius: var(--border-radius);
   display: block;
+}
 
-  &-color {
-    appearance: none;
-    width: 3rem;
-    height: calc(1.5em + 0.75rem + calc(var(--border-width) * 2));
-    padding: 0.375rem;
-  }
+.form-control-color {
+  appearance: none;
+  width: 3rem;
+  height: calc(1.5em + 0.75rem + calc(var(--border-width) * 2));
+  padding: 0.375rem;
 }
 
 .form-select {
@@ -187,17 +187,17 @@ input, select, textarea {
   font-size: 0;
   line-height: 0;
   white-space: nowrap;
+}
 
-  a {
-    text-decoration: none;
-    outline: 0
-  }
+.widget a {
+  text-decoration: none;
+  outline: 0
 }
 
 .gh-btn, .gh-star {
   position: relative;
   display: inline-flex;
-  //height: 20px;
+  /*height: 20px;*/
   padding: 2px 5px;
   font-size: 11px;
   font-weight: 600;
@@ -224,27 +224,27 @@ input, select, textarea {
   border-color: rgba(27, 31, 36, .15);
   background-image: linear-gradient(180deg, #f6f8fa, #ebf0f4 90%);
   border-radius: .25em;
+}
 
-  &:not(:last-child) {
-    border-radius: .25em 0 0 .25em;
-  }
+.gh-btn:not(:last-child) {
+  border-radius: .25em 0 0 .25em;
+}
 
-  &:focus, &:hover {
-    background-color: #e9ebef;
-    background-position: 0 -0.5em;
-    border-color: #caccd1;
-    border-color: rgba(27, 31, 36, .15);
-    background-image: linear-gradient(180deg, #f3f4f6, #e9ebef 90%);
-  }
+.gh-btn:focus, .gh-btn:hover {
+  background-color: #e9ebef;
+  background-position: 0 -0.5em;
+  border-color: #caccd1;
+  border-color: rgba(27, 31, 36, .15);
+  background-image: linear-gradient(180deg, #f3f4f6, #e9ebef 90%);
+}
 
-  &:active {
-    background-color: #e5e9ed;
-    border-color: #c7cbcf;
-    border-color: rgba(27, 31, 36, .15);
-    box-shadow: inset 0 .15em .3em rgba(27, 31, 36, .15);
-    background-image: none;
-    filter: none;
-  }
+&:active {
+  background-color: #e5e9ed;
+  border-color: #c7cbcf;
+  border-color: rgba(27, 31, 36, .15);
+  box-shadow: inset 0 .15em .3em rgba(27, 31, 36, .15);
+  background-image: none;
+  filter: none;
 }
 
 .gh-star {
@@ -254,8 +254,8 @@ input, select, textarea {
   border-color: rgba(27, 31, 36, .15);
   border-left: 0;
   border-radius: 0 .25em .25em 0;
+}
 
-  &:focus, &:hover {
-    color: #0969da;
-  }
+.gh-star:focus, .gh-star:hover {
+  color: #0969da;
 }
