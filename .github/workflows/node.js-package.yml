@@ -30,6 +30,4 @@ jobs:
         run: yarn build
 
       - name: Publish registry
-        run: npm publish
-        env:
-          #NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: yarn publish
