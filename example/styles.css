@@ -1,4 +1,6 @@
 :root {
+  color-scheme: light dark;
+
   --bg-color: #fff;
   --border-color: #dee2e6;
   --border-width: 1px;
@@ -10,6 +12,8 @@
 }
 
 [data-bs-theme="dark"] {
+  color-scheme: dark;
+
   --bg-color: #212529;
   --border-color: #495057;
   --primary-color: #dee2e6;
@@ -162,7 +166,6 @@ input, select, textarea {
 }
 
 .container-fluid {
-  width: 100%;
   padding-right: 1rem;
   padding-left: 1rem;
   margin-right: auto;
