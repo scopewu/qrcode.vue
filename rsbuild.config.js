@@ -7,6 +7,8 @@ export default defineConfig({
     entry: {
       index: './example/webpack-entry.ts',
     },
+  },
+  resolve: {
     alias: {
       vue$: isProd
         ? 'vue/dist/vue.esm-browser.prod.js'
