@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+  />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <title>qrcode vue - A Vue.js component to generate QRCode.</title>
+  <meta name="author" content="@scopewu" />
+  <meta name="Keywords" content="qrcode.vue,qrcode,component" />
+  <meta
+    name="description"
+    content="qrcode.vue - A Vue.js component for QRCode. QRCode vue supports both Vue 2 and Vue 3. It offers two QR code formats: canvas and svg. Customize QR code size, margins, error correction level, foreground and background colors, logo images, and gradient effects."
+  />
+  <link rel="canonical" href="https://qr-vue.tie.pub" />
+  <meta property="og:site_name" content="qrcode.vue" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="QRCode Vue" />
+  <meta property="og:description" content="qrcode.vue - A Vue.js component to generate QRCode" />
+  <meta property="og:url" content="https://qr-vue.tie.pub" />
+  <meta property="og:image" content="https://s.tie.pub/qrcode/qrcode.vue.png" />
+  <meta property="og:image:alt" content="link to qrcode.vue" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:creator" content="@ngwwj" />
+  <style>[v-cloak]{display: none!important;}</style>
+  <script>
+    (() => {
+      "use strict"
+
+      const getPreferredTheme = () => {
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+      }
+
+      const setTheme = theme => {
+        if (theme === "auto") {
+          document.documentElement.setAttribute("data-bs-theme", (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"))
+        } else {
+          document.documentElement.setAttribute("data-bs-theme", theme)
+        }
+      }
+
+      setTheme(getPreferredTheme())
+
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+        setTheme(getPreferredTheme())
+      })
+    })()
+  </script>
+<script type="module" src="/static/js/932.4ebb88f3.js"></script><script type="module" src="/static/js/index.e625dbe6.js"></script><style>:root{--lightningcss-light:initial;--lightningcss-dark: ;--lightningcss-light:initial;--lightningcss-dark: ;color-scheme:light dark;--bg-color:#fff;--border-color:#dee2e6;--border-width:1px;--primary-color:#212529;--secondary-bg:#e9ecef;--gap-x:1rem;--gap-y:1rem;--border-radius:.3rem}@media (prefers-color-scheme:dark){:root{--lightningcss-light: ;--lightningcss-dark:initial}}[data-bs-theme=dark]{--lightningcss-light: ;--lightningcss-dark:initial;--lightningcss-light: ;--lightningcss-dark:initial;color-scheme:dark;--bg-color:#212529;--border-color:#495057;--primary-color:#dee2e6;--secondary-bg:#343a40}body{color:var(--primary-color);background-color:var(--bg-color);margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Cantarell,Helvetica Neue,Liberation Sans,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-size:1rem;line-height:1.5}a{color:inherit}a:hover{text-decoration:none}textarea{resize:vertical;font-size:inherit}[hidden]{display:none!important}.flex{display:flex}.flex .col-auto{flex:auto}.align-items-center{align-items:center}.justify-content-between{justify-content:space-between}.border-bottom{border-bottom:var(--border-width)solid var(--border-color)}.row{margin-right:calc(-.5*var(--gap-x));margin-left:calc(-.5*var(--gap-x));flex-wrap:wrap;display:flex}.row>[class^=col]{box-sizing:border-box;max-width:100%;padding-right:calc(.5*var(--gap-x));padding-left:calc(.5*var(--gap-x));margin-top:var(--gap-y)}.col-6{flex:none;width:50%}.col-12{width:100%}input,select,textarea{font-family:inherit;font-size:inherit;line-height:inherit;margin:0}.form-label{margin-bottom:calc(.5*var(--gap-y));display:inline-block}.form-range,.form-control,.form-select{box-sizing:border-box;background-color:var(--bg-color);width:100%;padding:0;font-size:1rem;line-height:1.5}.form-range{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-color:#0000;height:1.5rem}.form-range::-webkit-slider-runnable-track{color:#0000;cursor:pointer;background-color:var(--secondary-bg);border-color:#0000;border-radius:1rem;width:100%}.form-range::-moz-range-track{color:#0000;cursor:pointer;background-color:var(--secondary-bg);border-color:#0000;border-radius:1rem;width:100%}.form-control{width:100%;color:var(--primary-color);border:var(--border-width)solid var(--border-color);border-radius:var(--border-radius);padding:.375rem .75rem;display:block}.form-control-color{-webkit-appearance:none;-moz-appearance:none;appearance:none;width:3rem;height:calc(1.5em + .75rem + calc(var(--border-width)*2));padding:.375rem}.form-select{color:var(--primary-color);border:var(--border-width)solid var(--border-color);border-radius:var(--border-radius);padding:.375rem 2.25rem .375rem .75rem}.form-check-input{border:var(--border-width)solid var(--border-color);margin-left:.5rem}.qrcode-wrap.border{border:6px solid var(--border-color);display:inline-block}.qrcode{vertical-align:middle}.container-fluid{margin-left:auto;margin-right:auto;padding-left:1rem;padding-right:1rem}@media screen and (min-width:768px){.container-fluid{max-width:720px}}.space-x-2>:not([hidden])~:not([hidden]){margin-left:.5rem}.widget{white-space:nowrap;margin-block-start:1rem;margin-block-end:1rem;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;font-size:0;line-height:0;display:inline-block;overflow:hidden}.widget a{outline:0;text-decoration:none}.gh-btn,.gh-star{vertical-align:bottom;cursor:pointer;border:var(--border-width)solid;background-position:-1px -1px;background-repeat:repeat-x;background-size:110% 110%;padding:2px 5px;font-size:11px;font-weight:600;line-height:14px;display:inline-flex;position:relative}.octicon{vertical-align:text-top;fill:currentColor;display:inline-block;overflow:visible}.gh-btn{color:#24292f;background-color:#ebf0f4;background-image:linear-gradient(#f6f8fa,#ebf0f4 90%);border-color:#1b1f2426;border-radius:.25em}.gh-btn:not(:last-child){border-radius:.25em 0 0 .25em}.gh-btn:focus,.gh-btn:hover{background-color:#e9ebef;background-image:linear-gradient(#f3f4f6,#e9ebef 90%);background-position:0 -.5em;border-color:#1b1f2426}:scope:active{filter:none;background-color:#e5e9ed;background-image:none;border-color:#1b1f2426;box-shadow:inset 0 .15em .3em #1b1f2426}.gh-star{color:#24292f;background-color:#fff;border-color:#1b1f2426 #1b1f2426 #1b1f2426 currentColor;border-left-style:none;border-left-width:0;border-radius:0 .25em .25em 0}.gh-star:focus,.gh-star:hover{color:#0969da}</style></head>
+<body>
+<div id="root">
+  <div class="container-fluid mb-5">
+    <header class="border-bottom mt-4 mb-3 pb-3">
+      <div class="flex align-items-center justify-content-between">
+        <h1>qrcode.vue</h1>
+        <div class="space-x-2">
+          <a
+            href="https://github.com/scopewu/qrcode.vue"
+            class="link-body-emphasis link-underline-opacity-25 link-underline-opacity-100-hover"
+            target="_blank"
+            rel="noopener"
+          >GitHub</a>
+          <a
+            href="https://tie.pub"
+            class="link-body-emphasis link-underline-opacity-25 link-underline-opacity-100-hover"
+            target="_blank"
+          >Author</a>
+        </div>
+      </div>
+      <div>A Vue.js component for QRCode. Supports both Vue 2 and Vue 3. It offers two QR code formats: canvas and svg. Customize QR code size, margins, error correction level, foreground and background colors, logo images, and gradient effects.</div>
+      <div class="widget">
+        <a class="gh-btn" href="https://github.com/scopewu/qrcode.vue" rel="noopener" target="_blank" aria-label="Star qrcode.vue on GitHub">
+          <svg viewBox="0 0 16 16" width="14" height="14" class="octicon octicon-mark-github" aria-hidden="true">
+            <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+          </svg>
+          <span>&nbsp;</span>
+          <span>Star</span>
+        </a>
+        <a class="gh-star" href="https://github.com/scopewu/qrcode.vue/stargazers" rel="noopener" target="_blank" :aria-label="`${stargazersCount} stargazers on GitHub`" v-cloak>{{ stargazersCount }}</a>
+      </div>
+    </header>
+    <form class="row g-3">
+      <div class="col-12">
+        <label for="value" class="form-label">value:</label>
+        <textarea v-model="value" class="form-control" id="value" rows="3"></textarea>
+      </div>
+      <div class="col-6">
+        <label for="size" class="form-label">size: <span v-cloak>{{size}}</span></label>
+        <input type="range" v-model="size" min="100" max="720" step="20" class="form-range" id="size" />
+      </div>
+      <div class="col-6">
+        <label for="margin" class="form-label">margin: <span v-cloak>{{margin}}</span></label>
+        <input type="range" v-model="margin" min="0" max="10" step="1" class="form-range" id="margin" />
+      </div>
+      <div class="col-6">
+        <label for="level" class="form-label">level:</label>
+        <select v-model="level" class="form-select" id="level">
+          <option value="L">L</option>
+          <option value="M">M</option>
+          <option value="Q">Q</option>
+          <option value="H">H</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <label for="RenderAs" class="form-label">render-as:</label>
+        <select v-model="renderAs" class="form-select" id="RenderAs">
+          <option value="svg">svg</option>
+          <option value="canvas">canvas</option>
+        </select>
+      </div>
+      <div class="col-6">
+        <label for="background" class="form-label">background:</label>
+        <input type="color" class="form-control form-control-color" id="background" v-model="background">
+      </div>
+      <div class="col-6">
+        <label for="foreground" class="form-label">foreground:</label>
+        <input type="color" class="form-control form-control-color" id="foreground" v-model="foreground">
+      </div>
+      <div class="col-12">
+        <div class="form-check">
+          <label for="gradient" class="form-label">gradient</label>
+          <input class="form-check-input" type="checkbox" id="gradient" v-model="gradient">
+        </div>
+      </div>
+      <template v-if="gradient">
+        <div class="col-12">
+          <label for="gradient-type" class="form-label">gradient-type:</label>
+          <select v-model="gradientType" class="form-select" id="gradient-type">
+            <option value="linear">Linear</option>
+            <option value="radial">Radial</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label for="gradientStartColor" class="form-label">gradient-start-color:</label>
+          <input type="color" class="form-control form-control-color" id="gradientStartColor" v-model="gradientStartColor">
+        </div>
+        <div class="col-6">
+          <label for="gradientEndColor" class="form-label">gradient-end-color:</label>
+          <input type="color" class="form-control form-control-color" id="gradientEndColor" v-model="gradientEndColor">
+        </div>
+      </template>
+      <div class="col-12">
+        <label class="form-label">QR_CODE:</label>
+        <div class="form-control-static">
+          <div class="border qrcode-wrap">
+            <qrcode-vue
+              class="qrcode"
+              :value="value"
+              :margin="Number(margin)"
+              :render-as="renderAs"
+              :size="Number(size)"
+              :level="level"
+              :background="background"
+              :foreground="foreground"
+              :gradient="gradient"
+              :gradient-type="gradientType"
+              :gradient-start-color="gradientStartColor"
+              :gradient-end-color="gradientEndColor"
+              :image-settings="imageSettings"
+            ></qrcode-vue>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>
