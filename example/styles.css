@@ -47,6 +47,10 @@ textarea {
   display: none !important;
 }
 
+.mb-5 {
+  margin-bottom: 3rem !important;
+}
+
 .flex {
   display: flex;
 }

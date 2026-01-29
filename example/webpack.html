@@ -54,7 +54,7 @@
 <body>
 <div id="root">
   <div class="container-fluid mb-5">
-    <header class="border-bottom mt-4 mb-3 pb-3">
+    <header class="border-bottom">
       <div class="flex align-items-center justify-content-between">
         <h1>qrcode.vue</h1>
         <div class="space-x-2">
@@ -193,8 +193,8 @@
         </div>
       </div>
       <div class='col-6'>
-        <label class="form-label">Usage:</label>
-        <textarea class='form-textarea' disabled :rows="rows" cols="41">{{usageExample}}</textarea>
+        <label class="form-label" for="usageExample">Usage:</label>
+        <textarea class='form-textarea' disabled :rows="rows" cols="41" id="usageExample">{{usageExample}}</textarea>
       </div>
     </form>
   </div>

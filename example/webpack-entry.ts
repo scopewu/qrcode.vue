@@ -1,4 +1,4 @@
-import { computed, createApp, defineComponent, onMounted, ref } from 'vue'
+import { computed, createApp, defineComponent, onMounted, ref, watch } from 'vue'
 import QrcodeVue from '../src'
 import type { Level, RenderAs, GradientType, ImageSettings } from '../src'
 import './styles.css'
@@ -29,6 +29,22 @@ const App = defineComponent({
     const gradientEndColor = ref('#38bdf8')
 
     const stargazersCount = ref(800)
+
+    let _ = imageSettings.value
+    watch(includeImage, (newVal) => {
+      if (newVal) {
+        imageSettings.value = _
+      } else {
+        _ = imageSettings.value
+        imageSettings.value = {
+          src: '',
+          width: 0,
+          height: 0,
+          excavate: false,
+          borderRadius: 0,
+        }
+      }
+    })
 
     const usageExample = computed(() => {
       let _ = ''
