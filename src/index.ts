@@ -1,4 +1,4 @@
-import { defineComponent, Fragment, h, onMounted, onUpdated, PropType, ref } from 'vue'
+import { defineComponent, Fragment, h, onMounted, PropType, ref, watch } from 'vue'
 import QR from './qrcodegen'
 
 type Modules = ReturnType<QR.QrCode['getModules']>
@@ -376,8 +376,7 @@ export const QrcodeSvg = defineComponent({
     }
 
     generate()
-
-    onUpdated(generate)
+    watch(props, generate, { deep: true })
 
     return () => h(
       'svg',
@@ -551,7 +550,7 @@ export const QrcodeCanvas = defineComponent({
     }
 
     onMounted(generate)
-    onUpdated(generate)
+    watch(props, generate, { deep: true })
 
     const { style } = ctx.attrs
 

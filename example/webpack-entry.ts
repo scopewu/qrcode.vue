@@ -6,7 +6,7 @@ import './styles.css'
 const App = defineComponent({
   components: { QrcodeVue },
   setup() {
-    const value = ref('QRCODE.VUE ❤️ Thanks. 感谢.')
+    const value = ref('QRCODE.VUE ❤️ Thanks. 感谢. ありがたい. 감사. Reconnaissant. Dankbar. berterima kasih.')
     const size = ref(135)
     const level = ref<Level>('L')
     const background = ref('#ffffff')
