@@ -156,6 +156,27 @@ input, select, textarea {
   border: var(--border-width) solid var(--border-color);
 }
 
+.form-textarea {
+  box-sizing: border-box;
+  width: 100%;
+  /*min-height: calc(1.5em + 0.75rem + calc(var(--border-width) * 2));*/
+  padding: .375rem .75rem;
+  color: var(--primary-color);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius);
+  display: block;
+}
+
+fieldset {
+  margin: 0;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+}
+
+fieldset[disabled] {
+  opacity: 0.65;
+}
+
 .qrcode-wrap.border {
   display: inline-block;
   border: 6px solid var(--border-color);

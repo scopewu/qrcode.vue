@@ -143,7 +143,34 @@
           <input type="color" class="form-control form-control-color" id="gradientEndColor" v-model="gradientEndColor">
         </div>
       </template>
-      <div class="col-12">
+      <div class="col-6">
+        <label for="includeImage" class="form-label">Include Image:</label>
+        <input type="checkbox" class="form-check-input" id="includeImage" v-model="includeImage">
+      </div>
+      <fieldset class='row' :disabled='!includeImage'>
+        <legend>ImageSettings</legend>
+        <div class="col-6">
+          <label for="imageSrc" class="form-label">src:</label>
+          <input type="text" class="form-control" id="imageSrc" v-model="imageSettings.src" placeholder="Image URL">
+        </div>
+        <div class="col-6">
+          <label for="imageBorderRadius" class="form-label">borderRadius:</label>
+          <input type="number" class="form-control" id="imageBorderRadius" v-model.number="imageSettings.borderRadius" placeholder="Image borderRadius">
+        </div>
+        <div class="col-6">
+          <label for="imageWidth" class="form-label">width:</label>
+          <input type="number" class="form-control" id="imageWidth" v-model.number="imageSettings.width" placeholder="Image Width">
+        </div>
+        <div class="col-6">
+          <label for="imageHeight" class="form-label">height:</label>
+          <input type="number" class="form-control" id="imageHeight" v-model.number="imageSettings.height" placeholder="Image Height">
+        </div>
+        <div class="col-6">
+          <label for="imageExcavate" class="form-label">excavate:</label>
+          <input type="checkbox" class="form-check-input" id="imageExcavate" v-model="imageSettings.excavate">
+        </div>
+      </fieldset>
+      <div class="col-6">
         <label class="form-label">QR_CODE:</label>
         <div class="form-control-static">
           <div class="border qrcode-wrap">
@@ -164,6 +191,10 @@
             ></qrcode-vue>
           </div>
         </div>
+      </div>
+      <div class='col-6'>
+        <label class="form-label">Usage:</label>
+        <textarea class='form-textarea' disabled :rows="rows" cols="41">{{usageExample}}</textarea>
       </div>
     </form>
   </div>

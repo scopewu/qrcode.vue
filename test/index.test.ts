@@ -92,6 +92,42 @@ describe('QrcodeVue', () => {
       expect(wrapper.html()).toContain('<img')
     })
 
+    it('renders canvas with image borderRadius', () => {
+      const imageSettings = {
+        src: 'test.png',
+        height: 30,
+        width: 30,
+        excavate: true,
+        borderRadius: 5,
+      }
+      const wrapper = mount(QrcodeVue, {
+        props: {
+          value: 'test',
+          imageSettings,
+        },
+      })
+      expect(wrapper.html()).toContain('<canvas')
+      expect(wrapper.html()).toContain('<img')
+    })
+
+    it('renders canvas without borderRadius when borderRadius is 0', () => {
+      const imageSettings = {
+        src: 'test.png',
+        height: 30,
+        width: 30,
+        excavate: true,
+        borderRadius: 0,
+      }
+      const wrapper = mount(QrcodeVue, {
+        props: {
+          value: 'test',
+          imageSettings,
+        },
+      })
+      expect(wrapper.html()).toContain('<canvas')
+      expect(wrapper.html()).toContain('<img')
+    })
+
     it('handles invalid error correction level gracefully in canvas mode', () => {
       const wrapper = mount(QrcodeVue, {
         props: {
@@ -237,6 +273,120 @@ describe('QrcodeVue', () => {
         },
       })
       expect(wrapper.html()).toContain('<image')
+    })
+
+    it('renders SVG with image borderRadius', () => {
+      const imageSettings = {
+        src: 'test.png',
+        height: 30,
+        width: 30,
+        excavate: true,
+        borderRadius: 5,
+      }
+      const wrapper = mount(QrcodeVue, {
+        props: {
+          value: 'test',
+          renderAs: 'svg',
+          imageSettings,
+        },
+      })
+      expect(wrapper.html()).toContain('<image')
+      expect(wrapper.html()).toContain('clip-path')
+      const svg = wrapper.find('svg')
+      const defs = svg.find('defs')
+      expect(defs.exists()).toBe(true)
+      expect(wrapper.html()).toContain('clipPath')
+      const image = wrapper.find('image')
+      expect(image.attributes('clip-path')).toBe('url(#qr-logo-clip)')
+    })
+
+    it('excavates modules with rounded corners when borderRadius is set', () => {
+      const imageSettings = {
+        src: 'test.png',
+        height: 30,
+        width: 30,
+        excavate: true,
+        borderRadius: 8,
+      }
+      const wrapper = mount(QrcodeVue, {
+        props: {
+          value: 'test',
+          renderAs: 'svg',
+          imageSettings,
+        },
+      })
+      const path = wrapper.find('path')
+      const d = path.attributes('d')
+      expect(d).toBeDefined()
+      expect(d).not.toBe('')
+    })
+
+    it('renders SVG without clip-path when borderRadius is 0, undefined, or negative', async () => {
+      const imageSettings = {
+        src: 'test.png',
+        height: 30,
+        width: 30,
+        excavate: true,
+      }
+      const wrapper = mount(QrcodeVue, {
+        props: {
+          value: 'test',
+          renderAs: 'svg',
+          imageSettings,
+        },
+      })
+
+      expect(wrapper.html()).toContain('<image')
+      expect(wrapper.html()).not.toContain('clipPath')
+      let image = wrapper.find('image')
+      expect(image.attributes('clip-path')).toBeUndefined()
+
+      await wrapper.setProps({
+        imageSettings: { ...imageSettings, borderRadius: 0 },
+      })
+
+      expect(wrapper.html()).toContain('<image')
+      expect(wrapper.html()).not.toContain('clipPath')
+      image = wrapper.find('image')
+      expect(image.attributes('clip-path')).toBeUndefined()
+
+      await wrapper.setProps({
+        imageSettings: { ...imageSettings, borderRadius: -5 },
+      })
+
+      expect(wrapper.html()).toContain('<image')
+      expect(wrapper.html()).not.toContain('clipPath')
+    })
+
+    it('handles fractional and very large borderRadius in SVG', async () => {
+      const imageSettings = {
+        src: 'test.png',
+        height: 30,
+        width: 30,
+        excavate: true,
+      }
+
+      const wrapper = mount(QrcodeVue, {
+        props: {
+          value: 'test',
+          renderAs: 'svg',
+          imageSettings: { ...imageSettings, borderRadius: 2.5 },
+        },
+      })
+
+      expect(wrapper.html()).toContain('<image')
+      expect(wrapper.html()).toContain('clip-path')
+      let image = wrapper.find('image')
+      expect(image.attributes('clip-path')).toBe('url(#qr-logo-clip)')
+
+      await wrapper.setProps({
+        imageSettings: { ...imageSettings, borderRadius: 100 },
+      })
+
+      expect(wrapper.html()).toContain('<image')
+      expect(wrapper.html()).toContain('clip-path')
+      image = wrapper.find('image')
+      expect(image.attributes('clip-path')).toBe('url(#qr-logo-clip)')
     })
 
     it('handles invalid error correction level gracefully in SVG mode', () => {
