@@ -30,4 +30,4 @@ jobs:
         run: yarn build
 
       - name: Publish registry
-        run: yarn publish
+        run: npm publish
