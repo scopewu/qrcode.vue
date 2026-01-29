@@ -1,3 +1,14 @@
+## [3.7.0] - 2026-01-29
+
+### Feature
+
+- Suppord border radius for QRCode logo image.
+- optimize performance for QRCode.
+
+### Bugfix
+
+- Fix state update issue when value prop changed.
+
 ## [3.6.0] - 2024-11-03
 
 ### Feature

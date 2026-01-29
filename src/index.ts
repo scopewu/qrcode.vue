@@ -1,4 +1,4 @@
-import { defineComponent, Fragment, h, onMounted, onUpdated, PropType, ref } from 'vue'
+import { defineComponent, Fragment, h, onMounted, PropType, ref, watch } from 'vue'
 import QR from './qrcodegen'
 
 type Modules = ReturnType<QR.QrCode['getModules']>
@@ -12,15 +12,21 @@ export type ImageSettings = {
   height: number,
   width: number,
   excavate?: boolean,
+  borderRadius?: number,
 }
 type Excavation = {
   x: number,
   y: number,
   w: number,
   h: number,
+  borderRadius?: number,
 }
 
 const defaultErrorCorrectLevel: Level = 'L'
+
+const DEFAULT_QR_SIZE = 100
+const DEFAULT_MARGIN = 0
+const DEFAULT_IMAGE_SIZE_RATIO = 0.1
 
 const ErrorCorrectLevelMap : Readonly<Record<Level, QR.QrCode.Ecc>> = {
   L: QR.QrCode.Ecc.LOW,
@@ -43,17 +49,66 @@ function validErrorCorrectLevel(level: string): boolean {
   return level in ErrorCorrectLevelMap
 }
 
+function isPointInRoundedRect(
+  px: number,
+  py: number,
+  rx: number,
+  ry: number,
+  rw: number,
+  rh: number,
+  r: number
+): boolean {
+  // Fast check: point outside the bounding box
+  if (px < rx || px > rx + rw || py < ry || py > ry + rh) {
+    return false
+  }
+
+  // If no border radius or point is in the center rectangle
+  if (r <= 0 || (px > rx + r && px < rx + rw - r) || (py > ry + r && py < ry + rh - r)) {
+    return true
+  }
+
+  // Check the four corners
+  // Top-left corner
+  if (px < rx + r && py < ry + r) {
+    const dx = px - (rx + r)
+    const dy = py - (ry + r)
+    return dx * dx + dy * dy <= r * r
+  }
+
+  // Top-right corner
+  if (px > rx + rw - r && py < ry + r) {
+    const dx = px - (rx + rw - r)
+    const dy = py - (ry + r)
+    return dx * dx + dy * dy <= r * r
+  }
+
+  // Bottom-left corner
+  if (px < rx + r && py > ry + rh - r) {
+    const dx = px - (rx + r)
+    const dy = py - (ry + rh - r)
+    return dx * dx + dy * dy <= r * r
+  }
+
+  // Bottom-right corner
+  if (px > rx + rw - r && py > ry + rh - r) {
+    const dx = px - (rx + rw - r)
+    const dy = py - (ry + rh - r)
+    return dx * dx + dy * dy <= r * r
+  }
+
+  return true
+}
+
 function generatePath(modules: Modules, margin: number = 0): string {
-  const ops: string[] = []
+  let path = ''
   modules.forEach(function (row, y) {
     let start: number | null = null
     row.forEach(function (cell, x) {
       if (!cell && start !== null) {
         // M0 0h7v1H0z injects the space with the move and drops the comma,
         // saving a char per operation
-        ops.push(
-          `M${start + margin} ${y + margin}h${x - start}v1H${start + margin}z`
-        )
+        path += `M${start + margin} ${y + margin}h${x - start}v1H${start + margin}z`
         start = null
         return
       }
@@ -67,14 +122,12 @@ function generatePath(modules: Modules, margin: number = 0): string {
         }
         if (start === null) {
           // Just a single dark module.
-          ops.push(`M${x + margin},${y + margin} h1v1H${x + margin}z`)
+          path += `M${x + margin},${y + margin} h1v1H${x + margin}z`
         } else {
           // Otherwise finish the current line.
-          ops.push(
-            `M${start + margin},${y + margin} h${x + 1 - start}v1H${
-              start + margin
-            }z`
-          )
+          path += `M${start + margin},${y + margin} h${x + 1 - start}v1H${
+            start + margin
+          }z`
         }
         return
       }
@@ -84,7 +137,7 @@ function generatePath(modules: Modules, margin: number = 0): string {
       }
     })
   })
-  return ops.join('')
+  return path
 }
 
 function getImageSettings(
@@ -101,7 +154,7 @@ function getImageSettings(
 } {
   const { width, height, x: imageX, y: imageY } = imageSettings
   const numCells = cells.length + margin * 2
-  const defaultSize = Math.floor(size * 0.1)
+  const defaultSize = Math.floor(size * DEFAULT_IMAGE_SIZE_RATIO)
   const scale = numCells / size
   const w = (width || defaultSize) * scale
   const h = (height || defaultSize) * scale
@@ -114,22 +167,47 @@ function getImageSettings(
     let floorY = Math.floor(y)
     let ceilW = Math.ceil(w + x - floorX)
     let ceilH = Math.ceil(h + y - floorY)
-    excavation = { x: floorX, y: floorY, w: ceilW, h: ceilH }
+    const borderRadius = (imageSettings.borderRadius || 0) * scale
+    excavation = { x: floorX, y: floorY, w: ceilW, h: ceilH, borderRadius }
   }
 
   return { x, y, h, w, excavation }
 }
 
 function excavateModules(modules: Modules, excavation: Excavation): Modules {
-  return modules.slice().map((row, y) => {
-    if (y < excavation.y || y >= excavation.y + excavation.h) {
-      return row
-    }
-    return row.map((cell, x) => {
-      if (x < excavation.x || x >= excavation.x + excavation.w) {
-        return cell
+  const { borderRadius } = excavation
+
+  // If no border radius, use simple rectangular excavation
+  if (!borderRadius || borderRadius <= 0) {
+    return modules.map((row, y) => {
+      if (y < excavation.y || y >= excavation.y + excavation.h) {
+        return row
       }
-      return false
+      return row.map((cell, x) => {
+        if (x < excavation.x || x >= excavation.x + excavation.w) {
+          return cell
+        }
+        return false
+      })
+    })
+  }
+
+  // For rounded corners, check each module against the rounded rectangle shape
+  return modules.map((row, y) => {
+    return row.map((cell, x) => {
+      if (!cell) return cell
+
+      const inExcavation = isPointInRoundedRect(
+        x + 0.5,
+        y + 0.5,
+        excavation.x,
+        excavation.y,
+        excavation.w,
+        excavation.h,
+        borderRadius
+      )
+
+      return inExcavation ? false : cell
     })
   })
 }
@@ -142,7 +220,7 @@ const QRCodeProps = {
   },
   size: {
     type: Number,
-    default: 100,
+    default: DEFAULT_QR_SIZE,
   },
   level: {
     type: String as PropType<Level>,
@@ -160,7 +238,7 @@ const QRCodeProps = {
   margin: {
     type: Number,
     required: false,
-    default: 0,
+    default: DEFAULT_MARGIN,
   },
   imageSettings: {
     type: Object as PropType<ImageSettings>,
@@ -276,9 +354,29 @@ export const QrcodeSvg = defineComponent({
       )
     }
 
-    generate()
+    const renderClipPath = () => {
+      const borderRadius = props.imageSettings.borderRadius || 0
+      if (!props.imageSettings.src) return null
+      if (borderRadius <= 0) return null
 
-    onUpdated(generate)
+      return h(
+        'clipPath',
+        { id: 'qr-logo-clip' },
+        [
+          h('rect', {
+            x: imageProps.x,
+            y: imageProps.y,
+            width: imageProps.width,
+            height: imageProps.height,
+            rx: borderRadius,
+            ry: borderRadius,
+          }),
+        ],
+      )
+    }
+
+    generate()
+    watch(props, generate, { deep: true })
 
     return () => h(
       'svg',
@@ -290,7 +388,7 @@ export const QrcodeSvg = defineComponent({
         viewBox: `0 0 ${numCells.value} ${numCells.value}`,
       },
       [
-        h('defs', {}, [renderGradient()]),
+        h('defs', {}, [renderGradient(), renderClipPath()]),
         h('rect', {
           width: '100%',
           height: '100%',
@@ -303,6 +401,7 @@ export const QrcodeSvg = defineComponent({
         props.imageSettings.src && h('image', {
           href: props.imageSettings.src,
           ...imageProps,
+          ...(props.imageSettings.borderRadius ? { 'clip-path': 'url(#qr-logo-clip)' } : {}),
         }),
       ]
     )
@@ -365,7 +464,7 @@ export const QrcodeCanvas = defineComponent({
         }
       }
 
-      const devicePixelRatio = window.devicePixelRatio || 1
+      const devicePixelRatio = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
 
       const scale = (size / numCells) * devicePixelRatio
       canvas.height = canvas.width = size * devicePixelRatio
@@ -408,18 +507,50 @@ export const QrcodeCanvas = defineComponent({
       }
 
       if (showImage) {
-        ctx.drawImage(
-          image,
-          imageProps.x,
-          imageProps.y,
-          imageProps.width,
-          imageProps.height
-        );
+        const borderRadius = props.imageSettings.borderRadius || 0
+        if (borderRadius > 0) {
+          ctx.save()
+          ctx.beginPath()
+          if (ctx.roundRect) {
+            ctx.roundRect(
+              imageProps.x,
+              imageProps.y,
+              imageProps.width,
+              imageProps.height,
+              borderRadius
+            )
+          } else {
+            // Fallback for browsers without roundRect support
+            ctx.rect(
+              imageProps.x,
+              imageProps.y,
+              imageProps.width,
+              imageProps.height
+            )
+          }
+          ctx.clip()
+          ctx.drawImage(
+            image,
+            imageProps.x,
+            imageProps.y,
+            imageProps.width,
+            imageProps.height,
+          )
+          ctx.restore()
+        } else {
+          ctx.drawImage(
+            image,
+            imageProps.x,
+            imageProps.y,
+            imageProps.width,
+            imageProps.height,
+          )
+        }
       }
     }
 
     onMounted(generate)
-    onUpdated(generate)
+    watch(props, generate, { deep: true })
 
     const { style } = ctx.attrs
 

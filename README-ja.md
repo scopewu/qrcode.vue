@@ -179,6 +179,7 @@ QRコードの前景色。
     height: number, // The height of image
     width: number,  // The height of image
     excavate?: boolean, // Whether or not to "excavate" the modules around the image.
+    borderRadius?: number, // The border radius of image.
   }
   ```
 
