@@ -19,7 +19,6 @@ type Excavation = {
   y: number,
   w: number,
   h: number,
-  borderRadius?: number,
 }
 
 const defaultErrorCorrectLevel: Level = 'L'
@@ -150,6 +149,7 @@ function getImageSettings(
   y: number
   h: number
   w: number
+  borderRadius: number,
   excavation: Excavation | null
 } {
   const { width, height, x: imageX, y: imageY } = imageSettings
@@ -160,6 +160,7 @@ function getImageSettings(
   const h = (height || defaultSize) * scale
   const x = imageX == null ? cells.length / 2 - w / 2 : imageX * scale
   const y = imageY == null ? cells.length / 2 - h / 2 : imageY * scale
+  const borderRadius = (imageSettings.borderRadius || 0) * scale
 
   let excavation = null
   if (imageSettings.excavate) {
@@ -167,16 +168,14 @@ function getImageSettings(
     let floorY = Math.floor(y)
     let ceilW = Math.ceil(w + x - floorX)
     let ceilH = Math.ceil(h + y - floorY)
-    const borderRadius = (imageSettings.borderRadius || 0) * scale
-    excavation = { x: floorX, y: floorY, w: ceilW, h: ceilH, borderRadius }
+
+    excavation = { x: floorX, y: floorY, w: ceilW, h: ceilH }
   }
 
-  return { x, y, h, w, excavation }
+  return { x, y, h, w, borderRadius, excavation }
 }
 
-function excavateModules(modules: Modules, excavation: Excavation): Modules {
-  const { borderRadius } = excavation
-
+function excavateModules(modules: Modules, excavation: Excavation, borderRadius?: number): Modules {
   // If no border radius, use simple rectangular excavation
   if (!borderRadius || borderRadius <= 0) {
     return modules.map((row, y) => {
@@ -284,7 +283,7 @@ export const QrcodeSvg = defineComponent({
   setup(props) {
     const numCells = ref(0)
     const fgPath = ref('')
-    let imageProps: { x: number, y: number, width: number, height: number }
+    const imageProps = ref({ x: 0, y: 0, width: 0, height: 0, borderRadius: 0 })
 
     const generate = () => {
       const { value, level: _level, margin: _margin } = props
@@ -296,15 +295,16 @@ export const QrcodeSvg = defineComponent({
 
       if(props.imageSettings.src) {
         const imageSettings = getImageSettings(cells, props.size, margin, props.imageSettings)
-        imageProps = {
+        imageProps.value = {
           x: imageSettings.x + margin,
           y: imageSettings.y + margin,
           width: imageSettings.w,
           height: imageSettings.h,
+          borderRadius: imageSettings.borderRadius,
         }
 
         if (imageSettings.excavation) {
-          cells = excavateModules(cells, imageSettings.excavation)
+          cells = excavateModules(cells, imageSettings.excavation, imageSettings.borderRadius)
         }
       }
 
@@ -317,6 +317,7 @@ export const QrcodeSvg = defineComponent({
       fgPath.value = generatePath(cells, margin)
     }
 
+    const qrGradientId = 'qrcode.vue-gradient'
     const renderGradient = () => {
       if (!props.gradient) return null
 
@@ -338,7 +339,7 @@ export const QrcodeSvg = defineComponent({
       return h(
         props.gradientType === 'linear' ? 'linearGradient' : 'radialGradient',
         {
-          id: 'qr-gradient',
+          id: qrGradientId,
           ...gradientProps,
         },
         [
@@ -354,20 +355,21 @@ export const QrcodeSvg = defineComponent({
       )
     }
 
+    const qrLogoClipPathId = 'qrcode.vue-logo-clip-path'
     const renderClipPath = () => {
-      const borderRadius = props.imageSettings.borderRadius || 0
+      const borderRadius = imageProps.value.borderRadius
       if (!props.imageSettings.src) return null
       if (borderRadius <= 0) return null
 
       return h(
         'clipPath',
-        { id: 'qr-logo-clip' },
+        { id: qrLogoClipPathId },
         [
           h('rect', {
-            x: imageProps.x,
-            y: imageProps.y,
-            width: imageProps.width,
-            height: imageProps.height,
+            x: imageProps.value.x,
+            y: imageProps.value.y,
+            width: imageProps.value.width,
+            height: imageProps.value.height,
             rx: borderRadius,
             ry: borderRadius,
           }),
@@ -395,13 +397,13 @@ export const QrcodeSvg = defineComponent({
           fill: props.background,
         }),
         h('path', {
-          fill: props.gradient ? 'url(#qr-gradient)' : props.foreground,
+          fill: props.gradient ? `url(#${qrGradientId})` : props.foreground,
           d: fgPath.value,
         }),
         props.imageSettings.src && h('image', {
           href: props.imageSettings.src,
-          ...imageProps,
-          ...(props.imageSettings.borderRadius ? { 'clip-path': 'url(#qr-logo-clip)' } : {}),
+          ...imageProps.value,
+          ...(imageProps.value.borderRadius > 0 ? { 'clip-path': `url(#${qrLogoClipPathId})` } : {}),
         }),
       ]
     )
@@ -447,7 +449,7 @@ export const QrcodeCanvas = defineComponent({
       const numCells = cells.length + margin * 2
 
       const image = imageRef.value
-      let imageProps = { x: 0, y: 0, width: 0, height: 0 }
+      let imageProps = { x: 0, y: 0, width: 0, height: 0, borderRadius: 0 }
       const showImage = props.imageSettings.src && image != null && image.naturalWidth !== 0 && image.naturalHeight !== 0
 
       if(showImage) {
@@ -457,10 +459,11 @@ export const QrcodeCanvas = defineComponent({
           y: imageSettings.y + margin,
           width: imageSettings.w,
           height: imageSettings.h,
+          borderRadius: imageSettings.borderRadius,
         }
 
         if (imageSettings.excavation) {
-          cells = excavateModules(cells, imageSettings.excavation)
+          cells = excavateModules(cells, imageSettings.excavation, imageSettings.borderRadius)
         }
       }
 
@@ -507,7 +510,7 @@ export const QrcodeCanvas = defineComponent({
       }
 
       if (showImage) {
-        const borderRadius = props.imageSettings.borderRadius || 0
+        const borderRadius = imageProps.borderRadius
         if (borderRadius > 0) {
           ctx.save()
           ctx.beginPath()

@@ -34,6 +34,7 @@
   ],
   "files": [
     "/dist",
+    "CHANGELOG.md",
     "README-zh_cn.md",
     "README.md"
   ],

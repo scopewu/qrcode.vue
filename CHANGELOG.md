@@ -1,3 +1,9 @@
+## [3.7.1] - 2026-01-31
+
+### Bugfix
+
+- Fix logo image border radius scale in QRCode.
+
 ## [3.7.0] - 2026-01-29
 
 ### Feature
