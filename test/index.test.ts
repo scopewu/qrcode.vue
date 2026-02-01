@@ -223,7 +223,7 @@ describe('QrcodeVue', () => {
       })
       expect(wrapper.html()).toContain('linearGradient')
       const path = wrapper.find('path')
-      expect(path.attributes('fill')).toBe('url(#qr-gradient)')
+      expect(path.attributes('fill')).toBe('url(#qrcode.vue-gradient)')
     })
 
     it('renders SVG with radial gradient', () => {
@@ -297,7 +297,7 @@ describe('QrcodeVue', () => {
       expect(defs.exists()).toBe(true)
       expect(wrapper.html()).toContain('clipPath')
       const image = wrapper.find('image')
-      expect(image.attributes('clip-path')).toBe('url(#qr-logo-clip)')
+      expect(image.attributes('clip-path')).toBe('url(#qrcode.vue-logo-clip-path)')
     })
 
     it('excavates modules with rounded corners when borderRadius is set', () => {
@@ -377,7 +377,7 @@ describe('QrcodeVue', () => {
       expect(wrapper.html()).toContain('<image')
       expect(wrapper.html()).toContain('clip-path')
       let image = wrapper.find('image')
-      expect(image.attributes('clip-path')).toBe('url(#qr-logo-clip)')
+      expect(image.attributes('clip-path')).toBe('url(#qrcode.vue-logo-clip-path)')
 
       await wrapper.setProps({
         imageSettings: { ...imageSettings, borderRadius: 100 },
@@ -386,7 +386,7 @@ describe('QrcodeVue', () => {
       expect(wrapper.html()).toContain('<image')
       expect(wrapper.html()).toContain('clip-path')
       image = wrapper.find('image')
-      expect(image.attributes('clip-path')).toBe('url(#qr-logo-clip)')
+      expect(image.attributes('clip-path')).toBe('url(#qrcode.vue-logo-clip-path)')
     })
 
     it('handles invalid error correction level gracefully in SVG mode', () => {

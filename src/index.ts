@@ -1,4 +1,4 @@
-import { defineComponent, Fragment, h, onMounted, PropType, ref, watch } from 'vue'
+import { defineComponent, Fragment, h, onMounted, PropType, ref, computed, watchEffect } from 'vue'
 import QR from './qrcodegen'
 
 type Modules = ReturnType<QR.QrCode['getModules']>
@@ -211,6 +211,35 @@ function excavateModules(modules: Modules, excavation: Excavation, borderRadius?
   })
 }
 
+function useQRCode(props: {
+  value: string
+  level: Level
+  margin: number
+  size: number
+  imageSettings: ImageSettings
+}) {
+  const margin = computed(() => (props.margin ?? DEFAULT_MARGIN) >>> 0)
+  const cells = computed(() => {
+    const level = validErrorCorrectLevel(props.level) ? props.level : defaultErrorCorrectLevel
+    let c = QR.QrCode.encodeText(props.value, ErrorCorrectLevelMap[level]).getModules()
+    if (props.imageSettings.src) {
+      const imageSettings = getImageSettings(c, props.size, margin.value, props.imageSettings)
+      if (imageSettings.excavation) {
+        c = excavateModules(c, imageSettings.excavation, imageSettings.borderRadius)
+      }
+    }
+    return c
+  })
+  const numCells = computed(() => cells.value.length + margin.value * 2)
+  const imageSettingsData = computed(() => {
+    if (!props.imageSettings.src) return null
+    return getImageSettings(cells.value, props.size, margin.value, props.imageSettings)
+  })
+  const fgPath = computed(() => generatePath(cells.value, margin.value))
+
+  return { margin, numCells, imageSettingsData, cells, fgPath }
+}
+
 const QRCodeProps = {
   value: {
     type: String,
@@ -281,41 +310,15 @@ export const QrcodeSvg = defineComponent({
   name: 'QRCodeSvg',
   props: QRCodeProps,
   setup(props) {
-    const numCells = ref(0)
-    const fgPath = ref('')
-    const imageProps = ref({ x: 0, y: 0, width: 0, height: 0, borderRadius: 0 })
+    const { margin, numCells, imageSettingsData, fgPath } = useQRCode(props)
 
-    const generate = () => {
-      const { value, level: _level, margin: _margin } = props
-      const margin = _margin >>> 0
-      const level = validErrorCorrectLevel(_level) ? _level : defaultErrorCorrectLevel
-
-      let cells = QR.QrCode.encodeText(value, ErrorCorrectLevelMap[level]).getModules()
-      numCells.value = cells.length + margin * 2
-
-      if(props.imageSettings.src) {
-        const imageSettings = getImageSettings(cells, props.size, margin, props.imageSettings)
-        imageProps.value = {
-          x: imageSettings.x + margin,
-          y: imageSettings.y + margin,
-          width: imageSettings.w,
-          height: imageSettings.h,
-          borderRadius: imageSettings.borderRadius,
-        }
-
-        if (imageSettings.excavation) {
-          cells = excavateModules(cells, imageSettings.excavation, imageSettings.borderRadius)
-        }
-      }
-
-      // Drawing strategy: instead of a rect per module, we're going to create a
-      // single path for the dark modules and layer that on top of a light rect,
-      // for a total of 2 DOM nodes. We pay a bit more in string concat but that's
-      // way faster than DOM ops.
-      // For level 1, 441 nodes -> 2
-      // For level 40, 31329 -> 2
-      fgPath.value = generatePath(cells, margin)
-    }
+    const imageProps = computed(() => imageSettingsData.value ? {
+      x: imageSettingsData.value.x + margin.value,
+      y: imageSettingsData.value.y + margin.value,
+      width: imageSettingsData.value.w,
+      height: imageSettingsData.value.h,
+      borderRadius: imageSettingsData.value.borderRadius,
+    } : { x: 0, y: 0, width: 0, height: 0, borderRadius: 0 })
 
     const qrGradientId = 'qrcode.vue-gradient'
     const renderGradient = () => {
@@ -377,9 +380,6 @@ export const QrcodeSvg = defineComponent({
       )
     }
 
-    generate()
-    watch(props, generate, { deep: true })
-
     return () => h(
       'svg',
       {
@@ -414,15 +414,22 @@ export const QrcodeCanvas = defineComponent({
   name: 'QRCodeCanvas',
   props: QRCodeProps,
   setup(props, ctx) {
+    const { margin, cells, numCells, imageSettingsData } = useQRCode(props)
+
+    const imageProps = computed(() => imageSettingsData.value ? {
+      x: imageSettingsData.value.x + margin.value,
+      y: imageSettingsData.value.y + margin.value,
+      width: imageSettingsData.value.w,
+      height: imageSettingsData.value.h,
+      borderRadius: imageSettingsData.value.borderRadius,
+    } : { x: 0, y: 0, width: 0, height: 0, borderRadius: 0 })
+
     const canvasEl = ref<HTMLCanvasElement | null>(null)
     const imageRef = ref<HTMLImageElement | null>(null)
 
     const generate = () => {
       const {
-        value,
-        level: _level,
         size,
-        margin: _margin,
         background,
         foreground,
         gradient,
@@ -430,8 +437,6 @@ export const QrcodeCanvas = defineComponent({
         gradientStartColor,
         gradientEndColor,
       } = props
-      const margin = _margin >>> 0
-      const level = validErrorCorrectLevel(_level) ? _level : defaultErrorCorrectLevel
 
       const canvas = canvasEl.value
 
@@ -439,121 +444,105 @@ export const QrcodeCanvas = defineComponent({
         return
       }
 
-      const ctx = canvas.getContext('2d')
+      const canvasCtx = canvas.getContext('2d')
 
-      if (!ctx) {
+      if (!canvasCtx) {
         return
       }
 
-      let cells = QR.QrCode.encodeText(value, ErrorCorrectLevelMap[level]).getModules()
-      const numCells = cells.length + margin * 2
+      const qrCells = cells.value
 
       const image = imageRef.value
-      let imageProps = { x: 0, y: 0, width: 0, height: 0, borderRadius: 0 }
-      const showImage = props.imageSettings.src && image != null && image.naturalWidth !== 0 && image.naturalHeight !== 0
-
-      if(showImage) {
-        const imageSettings = getImageSettings(cells, props.size, margin, props.imageSettings)
-        imageProps = {
-          x: imageSettings.x + margin,
-          y: imageSettings.y + margin,
-          width: imageSettings.w,
-          height: imageSettings.h,
-          borderRadius: imageSettings.borderRadius,
-        }
-
-        if (imageSettings.excavation) {
-          cells = excavateModules(cells, imageSettings.excavation, imageSettings.borderRadius)
-        }
-      }
 
       const devicePixelRatio = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
 
-      const scale = (size / numCells) * devicePixelRatio
+      const scale = (size / numCells.value) * devicePixelRatio
       canvas.height = canvas.width = size * devicePixelRatio
-      ctx.scale(scale, scale)
+      canvasCtx.scale(scale, scale)
 
-      ctx.fillStyle = background
-      ctx.fillRect(0, 0, numCells, numCells)
+      canvasCtx.fillStyle = background
+      canvasCtx.fillRect(0, 0, numCells.value, numCells.value)
 
       if (gradient) {
         let grad
         if (gradientType === 'linear') {
-          grad = ctx.createLinearGradient(0, 0, numCells, numCells)
+          grad = canvasCtx.createLinearGradient(0, 0, numCells.value, numCells.value)
         } else {
-          grad = ctx.createRadialGradient(
-            numCells / 2,
-            numCells / 2,
+          grad = canvasCtx.createRadialGradient(
+            numCells.value / 2,
+            numCells.value / 2,
             0,
-            numCells / 2,
-            numCells / 2,
-            numCells / 2,
+            numCells.value / 2,
+            numCells.value / 2,
+            numCells.value / 2,
           )
         }
         grad.addColorStop(0, gradientStartColor)
         grad.addColorStop(1, gradientEndColor)
-        ctx.fillStyle = grad
+        canvasCtx.fillStyle = grad
       } else {
-        ctx.fillStyle = foreground
+        canvasCtx.fillStyle = foreground
       }
 
       if (SUPPORTS_PATH2D) {
-        ctx.fill(new Path2D(generatePath(cells, margin)))
+        canvasCtx.fill(new Path2D(generatePath(qrCells, margin.value)))
       } else {
-        cells.forEach(function (row, rdx) {
+        qrCells.forEach(function (row, rdx) {
           row.forEach(function (cell, cdx) {
             if (cell) {
-              ctx.fillRect(cdx + margin, rdx + margin, 1, 1)
+              canvasCtx.fillRect(cdx + margin.value, rdx + margin.value, 1, 1)
             }
           })
         })
       }
 
+      const showImage = props.imageSettings.src && image && image.naturalWidth !== 0 && image.naturalHeight !== 0
+
       if (showImage) {
-        const borderRadius = imageProps.borderRadius
+        const borderRadius = imageProps.value.borderRadius
         if (borderRadius > 0) {
-          ctx.save()
-          ctx.beginPath()
-          if (ctx.roundRect) {
-            ctx.roundRect(
-              imageProps.x,
-              imageProps.y,
-              imageProps.width,
-              imageProps.height,
+          canvasCtx.save()
+          canvasCtx.beginPath()
+          if (canvasCtx.roundRect) {
+            canvasCtx.roundRect(
+              imageProps.value.x,
+              imageProps.value.y,
+              imageProps.value.width,
+              imageProps.value.height,
               borderRadius
             )
           } else {
             // Fallback for browsers without roundRect support
-            ctx.rect(
-              imageProps.x,
-              imageProps.y,
-              imageProps.width,
-              imageProps.height
+            canvasCtx.rect(
+              imageProps.value.x,
+              imageProps.value.y,
+              imageProps.value.width,
+              imageProps.value.height
             )
           }
-          ctx.clip()
-          ctx.drawImage(
+          canvasCtx.clip()
+          canvasCtx.drawImage(
             image,
-            imageProps.x,
-            imageProps.y,
-            imageProps.width,
-            imageProps.height,
+            imageProps.value.x,
+            imageProps.value.y,
+            imageProps.value.width,
+            imageProps.value.height,
           )
-          ctx.restore()
+          canvasCtx.restore()
         } else {
-          ctx.drawImage(
+          canvasCtx.drawImage(
             image,
-            imageProps.x,
-            imageProps.y,
-            imageProps.width,
-            imageProps.height,
+            imageProps.value.x,
+            imageProps.value.y,
+            imageProps.value.width,
+            imageProps.value.height,
           )
         }
       }
     }
 
     onMounted(generate)
-    watch(props, generate, { deep: true })
+    watchEffect(generate)
 
     const { style } = ctx.attrs
 

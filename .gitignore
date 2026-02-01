@@ -47,3 +47,5 @@ jspm_packages
 
 #project build
 dist/
+
+.sisyphus/
