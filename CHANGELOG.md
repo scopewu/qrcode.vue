@@ -1,3 +1,9 @@
+## [3.8.0] - 2026-02-02
+
+### Performance
+
+- optimize QRCode rendering performance.
+
 ## [3.7.1] - 2026-01-31
 
 ### Bugfix
