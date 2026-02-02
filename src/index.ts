@@ -48,57 +48,6 @@ function validErrorCorrectLevel(level: string): boolean {
   return level in ErrorCorrectLevelMap
 }
 
-function isPointInRoundedRect(
-  px: number,
-  py: number,
-  rx: number,
-  ry: number,
-  rw: number,
-  rh: number,
-  r: number
-): boolean {
-  // Fast check: point outside the bounding box
-  if (px < rx || px > rx + rw || py < ry || py > ry + rh) {
-    return false
-  }
-
-  // If no border radius or point is in the center rectangle
-  if (r <= 0 || (px > rx + r && px < rx + rw - r) || (py > ry + r && py < ry + rh - r)) {
-    return true
-  }
-
-  // Check the four corners
-  // Top-left corner
-  if (px < rx + r && py < ry + r) {
-    const dx = px - (rx + r)
-    const dy = py - (ry + r)
-    return dx * dx + dy * dy <= r * r
-  }
-
-  // Top-right corner
-  if (px > rx + rw - r && py < ry + r) {
-    const dx = px - (rx + rw - r)
-    const dy = py - (ry + r)
-    return dx * dx + dy * dy <= r * r
-  }
-
-  // Bottom-left corner
-  if (px < rx + r && py > ry + rh - r) {
-    const dx = px - (rx + r)
-    const dy = py - (ry + rh - r)
-    return dx * dx + dy * dy <= r * r
-  }
-
-  // Bottom-right corner
-  if (px > rx + rw - r && py > ry + rh - r) {
-    const dx = px - (rx + rw - r)
-    const dy = py - (ry + rh - r)
-    return dx * dx + dy * dy <= r * r
-  }
-
-  return true
-}
-
 function generatePath(modules: Modules, margin: number = 0): string {
   let path = ''
   modules.forEach(function (row, y) {
