@@ -175,42 +175,6 @@ function getImageSettings(
   return { x, y, h, w, borderRadius, excavation }
 }
 
-function excavateModules(modules: Modules, excavation: Excavation, borderRadius?: number): Modules {
-  // If no border radius, use simple rectangular excavation
-  if (!borderRadius || borderRadius <= 0) {
-    return modules.map((row, y) => {
-      if (y < excavation.y || y >= excavation.y + excavation.h) {
-        return row
-      }
-      return row.map((cell, x) => {
-        if (x < excavation.x || x >= excavation.x + excavation.w) {
-          return cell
-        }
-        return false
-      })
-    })
-  }
-
-  // For rounded corners, check each module against the rounded rectangle shape
-  return modules.map((row, y) => {
-    return row.map((cell, x) => {
-      if (!cell) return cell
-
-      const inExcavation = isPointInRoundedRect(
-        x + 0.5,
-        y + 0.5,
-        excavation.x,
-        excavation.y,
-        excavation.w,
-        excavation.h,
-        borderRadius
-      )
-
-      return inExcavation ? false : cell
-    })
-  })
-}
-
 function useQRCode(props: {
   value: string
   level: Level
@@ -221,13 +185,7 @@ function useQRCode(props: {
   const margin = computed(() => (props.margin ?? DEFAULT_MARGIN) >>> 0)
   const cells = computed(() => {
     const level = validErrorCorrectLevel(props.level) ? props.level : defaultErrorCorrectLevel
-    let c = QR.QrCode.encodeText(props.value, ErrorCorrectLevelMap[level]).getModules()
-    if (props.imageSettings.src) {
-      const imageSettings = getImageSettings(c, props.size, margin.value, props.imageSettings)
-      if (imageSettings.excavation) {
-        c = excavateModules(c, imageSettings.excavation, imageSettings.borderRadius)
-      }
-    }
+    const c = QR.QrCode.encodeText(props.value, ErrorCorrectLevelMap[level]).getModules()
     return c
   })
   const numCells = computed(() => cells.value.length + margin.value * 2)
@@ -320,6 +278,18 @@ export const QrcodeSvg = defineComponent({
       borderRadius: imageSettingsData.value.borderRadius,
     } : { x: 0, y: 0, width: 0, height: 0, borderRadius: 0 })
 
+    const borderProps = computed(() => {
+      if (!props.imageSettings.excavate || !props.imageSettings.src) return null
+      const borderThickness = 2 / (props.size / numCells.value)
+      return {
+        x: imageProps.value.x - borderThickness,
+        y: imageProps.value.y - borderThickness,
+        width: imageProps.value.width + (borderThickness * 2),
+        height: imageProps.value.height + (borderThickness * 2),
+        borderRadius: imageProps.value.borderRadius,
+      }
+    })
+
     const qrGradientId = 'qrcode.vue-gradient'
     const renderGradient = () => {
       if (!props.gradient) return null
@@ -399,6 +369,15 @@ export const QrcodeSvg = defineComponent({
         h('path', {
           fill: props.gradient ? `url(#${qrGradientId})` : props.foreground,
           d: fgPath.value,
+        }),
+        borderProps.value && h('rect', {
+          x: borderProps.value.x,
+          y: borderProps.value.y,
+          width: borderProps.value.width,
+          height: borderProps.value.height,
+          fill: props.background,
+          rx: borderProps.value.borderRadius,
+          ry: borderProps.value.borderRadius,
         }),
         props.imageSettings.src && h('image', {
           href: props.imageSettings.src,
@@ -499,6 +478,24 @@ export const QrcodeCanvas = defineComponent({
       const showImage = props.imageSettings.src && image && image.naturalWidth !== 0 && image.naturalHeight !== 0
 
       if (showImage) {
+        if (props.imageSettings.excavate) {
+          const borderThickness = 2 / (props.size / numCells.value)
+          const borderX = imageProps.value.x - borderThickness
+          const borderY = imageProps.value.y - borderThickness
+          const borderW = imageProps.value.width + (borderThickness * 2)
+          const borderH = imageProps.value.height + (borderThickness * 2)
+          const borderRadius = imageProps.value.borderRadius
+
+          canvasCtx.fillStyle = props.background
+          canvasCtx.beginPath()
+          if (canvasCtx.roundRect) {
+            canvasCtx.roundRect(borderX, borderY, borderW, borderH, borderRadius)
+          } else {
+            canvasCtx.rect(borderX, borderY, borderW, borderH)
+          }
+          canvasCtx.fill()
+        }
+
         const borderRadius = imageProps.value.borderRadius
         if (borderRadius > 0) {
           canvasCtx.save()

@@ -273,6 +273,17 @@ describe('QrcodeVue', () => {
         },
       })
       expect(wrapper.html()).toContain('<image')
+      expect(wrapper.html()).toContain('<rect')
+      const svg = wrapper.find('svg')
+      const rects = svg.findAll('rect')
+      const borderRect = rects.find(rect => rect.attributes('fill') === '#fff' && rect.attributes('x'))
+      expect(borderRect).toBeDefined()
+      expect(borderRect?.attributes('x')).toBeDefined()
+      expect(borderRect?.attributes('y')).toBeDefined()
+      expect(borderRect?.attributes('width')).toBeDefined()
+      expect(borderRect?.attributes('height')).toBeDefined()
+      expect(borderRect?.attributes('rx')).toBe('0')
+      expect(borderRect?.attributes('ry')).toBe('0')
     })
 
     it('renders SVG with image borderRadius', () => {
@@ -298,6 +309,15 @@ describe('QrcodeVue', () => {
       expect(wrapper.html()).toContain('clipPath')
       const image = wrapper.find('image')
       expect(image.attributes('clip-path')).toBe('url(#qrcode.vue-logo-clip-path)')
+
+      expect(wrapper.html()).toContain('<rect')
+      const rects = svg.findAll('rect')
+      const borderRect = rects.find(rect => rect.attributes('fill') === '#fff' && rect.attributes('x'))
+      expect(borderRect).toBeDefined()
+      expect(borderRect?.attributes('rx')).toBeDefined()
+      expect(borderRect?.attributes('ry')).toBeDefined()
+      expect(borderRect?.attributes('rx')).not.toBe('0')
+      expect(borderRect?.attributes('ry')).not.toBe('0')
     })
 
     it('excavates modules with rounded corners when borderRadius is set', () => {
@@ -315,10 +335,19 @@ describe('QrcodeVue', () => {
           imageSettings,
         },
       })
-      const path = wrapper.find('path')
-      const d = path.attributes('d')
-      expect(d).toBeDefined()
-      expect(d).not.toBe('')
+      expect(wrapper.html()).toContain('<rect')
+      const svg = wrapper.find('svg')
+      const rects = svg.findAll('rect')
+      const borderRect = rects.find(rect => rect.attributes('fill') === '#fff' && rect.attributes('x'))
+      expect(borderRect).toBeDefined()
+      expect(borderRect?.attributes('x')).toBeDefined()
+      expect(borderRect?.attributes('y')).toBeDefined()
+      expect(borderRect?.attributes('width')).toBeDefined()
+      expect(borderRect?.attributes('height')).toBeDefined()
+      expect(borderRect?.attributes('rx')).toBeDefined()
+      expect(borderRect?.attributes('ry')).toBeDefined()
+      expect(borderRect?.attributes('rx')).not.toBe('0')
+      expect(borderRect?.attributes('ry')).not.toBe('0')
     })
 
     it('renders SVG without clip-path when borderRadius is 0, undefined, or negative', async () => {
