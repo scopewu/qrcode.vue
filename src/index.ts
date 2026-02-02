@@ -143,8 +143,15 @@ function useQRCode(props: {
     return getImageSettings(cells.value, props.size, margin.value, props.imageSettings)
   })
   const fgPath = computed(() => generatePath(cells.value, margin.value))
+  const imageProps = computed(() => imageSettingsData.value ? {
+    x: imageSettingsData.value.x + margin.value,
+    y: imageSettingsData.value.y + margin.value,
+    width: imageSettingsData.value.w,
+    height: imageSettingsData.value.h,
+    borderRadius: imageSettingsData.value.borderRadius,
+  } : { x: 0, y: 0, width: 0, height: 0, borderRadius: 0 })
 
-  return { margin, numCells, imageSettingsData, cells, fgPath }
+  return { margin, numCells, imageSettingsData, cells, fgPath, imageProps }
 }
 
 const QRCodeProps = {
@@ -217,15 +224,7 @@ export const QrcodeSvg = defineComponent({
   name: 'QRCodeSvg',
   props: QRCodeProps,
   setup(props) {
-    const { margin, numCells, imageSettingsData, fgPath } = useQRCode(props)
-
-    const imageProps = computed(() => imageSettingsData.value ? {
-      x: imageSettingsData.value.x + margin.value,
-      y: imageSettingsData.value.y + margin.value,
-      width: imageSettingsData.value.w,
-      height: imageSettingsData.value.h,
-      borderRadius: imageSettingsData.value.borderRadius,
-    } : { x: 0, y: 0, width: 0, height: 0, borderRadius: 0 })
+    const { margin, numCells, imageSettingsData, fgPath, imageProps } = useQRCode(props)
 
     const borderProps = computed(() => {
       if (!props.imageSettings.excavate || !props.imageSettings.src) return null
@@ -342,15 +341,7 @@ export const QrcodeCanvas = defineComponent({
   name: 'QRCodeCanvas',
   props: QRCodeProps,
   setup(props, ctx) {
-    const { margin, cells, numCells, imageSettingsData } = useQRCode(props)
-
-    const imageProps = computed(() => imageSettingsData.value ? {
-      x: imageSettingsData.value.x + margin.value,
-      y: imageSettingsData.value.y + margin.value,
-      width: imageSettingsData.value.w,
-      height: imageSettingsData.value.h,
-      borderRadius: imageSettingsData.value.borderRadius,
-    } : { x: 0, y: 0, width: 0, height: 0, borderRadius: 0 })
+    const { margin, cells, numCells, imageSettingsData, imageProps } = useQRCode(props)
 
     const canvasEl = ref<HTMLCanvasElement | null>(null)
     const imageRef = ref<HTMLImageElement | null>(null)
