@@ -49,7 +49,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-terser": "^1.0.0",
     "@rsbuild/core": "^1.7.3",
     "@rstest/core": "^0.8.5",
     "@vue/test-utils": "^2.4.6",
