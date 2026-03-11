@@ -50,16 +50,20 @@ function validErrorCorrectLevel(level: string): boolean {
 }
 
 function generatePath(modules: Modules, margin: number = 0): string {
-  let path = ''
-  modules.forEach(function (row, y) {
+  const pathSegments: string[] = []
+
+  for (let y = 0; y < modules.length; y++) {
+    const row = modules[y]
     let start: number | null = null
-    row.forEach(function (cell, x) {
+
+    for (let x = 0; x < row.length; x++) {
+      const cell = row[x]
+
       if (!cell && start !== null) {
         // M0 0h7v1H0z injects the space with the move and drops the comma,
-        // saving a char per operation
-        path += `M${start + margin} ${y + margin}h${x - start}v1H${start + margin}z`
+        pathSegments.push(`M${start + margin} ${y + margin}h${x - start}v1H${start + margin}z`)
         start = null
-        return
+        continue
       }
 
       // end of row, clean up or skip
@@ -67,26 +71,25 @@ function generatePath(modules: Modules, margin: number = 0): string {
         if (!cell) {
           // We would have closed the op above already so this can only mean
           // 2+ light modules in a row.
-          return
+          continue
         }
         if (start === null) {
           // Just a single dark module.
-          path += `M${x + margin},${y + margin} h1v1H${x + margin}z`
+          pathSegments.push(`M${x + margin},${y + margin} h1v1H${x + margin}z`)
         } else {
           // Otherwise finish the current line.
-          path += `M${start + margin},${y + margin} h${x + 1 - start}v1H${
-            start + margin
-          }z`
+          pathSegments.push(`M${start + margin},${y + margin} h${x + 1 - start}v1H${start + margin}z`)
         }
-        return
+        continue
       }
 
       if (cell && start === null) {
         start = x
       }
-    })
-  })
-  return path
+    }
+  }
+
+  return pathSegments.join('')
 }
 
 function getImageSettings(
@@ -349,6 +352,24 @@ export const QrcodeCanvas = defineComponent({
     const canvasEl = ref<HTMLCanvasElement | null>(null)
     const imageRef = ref<HTMLImageElement | null>(null)
 
+    const devicePixelRatio = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
+
+    const drawRoundedRect = (
+      ctx: CanvasRenderingContext2D,
+      x: number,
+      y: number,
+      width: number,
+      height: number,
+      radius: number
+    ) => {
+      ctx.beginPath()
+      if (ctx.roundRect) {
+        ctx.roundRect(x, y, width, height, radius)
+      } else {
+        ctx.rect(x, y, width, height)
+      }
+    }
+
     const generate = () => {
       const {
         size,
@@ -375,8 +396,6 @@ export const QrcodeCanvas = defineComponent({
       const qrCells = cells.value
 
       const image = imageRef.value
-
-      const devicePixelRatio = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
 
       const scale = (size / numCells.value) * devicePixelRatio
       canvas.height = canvas.width = size * devicePixelRatio
@@ -421,22 +440,6 @@ export const QrcodeCanvas = defineComponent({
       const showImage = props.imageSettings.src && image && image.naturalWidth !== 0 && image.naturalHeight !== 0
 
       if (showImage) {
-        const drawRoundedRect = (
-          ctx: CanvasRenderingContext2D,
-          x: number,
-          y: number,
-          width: number,
-          height: number,
-          radius: number
-        ) => {
-          ctx.beginPath()
-          if (ctx.roundRect) {
-            ctx.roundRect(x, y, width, height, radius)
-          } else {
-            ctx.rect(x, y, width, height)
-          }
-        }
-
         if (imageBorderProps.value) {
           const imageBorder = imageBorderProps.value
 
