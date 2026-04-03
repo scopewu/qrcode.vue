@@ -21,6 +21,8 @@ type Excavation = {
   h: number,
 }
 
+let _uid = 0
+
 const defaultErrorCorrectLevel: Level = 'L'
 
 const DEFAULT_QR_SIZE = 100
@@ -242,9 +244,10 @@ export const QrcodeSvg = defineComponent({
   name: 'QRCodeSvg',
   props: QRCodeProps,
   setup(props) {
-    const { margin, numCells, cells, fgPath, imageProps, imageBorderProps } = useQRCode(props)
-
-    const qrGradientId = 'qrcode.vue-gradient'
+    const { numCells, fgPath, imageProps, imageBorderProps } = useQRCode(props)
+    const uid = _uid++
+    const qrGradientId = `qrcode.vue-gradient-${uid}`
+    const qrLogoClipPathId = `qrcode.vue-logo-clip-path-${uid}`
     const renderGradient = () => {
       if (!props.gradient) return null
 
@@ -282,7 +285,6 @@ export const QrcodeSvg = defineComponent({
       )
     }
 
-    const qrLogoClipPathId = 'qrcode.vue-logo-clip-path'
     const renderClipPath = () => {
       const borderRadius = imageProps.value.borderRadius
       if (!props.imageSettings.src) return null
@@ -312,6 +314,8 @@ export const QrcodeSvg = defineComponent({
         'shape-rendering': `crispEdges`,
         xmlns: 'http://www.w3.org/2000/svg',
         viewBox: `0 0 ${numCells.value} ${numCells.value}`,
+        role: 'img',
+        'aria-label': props.value,
       },
       [
         h('defs', {}, [renderGradient(), renderClipPath()]),
@@ -352,8 +356,6 @@ export const QrcodeCanvas = defineComponent({
     const canvasEl = ref<HTMLCanvasElement | null>(null)
     const imageRef = ref<HTMLImageElement | null>(null)
 
-    const devicePixelRatio = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
-
     const drawRoundedRect = (
       ctx: CanvasRenderingContext2D,
       x: number,
@@ -393,10 +395,9 @@ export const QrcodeCanvas = defineComponent({
         return
       }
 
-      const qrCells = cells.value
-
       const image = imageRef.value
 
+      const devicePixelRatio = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
       const scale = (size / numCells.value) * devicePixelRatio
       canvas.height = canvas.width = size * devicePixelRatio
       canvasCtx.scale(scale, scale)
@@ -426,9 +427,9 @@ export const QrcodeCanvas = defineComponent({
       }
 
       if (SUPPORTS_PATH2D) {
-        canvasCtx.fill(new Path2D(generatePath(qrCells, margin.value)))
+        canvasCtx.fill(new Path2D(fgPath.value))
       } else {
-        qrCells.forEach(function (row, rdx) {
+        cells.value.forEach(function (row, rdx) {
           row.forEach(function (cell, cdx) {
             if (cell) {
               canvasCtx.fillRect(cdx + margin.value, rdx + margin.value, 1, 1)
@@ -500,6 +501,8 @@ export const QrcodeCanvas = defineComponent({
           {
             ...ctx.attrs,
             ref: canvasEl,
+            role: 'img',
+            'aria-label': props.value,
             style: { ...(style as Object), width: `${props.size}px`, height: `${props.size}px`},
           },
         ),
@@ -516,40 +519,25 @@ export const QrcodeCanvas = defineComponent({
 
 const QrcodeVue = defineComponent({
   name: 'Qrcode',
-  render() {
-    const {
-      renderAs,
-      value,
-      size,
-      margin,
-      level,
-      background,
-      foreground,
-      imageSettings,
-      gradient,
-      gradientType,
-      gradientStartColor,
-      gradientEndColor,
-    } = this.$props
-
-    return h(
-      renderAs === 'svg' ? QrcodeSvg : QrcodeCanvas,
+  props: QRCodeVueProps,
+  setup(props) {
+    return () => h(
+      props.renderAs === 'svg' ? QrcodeSvg : QrcodeCanvas,
       {
-        value,
-        size,
-        margin,
-        level,
-        background,
-        foreground,
-        imageSettings,
-        gradient,
-        gradientType,
-        gradientStartColor,
-        gradientEndColor,
+        value: props.value,
+        size: props.size,
+        margin: props.margin,
+        level: props.level,
+        background: props.background,
+        foreground: props.foreground,
+        imageSettings: props.imageSettings,
+        gradient: props.gradient,
+        gradientType: props.gradientType,
+        gradientStartColor: props.gradientStartColor,
+        gradientEndColor: props.gradientEndColor,
       },
     )
   },
-  props: QRCodeVueProps,
 })
 
 export default QrcodeVue
