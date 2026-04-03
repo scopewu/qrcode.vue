@@ -1,6 +1,6 @@
 {
   "name": "qrcode.vue",
-  "version": "3.8.0",
+  "version": "3.8.1",
   "description": "A Vue.js component to generate QRCode. Both support Vue 2 and Vue 3",
   "type": "module",
   "main": "./dist/qrcode.vue.cjs.js",
@@ -50,12 +50,12 @@
   "dependencies": {},
   "devDependencies": {
     "@rollup/plugin-terser": "^1.0.0",
-    "@rsbuild/core": "^1.7.3",
-    "@rstest/core": "^0.8.5",
+    "@rsbuild/core": "^2.0.0-rc.0",
+    "@rstest/core": "^0.9.6",
     "@vue/test-utils": "^2.4.6",
-    "happy-dom": "^20.8.3",
-    "rollup": "^4.59.0",
-    "rollup-plugin-typescript2": "^0.36.0",
+    "happy-dom": "^20.8.9",
+    "rollup": "^4.60.1",
+    "rollup-plugin-typescript2": "^0.37.0",
     "typescript": "^5.9.3",
     "vue": "^3.5.29"
   }
