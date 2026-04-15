@@ -1,4 +1,4 @@
-import { computed, defineComponent, Fragment, h, onMounted, PropType, ref, watchEffect } from 'vue'
+import { computed, defineComponent, Fragment, h, onMounted, PropType, ref, useId, watchEffect } from 'vue'
 import QR from './qrcodegen'
 
 type Modules = ReturnType<QR.QrCode['getModules']>
@@ -9,8 +9,8 @@ export type ImageSettings = {
   src: string,
   x?: number,
   y?: number,
-  height: number,
-  width: number,
+  height?: number,
+  width?: number,
   excavate?: boolean,
   borderRadius?: number,
 }
@@ -22,6 +22,13 @@ type Excavation = {
 }
 
 let _uid = 0
+
+function getUid(): string {
+  if (typeof useId === 'function') {
+    return `${useId()}-${_uid++}`
+  }
+  return `vue-${Math.random().toString(36).slice(2)}-${_uid++}`
+}
 
 const defaultErrorCorrectLevel: Level = 'L'
 
@@ -130,6 +137,8 @@ function getImageSettings(
   return { x, y, h, w, borderRadius, excavation }
 }
 
+const emptyImageProps = { x: 0, y: 0, width: 0, height: 0, borderRadius: 0 }
+
 function useQRCode(props: {
   value: string
   level: Level
@@ -146,7 +155,7 @@ function useQRCode(props: {
   const fgPath = computed(() => generatePath(cells.value, margin.value))
   const imageProps = computed(() => {
     if (!props.imageSettings.src) {
-      return { x: 0, y: 0, width: 0, height: 0, borderRadius: 0 }
+      return emptyImageProps
     }
 
     const settings = getImageSettings(cells.value, props.size, margin.value, props.imageSettings)
@@ -245,10 +254,10 @@ export const QrcodeSvg = defineComponent({
   props: QRCodeProps,
   setup(props) {
     const { numCells, fgPath, imageProps, imageBorderProps } = useQRCode(props)
-    const uid = _uid++
+    const uid = getUid()
     const qrGradientId = `qrcode.vue-gradient-${uid}`
     const qrLogoClipPathId = `qrcode.vue-logo-clip-path-${uid}`
-    const renderGradient = () => {
+    const gradientVNode = computed(() => {
       if (!props.gradient) return null
 
       const gradientProps = props.gradientType === 'linear'
@@ -283,9 +292,9 @@ export const QrcodeSvg = defineComponent({
           }),
         ]
       )
-    }
+    })
 
-    const renderClipPath = () => {
+    const clipPathVNode = computed(() => {
       const borderRadius = imageProps.value.borderRadius
       if (!props.imageSettings.src) return null
       if (borderRadius <= 0) return null
@@ -304,7 +313,7 @@ export const QrcodeSvg = defineComponent({
           }),
         ],
       )
-    }
+    })
 
     return () => h(
       'svg',
@@ -318,7 +327,7 @@ export const QrcodeSvg = defineComponent({
         'aria-label': props.value,
       },
       [
-        h('defs', {}, [renderGradient(), renderClipPath()]),
+        h('defs', {}, [gradientVNode.value, clipPathVNode.value]),
         h('rect', {
           width: '100%',
           height: '100%',
@@ -400,7 +409,7 @@ export const QrcodeCanvas = defineComponent({
       const devicePixelRatio = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
       const scale = (size / numCells.value) * devicePixelRatio
       canvas.height = canvas.width = size * devicePixelRatio
-      canvasCtx.scale(scale, scale)
+      canvasCtx.setTransform(scale, 0, 0, scale, 0, 0)
 
       canvasCtx.fillStyle = background
       canvasCtx.fillRect(0, 0, numCells.value, numCells.value)
@@ -491,8 +500,6 @@ export const QrcodeCanvas = defineComponent({
     onMounted(generate)
     watchEffect(generate)
 
-    const { style } = ctx.attrs
-
     return () => h(
       Fragment,
       [
@@ -503,7 +510,7 @@ export const QrcodeCanvas = defineComponent({
             ref: canvasEl,
             role: 'img',
             'aria-label': props.value,
-            style: { ...(style as Object), width: `${props.size}px`, height: `${props.size}px`},
+            style: { ...(ctx.attrs.style as Object), width: `${props.size}px`, height: `${props.size}px` },
           },
         ),
         props.imageSettings.src && h('img', {

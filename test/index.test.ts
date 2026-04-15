@@ -222,7 +222,7 @@ describe('QrcodeVue', () => {
       })
       expect(wrapper.html()).toContain('linearGradient')
       const path = wrapper.find('path')
-      expect(path.attributes('fill')).toMatch(/^url\(#qrcode\.vue-gradient-\d+\)$/)
+      expect(path.attributes('fill')).toMatch(/^url\(#qrcode\.vue-gradient-[^"]+\)$/)
     })
 
     it('renders SVG with radial gradient', () => {
@@ -307,7 +307,7 @@ describe('QrcodeVue', () => {
       expect(defs.exists()).toBe(true)
       expect(wrapper.html()).toContain('clipPath')
       const image = wrapper.find('image')
-      expect(image.attributes('clip-path')).toMatch(/^url\(#qrcode\.vue-logo-clip-path-\d+\)$/)
+      expect(image.attributes('clip-path')).toMatch(/^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/)
 
       expect(wrapper.html()).toContain('<rect')
       const rects = svg.findAll('rect')
@@ -405,7 +405,7 @@ describe('QrcodeVue', () => {
       expect(wrapper.html()).toContain('<image')
       expect(wrapper.html()).toContain('clip-path')
       let image = wrapper.find('image')
-      expect(image.attributes('clip-path')).toMatch(/^url\(#qrcode\.vue-logo-clip-path-\d+\)$/)
+      expect(image.attributes('clip-path')).toMatch(/^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/)
 
       await wrapper.setProps({
         imageSettings: { ...imageSettings, borderRadius: 100 },
@@ -414,7 +414,7 @@ describe('QrcodeVue', () => {
       expect(wrapper.html()).toContain('<image')
       expect(wrapper.html()).toContain('clip-path')
       image = wrapper.find('image')
-      expect(image.attributes('clip-path')).toMatch(/^url\(#qrcode\.vue-logo-clip-path-\d+\)$/)
+      expect(image.attributes('clip-path')).toMatch(/^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/)
     })
 
     it('handles invalid error correction level gracefully in SVG mode', () => {
@@ -657,8 +657,8 @@ describe('QrcodeVue', () => {
       const html1 = wrapper1.html()
       const html2 = wrapper2.html()
 
-      const id1 = html1.match(/id="(qrcode\.vue-gradient-\d+)"/)?.[1]
-      const id2 = html2.match(/id="(qrcode\.vue-gradient-\d+)"/)?.[1]
+      const id1 = html1.match(/id="(qrcode\.vue-gradient-[^"]+)"/)?.[1]
+      const id2 = html2.match(/id="(qrcode\.vue-gradient-[^"]+)"/)?.[1]
 
       expect(id1).toBeDefined()
       expect(id2).toBeDefined()
@@ -677,8 +677,8 @@ describe('QrcodeVue', () => {
       const html1 = wrapper1.html()
       const html2 = wrapper2.html()
 
-      const clipId1 = html1.match(/id="(qrcode\.vue-logo-clip-path-\d+)"/)?.[1]
-      const clipId2 = html2.match(/id="(qrcode\.vue-logo-clip-path-\d+)"/)?.[1]
+      const clipId1 = html1.match(/id="(qrcode\.vue-logo-clip-path-[^"]+)"/)?.[1]
+      const clipId2 = html2.match(/id="(qrcode\.vue-logo-clip-path-[^"]+)"/)?.[1]
 
       expect(clipId1).toBeDefined()
       expect(clipId2).toBeDefined()
@@ -691,7 +691,7 @@ describe('QrcodeVue', () => {
       })
 
       const html = wrapper.html()
-      const gradientId = html.match(/id="(qrcode\.vue-gradient-\d+)"/)?.[1]
+      const gradientId = html.match(/id="(qrcode\.vue-gradient-[^"]+)"/)?.[1]
       expect(gradientId).toBeDefined()
 
       const path = wrapper.find('path')
@@ -705,7 +705,7 @@ describe('QrcodeVue', () => {
       })
 
       const html = wrapper.html()
-      const clipId = html.match(/id="(qrcode\.vue-logo-clip-path-\d+)"/)?.[1]
+      const clipId = html.match(/id="(qrcode\.vue-logo-clip-path-[^"]+)"/)?.[1]
       expect(clipId).toBeDefined()
 
       const image = wrapper.find('image')
