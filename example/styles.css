@@ -51,6 +51,10 @@ textarea {
   margin-bottom: 3rem !important;
 }
 
+.pb-5 {
+  padding-bottom: 3rem !important;
+}
+
 .flex {
   display: flex;
 }
@@ -165,7 +169,7 @@ input, select, textarea {
   width: 100%;
   /*min-height: calc(1.5em + 0.75rem + calc(var(--border-width) * 2));*/
   padding: .375rem .75rem;
-  color: var(--primary-color);
+  color: var(--primary-color) !important;
   border: var(--border-width) solid var(--border-color);
   border-radius: var(--border-radius);
   display: block;
