@@ -85,6 +85,7 @@ When you use the component with Vue 3 with `TypeScript`:
     :gradient-start-color="gradientStartColor"
     :gradient-end-color="gradientEndColor"
     :image-settings='imageSettings'
+    :radius="radius"
   />
 </template>
 <script setup lang="ts">
@@ -112,6 +113,7 @@ When you use the component with Vue 3 with `TypeScript`:
   const gradientType = ref<GradientType>('linear')
   const gradientStartColor = ref('#000000')
   const gradientEndColor = ref('#38bdf8')
+  const radius = ref(0)
 </script>
 ```
 
@@ -212,6 +214,22 @@ The start color of the gradient.
 - Default: `#ffffff`
 
 The end color of the gradient.
+
+### `radius`
+
+- Type: `number`
+- Default: `0`
+
+The corner radius of each QR module, as a ratio of the module width. Accepts values from `0` to `0.5`.
+
+- `0` (default) - square modules with sharp corners
+- `0.5` - maximum rounding, modules become circles
+
+The rounding is context-aware: inner corners between adjacent dark modules remain sharp, while outer corners are rounded.
+
+```html
+<qrcode-vue value="test" :radius="0.35" />
+```
 
 ### `class`
 

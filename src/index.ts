@@ -14,12 +14,6 @@ export type ImageSettings = {
   excavate?: boolean,
   borderRadius?: number,
 }
-type Excavation = {
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-}
 
 let _uid = 0
 
@@ -56,6 +50,71 @@ const SUPPORTS_PATH2D: boolean = (function () {
 
 function validErrorCorrectLevel(level: string): boolean {
   return level in ErrorCorrectLevelMap
+}
+
+function getNeighborFlags(modules: Modules, row: number, col: number): {
+  nw: boolean
+  ne: boolean
+  se: boolean
+  sw: boolean
+} {
+  const north = row > 0 ? modules[row - 1][col] : false
+  const south = row < modules.length - 1 ? modules[row + 1][col] : false
+  const west = col > 0 ? modules[row][col - 1] : false
+  const east = col < modules[row].length - 1 ? modules[row][col + 1] : false
+
+  return {
+    nw: !north && !west,
+    ne: !north && !east,
+    se: !south && !east,
+    sw: !south && !west,
+  }
+}
+
+function generateRoundedPath(modules: Modules, margin: number = 0, radius: number = 0): string {
+  const pathSegments: string[] = []
+  const r = Math.min(radius, 0.5)
+
+  for (let row = 0; row < modules.length; row++) {
+    for (let col = 0; col < modules[row].length; col++) {
+      if (!modules[row][col]) continue
+
+      const { nw, ne, se, sw } = getNeighborFlags(modules, row, col)
+      const x = col + margin
+      const y = row + margin
+
+      pathSegments.push(
+        `M${x + (nw ? r : 0)} ${y}`,
+        `L${x + 1 - (ne ? r : 0)} ${y}`,
+      )
+
+      if (ne) {
+        pathSegments.push(`A${r} ${r} 0 0 1 ${x + 1} ${y + r}`)
+      }
+
+      pathSegments.push(`L${x + 1} ${y + 1 - (se ? r : 0)}`)
+
+      if (se) {
+        pathSegments.push(`A${r} ${r} 0 0 1 ${x + 1 - r} ${y + 1}`)
+      }
+
+      pathSegments.push(`L${x + (sw ? r : 0)} ${y + 1}`)
+
+      if (sw) {
+        pathSegments.push(`A${r} ${r} 0 0 1 ${x} ${y + 1 - r}`)
+      }
+
+      pathSegments.push(`L${x} ${y + (nw ? r : 0)}`)
+
+      if (nw) {
+        pathSegments.push(`A${r} ${r} 0 0 1 ${x + r} ${y}`)
+      }
+
+      pathSegments.push('z')
+    }
+  }
+
+  return pathSegments.join('')
 }
 
 function generatePath(modules: Modules, margin: number = 0): string {
@@ -112,7 +171,6 @@ function getImageSettings(
   h: number
   w: number
   borderRadius: number,
-  excavation: Excavation | null
 } {
   const { width, height, x: imageX, y: imageY } = imageSettings
   const numCells = cells.length + margin * 2
@@ -124,20 +182,10 @@ function getImageSettings(
   const y = imageY == null ? cells.length / 2 - h / 2 : imageY * scale
   const borderRadius = (imageSettings.borderRadius || 0) * scale
 
-  let excavation = null
-  if (imageSettings.excavate) {
-    let floorX = Math.floor(x)
-    let floorY = Math.floor(y)
-    let ceilW = Math.ceil(w + x - floorX)
-    let ceilH = Math.ceil(h + y - floorY)
-
-    excavation = { x: floorX, y: floorY, w: ceilW, h: ceilH }
-  }
-
-  return { x, y, h, w, borderRadius, excavation }
+  return { x, y, h, w, borderRadius }
 }
 
-const emptyImageProps = { x: 0, y: 0, width: 0, height: 0, borderRadius: 0 }
+const emptyImageProps: { x: number; y: number; width: number; height: number; borderRadius: number } = { x: 0, y: 0, width: 0, height: 0, borderRadius: 0 }
 
 function useQRCode(props: {
   value: string
@@ -145,6 +193,7 @@ function useQRCode(props: {
   margin: number
   size: number
   imageSettings: ImageSettings
+  radius: number
 }) {
   const margin = computed(() => (props.margin ?? DEFAULT_MARGIN) >>> 0)
   const cells = computed(() => {
@@ -152,7 +201,12 @@ function useQRCode(props: {
     return QR.QrCode.encodeText(props.value, ErrorCorrectLevelMap[level]).getModules()
   })
   const numCells = computed(() => cells.value.length + margin.value * 2)
-  const fgPath = computed(() => generatePath(cells.value, margin.value))
+  const fgPath = computed(() => {
+    if (props.radius > 0) {
+      return generateRoundedPath(cells.value, margin.value, props.radius)
+    }
+    return generatePath(cells.value, margin.value)
+  })
   const imageProps = computed(() => {
     if (!props.imageSettings.src) {
       return emptyImageProps
@@ -237,6 +291,12 @@ const QRCodeProps = {
     required: false,
     default: '#fff',
   },
+  radius: {
+    type: Number,
+    required: false,
+    default: 0,
+    validator: (r: any) => !isNaN(r) && r >= 0 && r <= 0.5,
+  },
 }
 
 const QRCodeVueProps = {
@@ -320,7 +380,6 @@ export const QrcodeSvg = defineComponent({
       {
         width: props.size,
         height: props.size,
-        'shape-rendering': `crispEdges`,
         xmlns: 'http://www.w3.org/2000/svg',
         viewBox: `0 0 ${numCells.value} ${numCells.value}`,
         role: 'img',
@@ -542,6 +601,7 @@ const QrcodeVue = defineComponent({
         gradientType: props.gradientType,
         gradientStartColor: props.gradientStartColor,
         gradientEndColor: props.gradientEndColor,
+        radius: props.radius,
       },
     )
   },

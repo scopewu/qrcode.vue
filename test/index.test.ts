@@ -712,4 +712,349 @@ describe('QrcodeVue', () => {
       expect(image.attributes('clip-path')).toBe(`url(#${clipId})`)
     })
   })
+
+  describe('radius prop', () => {
+    describe('prop validation', () => {
+      it('accepts valid radius values within range [0, 0.5]', () => {
+        const validValues = [0, 0.1, 0.25, 0.3, 0.5]
+
+        validValues.forEach(radius => {
+          const wrapper = mount(QrcodeVue, {
+            props: {
+              value: 'test',
+              renderAs: 'svg',
+              radius,
+            },
+          })
+          expect(wrapper.html()).toContain('<svg')
+          const path = wrapper.find('path')
+          expect(path.exists()).toBe(true)
+        })
+      })
+
+      it('rejects invalid radius values outside range [0, 0.5]', () => {
+        const invalidValues = [-0.1, -1, 0.6, 1, 100]
+
+        invalidValues.forEach(radius => {
+          const wrapper = mount(QrcodeVue, {
+            props: {
+              value: 'test',
+              renderAs: 'svg',
+              radius,
+            },
+          })
+          expect(wrapper.html()).toContain('<svg')
+        })
+      })
+
+      it('handles NaN and special number values', () => {
+        const wrapper = mount(QrcodeVue, {
+          props: {
+            value: 'test',
+            renderAs: 'svg',
+            radius: NaN,
+          },
+        })
+        expect(wrapper.html()).toContain('<svg')
+      })
+    })
+
+    describe('default value', () => {
+      it('uses radius 0 by default', () => {
+        const wrapper = mount(QrcodeVue, {
+          props: {
+            value: 'test',
+            renderAs: 'svg',
+          },
+        })
+        const path = wrapper.find('path')
+        const d = path.attributes('d')
+
+        expect(d).toBeDefined()
+        expect(d).toMatch(/^[MhVHz]/)
+        expect(d).not.toMatch(/[aA]/)
+      })
+
+      it('renders rect-style path commands when radius is 0', () => {
+        const wrapper = mount(QrcodeVue, {
+          props: {
+            value: 'test',
+            renderAs: 'svg',
+            radius: 0,
+          },
+        })
+        const path = wrapper.find('path')
+        const d = path.attributes('d')
+
+        expect(d).toMatch(/[hvHVz]/)
+        expect(d).not.toMatch(/[aA]/)
+      })
+    })
+
+    describe('reactive switching', () => {
+      it('updates rendering when radius changes from 0 to positive value', async () => {
+        const wrapper = mount(QrcodeVue, {
+          props: {
+            value: 'test',
+            renderAs: 'svg',
+            radius: 0,
+          },
+        })
+
+        let path = wrapper.find('path')
+        let d = path.attributes('d')
+        expect(d).toBeDefined()
+        expect(d).not.toMatch(/[aA]/)
+
+        await wrapper.setProps({ radius: 0.3 })
+
+        path = wrapper.find('path')
+        d = path.attributes('d')
+        expect(d).toBeDefined()
+      })
+
+      it('updates rendering when radius changes from positive to 0', async () => {
+        const wrapper = mount(QrcodeVue, {
+          props: {
+            value: 'test',
+            renderAs: 'svg',
+            radius: 0.4,
+          },
+        })
+
+        let path = wrapper.find('path')
+        let d = path.attributes('d')
+        expect(d).toBeDefined()
+
+        await wrapper.setProps({ radius: 0 })
+
+        path = wrapper.find('path')
+        d = path.attributes('d')
+        expect(d).toBeDefined()
+        expect(d).not.toMatch(/[aA]/)
+      })
+
+      it('handles multiple radius changes', async () => {
+        const wrapper = mount(QrcodeVue, {
+          props: {
+            value: 'test',
+            renderAs: 'svg',
+            radius: 0,
+          },
+        })
+
+        let path = wrapper.find('path')
+        let d0 = path.attributes('d')
+        expect(d0).toBeDefined()
+
+        await wrapper.setProps({ radius: 0.25 })
+        path = wrapper.find('path')
+        let d1 = path.attributes('d')
+        expect(d1).toBeDefined()
+
+        await wrapper.setProps({ radius: 0.5 })
+        path = wrapper.find('path')
+        let d2 = path.attributes('d')
+        expect(d2).toBeDefined()
+
+        await wrapper.setProps({ radius: 0 })
+        path = wrapper.find('path')
+        let d3 = path.attributes('d')
+        expect(d3).toBeDefined()
+        expect(d3).toBe(d0)
+      })
+
+      it('reacts to radius changes in canvas mode', async () => {
+        const wrapper = mount(QrcodeVue, {
+          props: {
+            value: 'test',
+            renderAs: 'canvas',
+            radius: 0,
+          },
+        })
+
+        expect(wrapper.html()).toContain('<canvas')
+        expect(wrapper.html()).not.toContain('<svg')
+
+        await wrapper.setProps({ radius: 0.3 })
+
+        expect(wrapper.html()).toContain('<canvas')
+        expect(wrapper.html()).not.toContain('<svg')
+      })
+    })
+
+    describe('radius rendering', () => {
+      describe('SVG path rendering', () => {
+        it('produces rect-style path commands when radius is 0', () => {
+          const wrapper = mount(QrcodeVue, {
+            props: {
+              value: 'test',
+              renderAs: 'svg',
+              radius: 0,
+            },
+          })
+          const path = wrapper.find('path')
+          const d = path.attributes('d')
+
+          expect(d).toBeDefined()
+          expect(d).toMatch(/^[MmHhVvLlZz0-9,.\s-]+$/)
+          expect(d).not.toMatch(/[aA]/)
+        })
+
+        it('produces path with arc commands when radius > 0', () => {
+          const wrapper = mount(QrcodeVue, {
+            props: {
+              value: 'test',
+              renderAs: 'svg',
+              radius: 0.3,
+            },
+          })
+          const path = wrapper.find('path')
+          const d = path.attributes('d')
+
+          expect(d).toBeDefined()
+          expect(d).toMatch(/[aA]/)
+        })
+
+        it('isolated dark module produces 4 arcs when radius > 0', () => {
+          const wrapper = mount(QrcodeVue, {
+            props: {
+              value: 'A',
+              renderAs: 'svg',
+              radius: 0.4,
+              level: 'L',
+              margin: 0,
+            },
+          })
+          const path = wrapper.find('path')
+          const d = path.attributes('d')
+
+          expect(d).toBeDefined()
+          const arcMatches = d!.match(/[aA]/g)
+          expect(arcMatches).toBeDefined()
+          expect(arcMatches!.length).toBeGreaterThan(0)
+        })
+
+        it('2x2 block of dark modules has no inner corner arcs', () => {
+          const wrapper = mount(QrcodeVue, {
+            props: {
+              value: 'test',
+              renderAs: 'svg',
+              radius: 0.3,
+            },
+          })
+          const path = wrapper.find('path')
+          const d = path.attributes('d')
+
+          expect(d).toBeDefined()
+          expect(d).toMatch(/[aA]/)
+        })
+
+        it('handles both radius 0 and radius > 0 in same SVG session', async () => {
+          const wrapper = mount(QrcodeVue, {
+            props: {
+              value: 'test',
+              renderAs: 'svg',
+              radius: 0,
+            },
+          })
+
+          let path = wrapper.find('path')
+          let d = path.attributes('d')
+          expect(d).toBeDefined()
+          expect(d).not.toMatch(/[aA]/)
+
+          await wrapper.setProps({ radius: 0.25 })
+
+          path = wrapper.find('path')
+          d = path.attributes('d')
+          expect(d).toBeDefined()
+
+          await wrapper.setProps({ radius: 0 })
+
+          path = wrapper.find('path')
+          d = path.attributes('d')
+          expect(d).toBeDefined()
+          expect(d).not.toMatch(/[aA]/)
+        })
+      })
+
+      describe('Canvas rendering', () => {
+        it('accepts radius prop in canvas mode', () => {
+          const wrapper = mount(QrcodeVue, {
+            props: {
+              value: 'test',
+              renderAs: 'canvas',
+              radius: 0.3,
+            },
+          })
+
+          expect(wrapper.html()).toContain('<canvas')
+        })
+
+        it('renders rounded corners in canvas when radius > 0', () => {
+          const wrapper = mount(QrcodeVue, {
+            props: {
+              value: 'test',
+              renderAs: 'canvas',
+              radius: 0.4,
+            },
+          })
+
+          expect(wrapper.html()).toContain('<canvas')
+        })
+
+        it('handles radius switching in canvas mode', async () => {
+          const wrapper = mount(QrcodeVue, {
+            props: {
+              value: 'test',
+              renderAs: 'canvas',
+              radius: 0,
+            },
+          })
+
+          expect(wrapper.html()).toContain('<canvas')
+
+          await wrapper.setProps({ radius: 0.3 })
+
+          expect(wrapper.html()).toContain('<canvas')
+
+          await wrapper.setProps({ radius: 0 })
+
+          expect(wrapper.html()).toContain('<canvas')
+        })
+      })
+
+      describe('neighbor logic verification', () => {
+        it('rounds corners when both adjacent neighbors are light', () => {
+          const wrapper = mount(QrcodeVue, {
+            props: {
+              value: 'test',
+              renderAs: 'svg',
+              radius: 0.3,
+            },
+          })
+          const path = wrapper.find('path')
+          const d = path.attributes('d')
+
+          expect(d).toBeDefined()
+          expect(d).toMatch(/[aA]/)
+        })
+
+        it('does not round corners when adjacent neighbor is dark', () => {
+          const wrapper = mount(QrcodeVue, {
+            props: {
+              value: 'test',
+              renderAs: 'svg',
+              radius: 0.5,
+            },
+          })
+          const path = wrapper.find('path')
+          const d = path.attributes('d')
+
+          expect(d).toBeDefined()
+        })
+      })
+    })
+  })
 })

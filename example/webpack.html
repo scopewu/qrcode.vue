@@ -120,8 +120,12 @@
         <label for="foreground" class="form-label">foreground:</label>
         <input type="color" class="form-control form-control-color" id="foreground" v-model="foreground">
       </div>
-      <div class="col-12">
-        <div class="form-check">
+      <div class="col-6">
+        <label for="radius" class="form-label">radius: <span v-cloak>{{radius}}</span></label>
+        <input type="range" v-model.number="radius" min="0" max="0.5" step="0.1" class="form-range" id="radius" />
+      </div>
+      <div class="col-6">
+        <div class="form-check" style="padding-top: 1.75rem">
           <label for="gradient" class="form-label">gradient</label>
           <input class="form-check-input" type="checkbox" id="gradient" v-model="gradient">
         </div>
@@ -143,11 +147,11 @@
           <input type="color" class="form-control form-control-color" id="gradientEndColor" v-model="gradientEndColor">
         </div>
       </template>
-      <div class="col-6">
+      <div class="col-12">
         <label for="includeImage" class="form-label">Include Image:</label>
         <input type="checkbox" class="form-check-input" id="includeImage" v-model="includeImage">
       </div>
-      <fieldset class='row' :disabled='!includeImage'>
+      <fieldset class='row' v-if='includeImage'>
         <legend>ImageSettings</legend>
         <div class="col-6">
           <label for="imageSrc" class="form-label">src:</label>
@@ -188,6 +192,7 @@
               :gradient-start-color="gradientStartColor"
               :gradient-end-color="gradientEndColor"
               :image-settings="imageSettings"
+              :radius="radius"
             ></qrcode-vue>
           </div>
         </div>
