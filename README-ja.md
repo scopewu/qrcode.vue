@@ -83,6 +83,7 @@ Vue 3で `TypeScript` を使用する場合：
     :gradient-start-color="gradientStartColor"
     :gradient-end-color="gradientEndColor"
     :image-settings='imageSettings'
+    :radius="radius"
   />
 </template>
 <script setup lang="ts">
@@ -112,6 +113,8 @@ Vue 3で `TypeScript` を使用する場合：
   const gradientType = ref<GradientType>('linear')
   const gradientStartColor = ref('#000000')
   const gradientEndColor = ref('#38bdf8')
+  // 角丸半径
+  const radius = ref(0)
 </script>
 ```
 
@@ -212,6 +215,22 @@ QRコードのグラデーション塗りつぶしを有効にします。
 - デフォルト：`#ffffff`
 
 グラデーションの終了色。
+
+### `radius`
+
+- タイプ：`number`
+- デフォルト：`0`
+
+各QRモジュールの角丸半径。モジュール幅に対する比率で、`0` から `0.5` の値を受け入れます。
+
+- `0`（デフォルト）- 正方形モジュール、鋭角
+- `0.5` - 最大の丸み、モジュールは円形になります
+
+丸みは文脈を認識します：隣接する暗いモジュール間の内角は鋭角のままで、外角のみが丸められます。
+
+```html
+<qrcode-vue value="test" :radius="0.35" />
+```
 
 ### `class`
 

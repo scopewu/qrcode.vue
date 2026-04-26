@@ -27,6 +27,7 @@ const App = defineComponent({
     const gradientType = ref<GradientType>('linear')
     const gradientStartColor = ref('#000000')
     const gradientEndColor = ref('#38bdf8')
+    const radius = ref(0)
 
     const stargazersCount = ref(800)
 
@@ -121,6 +122,7 @@ const App = defineComponent({
       gradientEndColor,
       usageExample,
       rows,
+      radius,
     }
   }
 })

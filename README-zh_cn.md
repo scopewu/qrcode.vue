@@ -81,6 +81,7 @@ createApp({
     :gradient-start-color="gradientStartColor"
     :gradient-end-color="gradientEndColor"
     :image-settings='imageSettings'
+    :radius="radius"
   />
 </template>
 <script setup lang="ts">
@@ -110,6 +111,8 @@ createApp({
   const gradientType = ref<GradientType>('linear')
   const gradientStartColor = ref('#000000')
   const gradientEndColor = ref('#38bdf8')
+  // 可传入圆角半径：
+  const radius = ref(0)
 </script>
 ```
 
@@ -213,6 +216,22 @@ createApp({
 - 默认值: `#ffffff`
 
 渐变的结束颜色。
+
+### `radius`
+
+- 类型：`number`
+- 默认值：`0`
+
+每个二维码模块的圆角半径，相对于模块宽度的比例。接受 `0` 到 `0.5` 的值。
+
+- `0`（默认）- 方形模块，直角
+- `0.5` - 最大圆角，模块变为圆形
+
+圆角是上下文感知的：相邻深色模块之间的内角保持直角，外角则圆角化。
+
+```html
+<qrcode-vue value="test" :radius="0.35" />
+```
 
 ### `class`
 

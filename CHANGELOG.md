@@ -1,3 +1,9 @@
+## [3.9.0]
+
+### Feature
+
+- Support `radius` prop for QRCode module corner rounding. The rounding is context-aware, keeping inner corners sharp while rounding outer corners. Supports both SVG and Canvas rendering modes.
+
 ## [3.8.0] - 2026-02-02
 
 ### Performance
