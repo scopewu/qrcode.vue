@@ -185,8 +185,6 @@ function getImageSettings(
   return { x, y, h, w, borderRadius }
 }
 
-const emptyImageProps: { x: number; y: number; width: number; height: number; borderRadius: number } = { x: 0, y: 0, width: 0, height: 0, borderRadius: 0 }
-
 function useQRCode(props: {
   value: string
   level: Level
@@ -208,9 +206,7 @@ function useQRCode(props: {
     return generatePath(cells.value, margin.value)
   })
   const imageProps = computed(() => {
-    if (!props.imageSettings.src) {
-      return emptyImageProps
-    }
+    if (!props.imageSettings.src) return null
 
     const settings = getImageSettings(cells.value, props.size, margin.value, props.imageSettings)
     return  {
@@ -223,7 +219,7 @@ function useQRCode(props: {
   })
 
   const imageBorderProps = computed(() => {
-    if (!props.imageSettings.excavate || !props.imageSettings.src) return null
+    if (!props.imageSettings.excavate || !imageProps.value) return null
     const borderThickness = IMAGE_EXCAVATE_THICKNESS / (props.size / numCells.value)
     return {
       x: imageProps.value.x - borderThickness,
@@ -241,7 +237,6 @@ const QRCodeProps = {
   value: {
     type: String,
     required: true,
-    default: '',
   },
   size: {
     type: Number,
@@ -355,8 +350,9 @@ export const QrcodeSvg = defineComponent({
     })
 
     const clipPathVNode = computed(() => {
+      if (!imageProps.value) return null
+
       const borderRadius = imageProps.value.borderRadius
-      if (!props.imageSettings.src) return null
       if (borderRadius <= 0) return null
 
       return h(
@@ -405,7 +401,7 @@ export const QrcodeSvg = defineComponent({
           rx: imageBorderProps.value.borderRadius,
           ry: imageBorderProps.value.borderRadius,
         }),
-        props.imageSettings.src && h('image', {
+        props.imageSettings.src && imageProps.value && h('image', {
           href: props.imageSettings.src,
           ...imageProps.value,
           ...(imageProps.value.borderRadius > 0 ? { 'clip-path': `url(#${qrLogoClipPathId})` } : {}),
@@ -422,7 +418,7 @@ export const QrcodeCanvas = defineComponent({
     const { margin, cells, numCells, fgPath, imageProps, imageBorderProps } = useQRCode(props)
 
     const canvasEl = ref<HTMLCanvasElement | null>(null)
-    const imageRef = ref<HTMLImageElement | null>(null)
+    const imageEl = ref<HTMLImageElement | null>(null)
 
     const drawRoundedRect = (
       ctx: CanvasRenderingContext2D,
@@ -463,7 +459,7 @@ export const QrcodeCanvas = defineComponent({
         return
       }
 
-      const image = imageRef.value
+      const image = imageEl.value
 
       const devicePixelRatio = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
       const scale = (size / numCells.value) * devicePixelRatio
@@ -508,7 +504,7 @@ export const QrcodeCanvas = defineComponent({
 
       const showImage = props.imageSettings.src && image && image.naturalWidth !== 0 && image.naturalHeight !== 0
 
-      if (showImage) {
+      if (showImage && imageProps.value) {
         if (imageBorderProps.value) {
           const imageBorder = imageBorderProps.value
 
@@ -573,7 +569,7 @@ export const QrcodeCanvas = defineComponent({
           },
         ),
         props.imageSettings.src && h('img', {
-          ref: imageRef,
+          ref: imageEl,
           src: props.imageSettings.src,
           style: {display: 'none'},
           onLoad: generate,
