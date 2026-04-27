@@ -930,9 +930,9 @@ describe('QrcodeVue', () => {
           const d = path.attributes('d')
 
           expect(d).toBeDefined()
-          const arcMatches = d!.match(/[aA]/g)
+          const arcMatches = d?.match(/[aA]/g)
           expect(arcMatches).toBeDefined()
-          expect(arcMatches!.length).toBeGreaterThan(0)
+          expect(arcMatches?.length).toBeGreaterThan(0)
         })
 
         it('2x2 block of dark modules has no inner corner arcs', () => {
