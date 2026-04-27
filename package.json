@@ -8,10 +8,10 @@
   "browser": "./dist/qrcode.vue.browser.js",
   "unpkg": "./dist/qrcode.vue.browser.min.js",
   "jsdelivr": "./dist/qrcode.vue.browser.min.js",
-  "types": "./dist/src/index.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/src/index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/qrcode.vue.esm.js",
       "require": "./dist/qrcode.vue.cjs.js"
     },

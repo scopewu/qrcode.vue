@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 import ts from 'rollup-plugin-typescript2'
 import terser from '@rollup/plugin-terser'
 
@@ -14,6 +16,20 @@ const banner =
   '\n * MIT License.' +
   '\n */'
 const sourcemap = false
+
+function cleanExtraDts() {
+  let cleaned = false
+  return {
+    name: 'clean-extra-dts',
+    writeBundle() {
+      if (cleaned) return
+      cleaned = true
+      try {
+        fs.unlinkSync('dist/qrcodegen.d.ts')
+      } catch (e) {}
+    },
+  }
+}
 
 function createEntry(options) {
   /** @type import('rollup').RollupOptions */
@@ -39,9 +55,10 @@ function createEntry(options) {
           compilerOptions: {
             declaration: options.format === 'es',
           },
-          exclude: ['src', 'example', 'test'],
+          exclude: ['example', 'test', '**/*.config.ts'],
         }
       }),
+      cleanExtraDts(),
     ],
   }
 
