@@ -1,4 +1,4 @@
-import { computed, defineComponent, Fragment, h, onMounted, PropType, ref, useId, watchEffect } from 'vue'
+import { computed, defineComponent, ExtractPropTypes, Fragment, h, onMounted, PropType, ref, useId, watchEffect } from 'vue'
 import QR from './qrcodegen'
 
 type Modules = ReturnType<QR.QrCode['getModules']>
@@ -185,14 +185,9 @@ function getImageSettings(
   return { x, y, h, w, borderRadius }
 }
 
-function useQRCode(props: {
-  value: string
-  level: Level
-  margin: number
-  size: number
-  imageSettings: ImageSettings
-  radius: number
-}) {
+type QRCodePropsType = ExtractPropTypes<typeof QRCodeProps>
+
+function useQRCode(props: QRCodePropsType) {
   const margin = computed(() => (props.margin ?? DEFAULT_MARGIN) >>> 0)
   const cells = computed(() => {
     const level = validErrorCorrectLevel(props.level) ? props.level : defaultErrorCorrectLevel
@@ -237,6 +232,7 @@ const QRCodeProps = {
   value: {
     type: String,
     required: true,
+    default: '',
   },
   size: {
     type: Number,
