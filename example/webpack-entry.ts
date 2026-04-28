@@ -29,14 +29,15 @@ const App = defineComponent({
     const gradientEndColor = ref('#38bdf8')
     const radius = ref(0)
 
+    const activeTab = ref<'docs' | 'playground'>('docs')
     const stargazersCount = ref(800)
 
-    let _ = imageSettings.value
+    let cachedImageSettings = imageSettings.value
     watch(includeImage, (newVal) => {
       if (newVal) {
-        imageSettings.value = _
+        imageSettings.value = cachedImageSettings
       } else {
-        _ = imageSettings.value
+        cachedImageSettings = imageSettings.value
         imageSettings.value = {
           src: '',
           width: 0,
@@ -48,15 +49,15 @@ const App = defineComponent({
     })
 
     const usageExample = computed(() => {
-      let _ = ''
+      let code = ''
 
       if (renderAs.value === 'svg') {
-        _ += 'import { QrcodeSvg } from \'qrcode.vue\''
+        code += 'import { QrcodeSvg } from \'qrcode.vue\''
       } else {
-        _ += 'import { QrcodeCanvas } from \'qrcode.vue\''
+        code += 'import { QrcodeCanvas } from \'qrcode.vue\''
       }
 
-      _+= `
+      code += `
 
 <${renderAs.value === 'svg' ? 'qrcode-svg' : 'qrcode-canvas'}
   :value="${value.value}"
@@ -69,14 +70,14 @@ const App = defineComponent({
 `
 
       if (gradient.value) {
-        _ += `  :gradient-type="${gradientType.value}"
+        code += `  :gradient-type="${gradientType.value}"
   :gradient-start-color="${gradientStartColor.value}"
   :gradient-end-color="${gradientEndColor.value}"
 `
       }
 
       if (includeImage.value) {
-        _ += `  :image-settings="{
+        code += `  :image-settings="{
       src: '${imageSettings.value.src}',
       width: ${imageSettings.value.width},
       height: ${imageSettings.value.height},
@@ -86,13 +87,9 @@ const App = defineComponent({
 `
       }
 
-      _ += `/>`
+      code += '/>'
 
-      return _
-    })
-    const rows = computed(() => {
-      const lineBreaks = usageExample.value.match(/\n/g)
-      return lineBreaks ? lineBreaks.length + 1 : 1
+      return code
     })
 
     onMounted(() => {
@@ -106,6 +103,7 @@ const App = defineComponent({
     })
 
     return {
+      activeTab,
       value,
       size,
       level,
@@ -121,7 +119,6 @@ const App = defineComponent({
       gradientStartColor,
       gradientEndColor,
       usageExample,
-      rows,
       radius,
     }
   }
@@ -129,7 +126,7 @@ const App = defineComponent({
 
 createApp(App).mount('#root')
 
-function fetchGitHubRepoStarCount(callback: Function) {
+function fetchGitHubRepoStarCount(callback: (detail: unknown) => void) {
   const repo = 'https://api.github.com/repos/scopewu/qrcode.vue'
 
   try {
@@ -137,12 +134,12 @@ function fetchGitHubRepoStarCount(callback: Function) {
 
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
-        callback(JSON.parse(xhr.response))
+        callback(JSON.parse(xhr.responseText))
       }
     }
 
     xhr.onerror = function (ev) {
-      console.log(ev)
+      console.error(ev)
       callback({})
     }
 
@@ -150,7 +147,7 @@ function fetchGitHubRepoStarCount(callback: Function) {
     xhr.withCredentials = false
     xhr.send();
   } catch (e) {
-    console.log(e)
+    console.error(e)
     callback({})
   }
 }

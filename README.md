@@ -187,6 +187,22 @@ The foreground color of qrcode.
 
 The settings to support qrcode image logo.
 
+### `radius`
+
+- Type: `number`
+- Default: `0`
+
+The corner radius of each QR module, as a ratio of the module width. Accepts values from `0` to `0.5`.
+
+- `0` (default) - square modules with sharp corners
+- `0.5` - maximum rounding, modules become circles
+
+The rounding is context-aware: inner corners between adjacent dark modules remain sharp, while outer corners are rounded.
+
+```html
+<qrcode-vue value="test" :radius="0.35" />
+```
+
 ### `gradient`
 
 - Type: `boolean`
@@ -214,22 +230,6 @@ The start color of the gradient.
 - Default: `#ffffff`
 
 The end color of the gradient.
-
-### `radius`
-
-- Type: `number`
-- Default: `0`
-
-The corner radius of each QR module, as a ratio of the module width. Accepts values from `0` to `0.5`.
-
-- `0` (default) - square modules with sharp corners
-- `0.5` - maximum rounding, modules become circles
-
-The rounding is context-aware: inner corners between adjacent dark modules remain sharp, while outer corners are rounded.
-
-```html
-<qrcode-vue value="test" :radius="0.35" />
-```
 
 ### `class`
 

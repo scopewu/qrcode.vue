@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    content="width=device-width, initial-scale=1.0"
   />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <title>qrcode vue - A Vue.js component to generate QRCode.</title>
+  <title>qrcode.vue - A Vue.js component to generate QRCode.</title>
   <meta name="author" content="@scopewu" />
+  <link rel="author" href="https://tie.pub/me/">
   <meta name="Keywords" content="qrcode.vue,qrcode,component" />
   <meta
     name="description"
@@ -30,179 +31,395 @@
   <script>
     (() => {
       "use strict"
-
       const getPreferredTheme = () => {
         return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
       }
-
       const setTheme = theme => {
-        if (theme === "auto") {
-          document.documentElement.setAttribute("data-bs-theme", (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"))
-        } else {
-          document.documentElement.setAttribute("data-bs-theme", theme)
-        }
+        document.documentElement.setAttribute("data-bs-theme", theme)
       }
-
       setTheme(getPreferredTheme())
-
       window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
         setTheme(getPreferredTheme())
       })
     })()
   </script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
 </head>
 <body>
 <div id="root">
-  <div class="container-fluid pb-5">
-    <header class="border-bottom">
-      <div class="flex align-items-center justify-content-between">
-        <h1>qrcode.vue</h1>
-        <div class="space-x-2">
-          <a
-            href="https://github.com/scopewu/qrcode.vue"
-            class="link-body-emphasis link-underline-opacity-25 link-underline-opacity-100-hover"
-            target="_blank"
-            rel="noopener"
-          >GitHub</a>
-          <a
-            href="https://tie.pub"
-            class="link-body-emphasis link-underline-opacity-25 link-underline-opacity-100-hover"
-            target="_blank"
-          >Author</a>
-        </div>
-      </div>
-      <div>A Vue.js component for QRCode. Supports both Vue 2 and Vue 3. It offers two QR code formats: canvas and svg. Customize QR code size, margins, error correction level, foreground and background colors, logo images, and gradient effects.</div>
-      <div class="widget">
-        <a class="gh-btn" href="https://github.com/scopewu/qrcode.vue" rel="noopener" target="_blank" aria-label="Star qrcode.vue on GitHub">
-          <svg viewBox="0 0 16 16" width="14" height="14" class="octicon octicon-mark-github" aria-hidden="true">
-            <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
-          </svg>
-          <span>&nbsp;</span>
-          <span>Star</span>
-        </a>
-        <a class="gh-star" href="https://github.com/scopewu/qrcode.vue/stargazers" rel="noopener" target="_blank" :aria-label="`${stargazersCount} stargazers on GitHub`" v-cloak>{{ stargazersCount }}</a>
-      </div>
-    </header>
-    <form class="row g-3">
-      <div class="col-12">
-        <label for="value" class="form-label">value:</label>
-        <textarea v-model="value" class="form-control" id="value" rows="3"></textarea>
-      </div>
-      <div class="col-6">
-        <label for="size" class="form-label">size: <span v-cloak>{{size}}</span></label>
-        <input type="range" v-model="size" min="100" max="720" step="20" class="form-range" id="size" />
-      </div>
-      <div class="col-6">
-        <label for="margin" class="form-label">margin: <span v-cloak>{{margin}}</span></label>
-        <input type="range" v-model="margin" min="0" max="10" step="1" class="form-range" id="margin" />
-      </div>
-      <div class="col-6">
-        <label for="level" class="form-label">level:</label>
-        <select v-model="level" class="form-select" id="level">
-          <option value="L">L</option>
-          <option value="M">M</option>
-          <option value="Q">Q</option>
-          <option value="H">H</option>
-        </select>
-      </div>
-      <div class="col-6">
-        <label for="RenderAs" class="form-label">render-as:</label>
-        <select v-model="renderAs" class="form-select" id="RenderAs">
-          <option value="svg">svg</option>
-          <option value="canvas">canvas</option>
-        </select>
-      </div>
-      <div class="col-6">
-        <label for="background" class="form-label">background:</label>
-        <input type="color" class="form-control form-control-color" id="background" v-model="background">
-      </div>
-      <div class="col-6">
-        <label for="foreground" class="form-label">foreground:</label>
-        <input type="color" class="form-control form-control-color" id="foreground" v-model="foreground">
-      </div>
-      <div class="col-6">
-        <label for="radius" class="form-label">radius: <span v-cloak>{{radius}}</span></label>
-        <input type="range" v-model.number="radius" min="0" max="0.5" step="0.1" class="form-range" id="radius" />
-      </div>
-      <div class="col-6">
-        <div class="form-check" style="padding-top: 1.75rem">
-          <label for="gradient" class="form-label">gradient</label>
-          <input class="form-check-input" type="checkbox" id="gradient" v-model="gradient">
-        </div>
-      </div>
-      <template v-if="gradient">
-        <div class="col-12">
-          <label for="gradient-type" class="form-label">gradient-type:</label>
-          <select v-model="gradientType" class="form-select" id="gradient-type">
-            <option value="linear">Linear</option>
-            <option value="radial">Radial</option>
-          </select>
-        </div>
-        <div class="col-6">
-          <label for="gradientStartColor" class="form-label">gradient-start-color:</label>
-          <input type="color" class="form-control form-control-color" id="gradientStartColor" v-model="gradientStartColor">
-        </div>
-        <div class="col-6">
-          <label for="gradientEndColor" class="form-label">gradient-end-color:</label>
-          <input type="color" class="form-control form-control-color" id="gradientEndColor" v-model="gradientEndColor">
-        </div>
-      </template>
-      <div class="col-12">
-        <label for="includeImage" class="form-label">Include Image:</label>
-        <input type="checkbox" class="form-check-input" id="includeImage" v-model="includeImage">
-      </div>
-      <fieldset class='row' v-if='includeImage'>
-        <legend>ImageSettings</legend>
-        <div class="col-6">
-          <label for="imageSrc" class="form-label">src:</label>
-          <input type="text" class="form-control" id="imageSrc" v-model="imageSettings.src" placeholder="Image URL">
-        </div>
-        <div class="col-6">
-          <label for="imageBorderRadius" class="form-label">borderRadius:</label>
-          <input type="number" class="form-control" id="imageBorderRadius" v-model.number="imageSettings.borderRadius" placeholder="Image borderRadius">
-        </div>
-        <div class="col-6">
-          <label for="imageWidth" class="form-label">width:</label>
-          <input type="number" class="form-control" id="imageWidth" v-model.number="imageSettings.width" placeholder="Image Width">
-        </div>
-        <div class="col-6">
-          <label for="imageHeight" class="form-label">height:</label>
-          <input type="number" class="form-control" id="imageHeight" v-model.number="imageSettings.height" placeholder="Image Height">
-        </div>
-        <div class="col-6">
-          <label for="imageExcavate" class="form-label">excavate:</label>
-          <input type="checkbox" class="form-check-input" id="imageExcavate" v-model="imageSettings.excavate">
-        </div>
-      </fieldset>
-      <div class="col-6">
-        <label class="form-label">QR_CODE:</label>
-        <div class="form-control-static">
-          <div class="border qrcode-wrap">
-            <qrcode-vue
-              class="qrcode"
-              :value="value"
-              :margin="Number(margin)"
-              :render-as="renderAs"
-              :size="Number(size)"
-              :level="level"
-              :background="background"
-              :foreground="foreground"
-              :gradient="gradient"
-              :gradient-type="gradientType"
-              :gradient-start-color="gradientStartColor"
-              :gradient-end-color="gradientEndColor"
-              :image-settings="imageSettings"
-              :radius="radius"
-            ></qrcode-vue>
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div class="app-header-top">
+        <h1 class="app-title">qrcode.vue</h1>
+        <div class="app-meta">
+          <div class="widget">
+            <a class="gh-btn" href="https://github.com/scopewu/qrcode.vue" rel="noopener" target="_blank" aria-label="Star qrcode.vue on GitHub">
+              <svg viewBox="0 0 16 16" width="14" height="14" class="octicon octicon-mark-github" aria-hidden="true">
+                <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+              </svg>
+              <span>Star</span>
+            </a>
+            <a class="gh-star" href="https://github.com/scopewu/qrcode.vue/stargazers" rel="noopener nofollow" target="_blank" :aria-label="`${stargazersCount} stargazers on GitHub`" v-cloak>{{ stargazersCount }}</a>
           </div>
         </div>
       </div>
-      <div class='col-6'>
-        <label class="form-label" for="usageExample">Usage:</label>
-        <textarea class='form-textarea' disabled :rows="rows" cols="41" id="usageExample">{{usageExample}}</textarea>
+      <p class="app-subtitle"><a href="https://github.com/scopewu/qrcode.vue" target="_blank" rel="noopener">View on GitHub →</a></p>
+      <p class="app-desc">A Vue.js component for QRCode. Supports both Vue 2 and Vue 3. It offers two QR code formats: canvas and svg. Customize size, margins, error correction level, foreground and background colors, logo images, and gradient effects.</p>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <nav class="tabs">
+      <button
+        class="tab-btn"
+        :class="{ active: activeTab === 'docs' }"
+        @click="activeTab = 'docs'"
+        type="button"
+      >Documentation</button>
+      <button
+        class="tab-btn"
+        :class="{ active: activeTab === 'playground' }"
+        @click="activeTab = 'playground'"
+        type="button"
+      >Playground</button>
+    </nav>
+
+    <section class="tab-panel" :class="{ active: activeTab === 'docs' }">
+      <div class="doc-section">
+        <h2>Installation</h2>
+        <pre><code>npm install --save qrcode.vue
+# or
+yarn add qrcode.vue</code></pre>
+        <p>The component provides three build formats:</p>
+        <table>
+          <thead>
+            <tr><th>File</th><th>Format</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>qrcode.vue.cjs.js</code></td><td>CommonJS</td></tr>
+            <tr><td><code>qrcode.vue.esm.js</code></td><td>ES module</td></tr>
+            <tr><td><code>qrcode.vue.browser.min.js</code></td><td>UMD (browser)</td></tr>
+          </tbody>
+        </table>
       </div>
-    </form>
-  </div>
+
+      <div class="doc-section">
+        <h2>Quick Start</h2>
+        <pre><code>import { createApp } from 'vue'
+import QrcodeVue from 'qrcode.vue'
+
+createApp({
+  data: { value: 'https://example.com' },
+  template: '&lt;qrcode-vue :value="value"&gt;&lt;/qrcode-vue&gt;',
+  components: { QrcodeVue },
+}).mount('#root')</code></pre>
+      </div>
+
+      <div class="doc-section">
+        <h2>Component Props</h2>
+        <table>
+          <thead>
+            <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>value</code></td>
+              <td><code>string</code></td>
+              <td><code>''</code></td>
+              <td>The content to encode in the QR code.</td>
+            </tr>
+            <tr>
+              <td><code>size</code></td>
+              <td><code>number</code></td>
+              <td><code>100</code></td>
+              <td>The size (width and height) of the QR code element in pixels.</td>
+            </tr>
+            <tr>
+              <td><code>render-as</code></td>
+              <td><code>'canvas' | 'svg'</code></td>
+              <td><code>'canvas'</code></td>
+              <td>Render format. Use <code>svg</code> for SSR compatibility.</td>
+            </tr>
+            <tr>
+              <td><code>margin</code></td>
+              <td><code>number</code></td>
+              <td><code>0</code></td>
+              <td>Width of the quiet zone around the QR code.</td>
+            </tr>
+            <tr>
+              <td><code>level</code></td>
+              <td><code>'L' | 'M' | 'Q' | 'H'</code></td>
+              <td><code>'L'</code></td>
+              <td>Error correction level. Higher levels allow more damage recovery.</td>
+            </tr>
+            <tr>
+              <td><code>background</code></td>
+              <td><code>string</code></td>
+              <td><code>'#ffffff'</code></td>
+              <td>Background color of the QR code.</td>
+            </tr>
+            <tr>
+              <td><code>foreground</code></td>
+              <td><code>string</code></td>
+              <td><code>'#000000'</code></td>
+              <td>Foreground color of the QR code modules.</td>
+            </tr>
+            <tr>
+              <td><code>gradient</code></td>
+              <td><code>boolean</code></td>
+              <td><code>false</code></td>
+              <td>Enable gradient fill for the QR code modules.</td>
+            </tr>
+            <tr>
+              <td><code>gradient-type</code></td>
+              <td><code>'linear' | 'radial'</code></td>
+              <td><code>'linear'</code></td>
+              <td>Type of gradient when <code>gradient</code> is enabled.</td>
+            </tr>
+            <tr>
+              <td><code>gradient-start-color</code></td>
+              <td><code>string</code></td>
+              <td><code>'#000000'</code></td>
+              <td>Start color of the gradient.</td>
+            </tr>
+            <tr>
+              <td><code>gradient-end-color</code></td>
+              <td><code>string</code></td>
+              <td><code>'#ffffff'</code></td>
+              <td>End color of the gradient.</td>
+            </tr>
+            <tr>
+              <td><code>radius</code></td>
+              <td><code>number</code></td>
+              <td><code>0</code></td>
+              <td>Corner radius ratio (0 to 0.5) for each module. 0.5 produces circles.</td>
+            </tr>
+            <tr>
+              <td><code>image-settings</code></td>
+              <td><code>ImageSettings</code></td>
+              <td><code>{}</code></td>
+              <td>Logo image settings. See details below.</td>
+            </tr>
+            <tr>
+              <td><code>class</code></td>
+              <td><code>string</code></td>
+              <td><code>''</code></td>
+              <td>CSS class name applied to the QR code element.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="doc-section">
+        <h2>Image Settings</h2>
+        <pre><code>type ImageSettings = {
+  src: string            // URL of the logo image
+  x?: number             // Horizontal offset (centers by default)
+  y?: number             // Vertical offset (centers by default)
+  height: number         // Height of the image in pixels
+  width: number          // Width of the image in pixels
+  excavate?: boolean     // Remove modules behind the image
+  borderRadius?: number  // Border radius of the image
+}</code></pre>
+      </div>
+
+      <div class="doc-section">
+        <h2>TypeScript Example</h2>
+        <pre><code>&lt;script setup lang="ts"&gt;
+import { ref } from 'vue'
+import QrcodeVue from 'qrcode.vue'
+import type { Level, RenderAs, GradientType, ImageSettings } from 'qrcode.vue'
+
+const value = ref('https://example.com')
+const level = ref&lt;Level&gt;('M')
+const renderAs = ref&lt;RenderAs&gt;('svg')
+const background = ref('#ffffff')
+const foreground = ref('#000000')
+const margin = ref(0)
+
+const imageSettings = ref&lt;ImageSettings&gt;({
+  src: 'https://github.com/scopewu.png',
+  width: 30,
+  height: 30,
+  excavate: true,
+})
+
+const gradient = ref(false)
+const gradientType = ref&lt;GradientType&gt;('linear')
+const gradientStartColor = ref('#000000')
+const gradientEndColor = ref('#38bdf8')
+const radius = ref(0)
+&lt;/script&gt;</code></pre>
+      </div>
+
+      <div class="doc-section">
+        <h2>Named Exports (v3.5+)</h2>
+        <p>Starting from v3.5, separate <code>QrcodeCanvas</code> and <code>QrcodeSvg</code> components are exported:</p>
+        <pre><code>import { QrcodeCanvas, QrcodeSvg } from 'qrcode.vue'
+
+// CommonJS / CDN usage
+const { default: QrcodeVue, QrcodeCanvas, QrcodeSvg } = require('qrcode.vue')</code></pre>
+      </div>
+    </section>
+
+    <section class="tab-panel" :class="{ active: activeTab === 'playground' }">
+      <div class="playground">
+        <div>
+          <div class="card">
+            <h3 class="card-title">Preview</h3>
+            <div class="preview-wrap">
+              <qrcode-vue
+                class="qrcode"
+                :value="value"
+                :margin="Number(margin)"
+                :render-as="renderAs"
+                :size="Number(size)"
+                :level="level"
+                :background="background"
+                :foreground="foreground"
+                :gradient="gradient"
+                :gradient-type="gradientType"
+                :gradient-start-color="gradientStartColor"
+                :gradient-end-color="gradientEndColor"
+                :image-settings="imageSettings"
+                :radius="radius"
+              ></qrcode-vue>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">Generated Code</h3>
+            <pre class="code-block">{{ usageExample }}</pre>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <h3 class="card-title">Settings</h3>
+
+            <div class="form-group">
+              <label for="value" class="form-label">Value</label>
+              <textarea v-model="value" id="value" rows="3" placeholder="Enter text to encode"></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="size" class="form-label">Size <span class="hint" v-cloak>{{ size }}px</span></label>
+                <input type="range" v-model="size" min="100" max="720" step="20" id="size" />
+              </div>
+              <div class="form-group">
+                <label for="margin" class="form-label">Margin <span class="hint" v-cloak>{{ margin }}px</span></label>
+                <input type="range" v-model="margin" min="0" max="10" step="1" id="margin" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="level" class="form-label">Level</label>
+                <select v-model="level" id="level">
+                  <option value="L">L (Low)</option>
+                  <option value="M">M (Medium)</option>
+                  <option value="Q">Q (Quartile)</option>
+                  <option value="H">H (High)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="renderAs" class="form-label">Render As</label>
+                <select v-model="renderAs" id="renderAs">
+                  <option value="svg">SVG</option>
+                  <option value="canvas">Canvas</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="background" class="form-label">Background</label>
+                <input type="color" id="background" v-model="background">
+              </div>
+              <div class="form-group">
+                <label for="foreground" class="form-label">Foreground</label>
+                <input type="color" id="foreground" v-model="foreground">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="radius" class="form-label">Radius <span class="hint" v-cloak>{{ radius }}</span></label>
+                <input type="range" v-model.number="radius" min="0" max="0.5" step="0.1" id="radius" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Gradient</label>
+                <div class="form-check">
+                  <input type="checkbox" id="gradient" v-model="gradient">
+                  <label for="gradient" class="form-label">Enable gradient fill</label>
+                </div>
+              </div>
+            </div>
+
+            <template v-if="gradient">
+              <div class="form-group">
+                <label for="gradient-type" class="form-label">Gradient Type</label>
+                <select v-model="gradientType" id="gradient-type">
+                  <option value="linear">Linear</option>
+                  <option value="radial">Radial</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="gradientStartColor" class="form-label">Start Color</label>
+                  <input type="color" id="gradientStartColor" v-model="gradientStartColor">
+                </div>
+                <div class="form-group">
+                  <label for="gradientEndColor" class="form-label">End Color</label>
+                  <input type="color" id="gradientEndColor" v-model="gradientEndColor">
+                </div>
+              </div>
+            </template>
+
+            <div class="form-group">
+              <label class="form-label">Include Image</label>
+              <div class="form-check">
+                <input type="checkbox" id="includeImage" v-model="includeImage">
+                <label for="includeImage" class="form-label">Show logo image</label>
+              </div>
+            </div>
+
+            <div class="fieldset-group" v-if="includeImage">
+              <legend>Image Settings</legend>
+              <div class="form-group">
+                <label for="imageSrc" class="form-label">Source URL</label>
+                <input type="text" id="imageSrc" v-model="imageSettings.src" placeholder="Image URL">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="imageWidth" class="form-label">Width</label>
+                  <input type="number" id="imageWidth" v-model.number="imageSettings.width" placeholder="Width in px">
+                </div>
+                <div class="form-group">
+                  <label for="imageHeight" class="form-label">Height</label>
+                  <input type="number" id="imageHeight" v-model.number="imageSettings.height" placeholder="Height in px">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="imageBorderRadius" class="form-label">Border Radius</label>
+                  <input type="number" id="imageBorderRadius" v-model.number="imageSettings.borderRadius" placeholder="Radius in px">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Excavate</label>
+                  <div class="form-check">
+                    <input type="checkbox" id="imageExcavate" v-model="imageSettings.excavate">
+                    <label for="imageExcavate" class="form-label">Remove modules behind image</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 </div>
 </body>
 </html>
