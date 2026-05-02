@@ -73,13 +73,13 @@
       <button
         class="tab-btn"
         :class="{ active: activeTab === 'docs' }"
-        @click="activeTab = 'docs'"
+        @click="switchTab('docs')"
         type="button"
       >Documentation</button>
       <button
         class="tab-btn"
         :class="{ active: activeTab === 'playground' }"
-        @click="activeTab = 'playground'"
+        @click="switchTab('playground')"
         type="button"
       >Playground</button>
     </nav>
@@ -165,6 +165,12 @@ createApp({
               <td>Foreground color of the QR code modules.</td>
             </tr>
             <tr>
+              <td><code>radius</code></td>
+              <td><code>number</code></td>
+              <td><code>0</code></td>
+              <td>Corner radius ratio (0 to 0.5) for each module. 0.5 produces circles.</td>
+            </tr>
+            <tr>
               <td><code>gradient</code></td>
               <td><code>boolean</code></td>
               <td><code>false</code></td>
@@ -187,12 +193,6 @@ createApp({
               <td><code>string</code></td>
               <td><code>'#ffffff'</code></td>
               <td>End color of the gradient.</td>
-            </tr>
-            <tr>
-              <td><code>radius</code></td>
-              <td><code>number</code></td>
-              <td><code>0</code></td>
-              <td>Corner radius ratio (0 to 0.5) for each module. 0.5 produces circles.</td>
             </tr>
             <tr>
               <td><code>image-settings</code></td>

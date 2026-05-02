@@ -1,4 +1,4 @@
-import { computed, createApp, defineComponent, onMounted, ref, watch } from 'vue'
+import { computed, createApp, defineComponent, nextTick, onMounted, ref, watch } from 'vue'
 import QrcodeVue from '../src'
 import type { Level, RenderAs, GradientType, ImageSettings } from '../src'
 import './styles.css'
@@ -31,6 +31,16 @@ const App = defineComponent({
 
     const activeTab = ref<'docs' | 'playground'>('docs')
     const stargazersCount = ref(800)
+
+    const switchTab = (tab: 'docs' | 'playground') => {
+      activeTab.value = tab
+      nextTick(() => {
+        const tabsEl = document.querySelector<HTMLElement>('.app-main')
+        if (tabsEl && window.scrollY > tabsEl.offsetTop + 30) {
+          window.scrollTo({ top: tabsEl.offsetTop - 10, behavior: 'smooth' })
+        }
+      })
+    }
 
     let cachedImageSettings = imageSettings.value
     watch(includeImage, (newVal) => {
@@ -67,6 +77,7 @@ const App = defineComponent({
   :foreground="${foreground.value}"
   :render-as="${renderAs.value}"
   :margin="${margin.value}"
+  :radius="${radius.value}"
 `
 
       if (gradient.value) {
@@ -104,6 +115,7 @@ const App = defineComponent({
 
     return {
       activeTab,
+      switchTab,
       value,
       size,
       level,

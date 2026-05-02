@@ -183,10 +183,14 @@ a:hover {
 
 /* Tabs */
 .tabs {
+  position: sticky;
+  top: 0;
   display: flex;
   gap: 0;
   border-bottom: 1px solid var(--border-color);
   margin-bottom: 2rem;
+  background: var(--bg-body);
+  z-index: 10;
 }
 
 .tab-btn {
