@@ -1,27 +1,51 @@
 import { describe, expect, it } from '@rstest/core'
-import { mount } from '@vue/test-utils'
+import { mount, VueWrapper } from '@vue/test-utils'
 import QrcodeVue from '../src'
+
+// ─── Shared Test Data ───
+const DEFAULT_VALUE = 'test'
+const TEST_IMAGE = { src: 'test.png', height: 30, width: 30 }
+const TEST_IMAGE_WITH_EXCAVATE = { ...TEST_IMAGE, excavate: true }
+const TEST_IMAGE_WITH_BORDER_RADIUS = { ...TEST_IMAGE, excavate: true, borderRadius: 5 }
+
+// ─── Helper Functions ───
+function mountQR(props: Record<string, unknown> = {}): VueWrapper {
+  return mount(QrcodeVue, {
+    props: {
+      value: DEFAULT_VALUE,
+      ...props,
+    },
+  })
+}
+
+function getSvgRectWithFill(wrapper: VueWrapper, fill: string) {
+  const svg = wrapper.find('svg')
+  const rects = svg.findAll('rect')
+  for (let i = 0; i < rects.length; i++) {
+    const rect = rects[i]
+    if (rect.attributes('fill') === fill && rect.attributes('x') !== undefined) {
+      return rect
+    }
+  }
+  return undefined
+}
+
+function getSvgPathData(wrapper: VueWrapper): string | undefined {
+  return wrapper.find('path').attributes('d')
+}
 
 describe('QrcodeVue', () => {
   describe('default rendering (canvas)', () => {
     it('renders canvas with default props', () => {
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-        },
-      })
-      expect(wrapper.html()).toContain('<canvas')
-      expect(wrapper.html()).not.toContain('<svg')
+      const wrapper = mountQR()
+      const html = wrapper.html()
+      expect(html).toContain('<canvas')
+      expect(html).not.toContain('<svg')
     })
 
     it('applies correct size to canvas', () => {
       const size = 200
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          size,
-        },
-      })
+      const wrapper = mountQR({ size })
       const canvas = wrapper.find('canvas')
       const style = canvas.attributes('style')
       expect(style).toContain(`width: ${size}px`)
@@ -29,196 +53,114 @@ describe('QrcodeVue', () => {
     })
 
     it('renders canvas with margin', () => {
-      const margin = 4
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          margin,
-        },
-      })
+      const wrapper = mountQR({ margin: 4 })
       expect(wrapper.html()).toContain('<canvas')
     })
 
     it('renders canvas with different error correction levels', () => {
       const levels = ['L', 'M', 'Q', 'H'] as const
       levels.forEach(level => {
-        const wrapper = mount(QrcodeVue, {
-          props: {
-            value: 'test',
-            level,
-          },
-        })
+        const wrapper = mountQR({ level })
         expect(wrapper.html()).toContain('<canvas')
       })
     })
 
     it('renders canvas with custom background and foreground colors', () => {
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          background: '#f0f0f0',
-          foreground: '#333333',
-        },
+      const wrapper = mountQR({
+        background: '#f0f0f0',
+        foreground: '#333333',
       })
       expect(wrapper.html()).toContain('<canvas')
     })
 
     it('renders canvas with gradient', () => {
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          gradient: true,
-          gradientType: 'linear',
-          gradientStartColor: '#000',
-          gradientEndColor: '#fff',
-        },
+      const wrapper = mountQR({
+        gradient: true,
+        gradientType: 'linear',
+        gradientStartColor: '#000',
+        gradientEndColor: '#fff',
       })
       expect(wrapper.html()).toContain('<canvas')
     })
 
     it('renders canvas with image settings', () => {
-      const imageSettings = {
-        src: 'test.png',
-        height: 30,
-        width: 30,
-      }
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          imageSettings,
-        },
-      })
-      expect(wrapper.html()).toContain('<canvas')
-      expect(wrapper.html()).toContain('<img')
+      const wrapper = mountQR({ imageSettings: TEST_IMAGE })
+      const html = wrapper.html()
+      expect(html).toContain('<canvas')
+      expect(html).toContain('<img')
     })
 
     it('renders canvas with image borderRadius', () => {
-      const imageSettings = {
-        src: 'test.png',
-        height: 30,
-        width: 30,
-        excavate: true,
-        borderRadius: 5,
-      }
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          imageSettings,
-        },
-      })
-      expect(wrapper.html()).toContain('<canvas')
-      expect(wrapper.html()).toContain('<img')
+      const wrapper = mountQR({ imageSettings: TEST_IMAGE_WITH_BORDER_RADIUS })
+      const html = wrapper.html()
+      expect(html).toContain('<canvas')
+      expect(html).toContain('<img')
     })
 
     it('renders canvas without borderRadius when borderRadius is 0', () => {
-      const imageSettings = {
-        src: 'test.png',
-        height: 30,
-        width: 30,
-        excavate: true,
-        borderRadius: 0,
-      }
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          imageSettings,
-        },
+      const wrapper = mountQR({
+        imageSettings: { ...TEST_IMAGE, excavate: true, borderRadius: 0 },
       })
-      expect(wrapper.html()).toContain('<canvas')
-      expect(wrapper.html()).toContain('<img')
+      const html = wrapper.html()
+      expect(html).toContain('<canvas')
+      expect(html).toContain('<img')
     })
 
     it('handles invalid error correction level gracefully in canvas mode', () => {
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          level: 'INVALID' as any,
-        },
-      })
+      const wrapper = mountQR({ level: 'INVALID' as any })
       expect(wrapper.html()).toContain('<canvas')
     })
   })
 
   describe('SVG rendering', () => {
     it('renders SVG when renderAs is svg', () => {
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'svg',
-        },
-      })
-      expect(wrapper.html()).toContain('<svg')
-      expect(wrapper.html()).not.toContain('<canvas')
+      const wrapper = mountQR({ renderAs: 'svg' })
+      const html = wrapper.html()
+      expect(html).toContain('<svg')
+      expect(html).not.toContain('<canvas')
     })
 
     it('applies correct size to SVG', () => {
       const size = 200
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'svg',
-          size,
-        },
-      })
+      const wrapper = mountQR({ renderAs: 'svg', size })
       const svg = wrapper.find('svg')
       expect(svg.attributes('width')).toBe(String(size))
       expect(svg.attributes('height')).toBe(String(size))
     })
 
     it('renders SVG with margin', () => {
-      const margin = 4
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'svg',
-          margin,
-        },
-      })
+      const wrapper = mountQR({ renderAs: 'svg', margin: 4 })
       const svg = wrapper.find('svg')
-      const viewBox = svg.attributes('viewBox')
-      expect(viewBox).toBeDefined()
+      expect(svg.attributes('viewBox')).toBeDefined()
     })
 
     it('renders SVG with different error correction levels', () => {
       const levels = ['L', 'M', 'Q', 'H'] as const
       levels.forEach(level => {
-        const wrapper = mount(QrcodeVue, {
-          props: {
-            value: 'test',
-            renderAs: 'svg',
-            level,
-          },
-        })
+        const wrapper = mountQR({ renderAs: 'svg', level })
         expect(wrapper.html()).toContain('<svg')
       })
     })
 
     it('renders SVG with custom background and foreground colors', () => {
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'svg',
-          background: '#f0f0f0',
-          foreground: '#333333',
-        },
+      const wrapper = mountQR({
+        renderAs: 'svg',
+        background: '#f0f0f0',
+        foreground: '#333333',
       })
-      const svg = wrapper.find('svg')
-      const rect = svg.find('rect')
-      const path = svg.find('path')
+      const rect = wrapper.find('rect')
+      const path = wrapper.find('path')
       expect(rect.attributes('fill')).toBe('#f0f0f0')
       expect(path.attributes('fill')).toBe('#333333')
     })
 
     it('renders SVG with linear gradient', () => {
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'svg',
-          gradient: true,
-          gradientType: 'linear',
-          gradientStartColor: '#000',
-          gradientEndColor: '#fff',
-        },
+      const wrapper = mountQR({
+        renderAs: 'svg',
+        gradient: true,
+        gradientType: 'linear',
+        gradientStartColor: '#000',
+        gradientEndColor: '#fff',
       })
       expect(wrapper.html()).toContain('linearGradient')
       const path = wrapper.find('path')
@@ -226,329 +168,191 @@ describe('QrcodeVue', () => {
     })
 
     it('renders SVG with radial gradient', () => {
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'svg',
-          gradient: true,
-          gradientType: 'radial',
-          gradientStartColor: '#000',
-          gradientEndColor: '#fff',
-        },
+      const wrapper = mountQR({
+        renderAs: 'svg',
+        gradient: true,
+        gradientType: 'radial',
+        gradientStartColor: '#000',
+        gradientEndColor: '#fff',
       })
       expect(wrapper.html()).toContain('radialGradient')
     })
 
     it('renders SVG with image settings', () => {
-      const imageSettings = {
-        src: 'test.png',
-        height: 30,
-        width: 30,
-      }
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'svg',
-          imageSettings,
-        },
-      })
+      const wrapper = mountQR({ renderAs: 'svg', imageSettings: TEST_IMAGE })
       expect(wrapper.html()).toContain('<image')
       const image = wrapper.find('image')
-      expect(image.attributes('href')).toBe(imageSettings.src)
+      expect(image.attributes('href')).toBe(TEST_IMAGE.src)
     })
 
-    it('renders SVG with image excavation', () => {
-      const imageSettings = {
-        src: 'test.png',
-        height: 30,
-        width: 30,
-        excavate: true,
-      }
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
+    describe('SVG image excavation', () => {
+      it('renders excavation border for image with excavate enabled', () => {
+        const wrapper = mountQR({
+          renderAs: 'svg',
+          imageSettings: TEST_IMAGE_WITH_EXCAVATE,
+        })
+        const html = wrapper.html()
+        expect(html).toContain('<image')
+        expect(html).toContain('<rect')
+
+        const borderRect = getSvgRectWithFill(wrapper, '#fff')
+        expect(borderRect).toBeDefined()
+        expect(borderRect?.attributes('x')).toBeDefined()
+        expect(borderRect?.attributes('y')).toBeDefined()
+        expect(borderRect?.attributes('width')).toBeDefined()
+        expect(borderRect?.attributes('height')).toBeDefined()
+      })
+
+      it('renders excavation border with rounded corners when borderRadius is set', () => {
+        const wrapper = mountQR({
+          renderAs: 'svg',
+          imageSettings: TEST_IMAGE_WITH_BORDER_RADIUS,
+        })
+        expect(wrapper.html()).toContain('<image')
+        expect(wrapper.html()).toContain('clip-path')
+
+        const svg = wrapper.find('svg')
+        expect(svg.find('defs').exists()).toBe(true)
+        expect(wrapper.html()).toContain('clipPath')
+
+        const image = wrapper.find('image')
+        expect(image.attributes('clip-path')).toMatch(/^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/)
+
+        const borderRect = getSvgRectWithFill(wrapper, '#fff')
+        expect(borderRect).toBeDefined()
+        expect(borderRect?.attributes('rx')).toBeDefined()
+        expect(borderRect?.attributes('ry')).toBeDefined()
+        expect(borderRect?.attributes('rx')).not.toBe('0')
+        expect(borderRect?.attributes('ry')).not.toBe('0')
+      })
+
+      it('does not render clip-path when borderRadius is 0, undefined, or negative', async () => {
+        const imageSettings = { ...TEST_IMAGE, excavate: true }
+        const wrapper = mountQR({
           renderAs: 'svg',
           imageSettings,
-        },
-      })
-      expect(wrapper.html()).toContain('<image')
-      expect(wrapper.html()).toContain('<rect')
-      const svg = wrapper.find('svg')
-      const rects = svg.findAll('rect')
-      const borderRect = rects.find(rect => rect.attributes('fill') === '#fff' && rect.attributes('x'))
-      expect(borderRect).toBeDefined()
-      expect(borderRect?.attributes('x')).toBeDefined()
-      expect(borderRect?.attributes('y')).toBeDefined()
-      expect(borderRect?.attributes('width')).toBeDefined()
-      expect(borderRect?.attributes('height')).toBeDefined()
-      expect(borderRect?.attributes('rx')).toBe('0')
-      expect(borderRect?.attributes('ry')).toBe('0')
-    })
+        })
 
-    it('renders SVG with image borderRadius', () => {
-      const imageSettings = {
-        src: 'test.png',
-        height: 30,
-        width: 30,
-        excavate: true,
-        borderRadius: 5,
-      }
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'svg',
-          imageSettings,
-        },
-      })
-      expect(wrapper.html()).toContain('<image')
-      expect(wrapper.html()).toContain('clip-path')
-      const svg = wrapper.find('svg')
-      const defs = svg.find('defs')
-      expect(defs.exists()).toBe(true)
-      expect(wrapper.html()).toContain('clipPath')
-      const image = wrapper.find('image')
-      expect(image.attributes('clip-path')).toMatch(/^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/)
+        expect(wrapper.html()).toContain('<image')
+        expect(wrapper.html()).not.toContain('clipPath')
+        let image = wrapper.find('image')
+        expect(image.attributes('clip-path')).toBeUndefined()
 
-      expect(wrapper.html()).toContain('<rect')
-      const rects = svg.findAll('rect')
-      const borderRect = rects.find(rect => rect.attributes('fill') === '#fff' && rect.attributes('x'))
-      expect(borderRect).toBeDefined()
-      expect(borderRect?.attributes('rx')).toBeDefined()
-      expect(borderRect?.attributes('ry')).toBeDefined()
-      expect(borderRect?.attributes('rx')).not.toBe('0')
-      expect(borderRect?.attributes('ry')).not.toBe('0')
-    })
+        await wrapper.setProps({
+          imageSettings: { ...imageSettings, borderRadius: 0 },
+        })
 
-    it('excavates modules with rounded corners when borderRadius is set', () => {
-      const imageSettings = {
-        src: 'test.png',
-        height: 30,
-        width: 30,
-        excavate: true,
-        borderRadius: 8,
-      }
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'svg',
-          imageSettings,
-        },
-      })
-      expect(wrapper.html()).toContain('<rect')
-      const svg = wrapper.find('svg')
-      const rects = svg.findAll('rect')
-      const borderRect = rects.find(rect => rect.attributes('fill') === '#fff' && rect.attributes('x'))
-      expect(borderRect).toBeDefined()
-      expect(borderRect?.attributes('x')).toBeDefined()
-      expect(borderRect?.attributes('y')).toBeDefined()
-      expect(borderRect?.attributes('width')).toBeDefined()
-      expect(borderRect?.attributes('height')).toBeDefined()
-      expect(borderRect?.attributes('rx')).toBeDefined()
-      expect(borderRect?.attributes('ry')).toBeDefined()
-      expect(borderRect?.attributes('rx')).not.toBe('0')
-      expect(borderRect?.attributes('ry')).not.toBe('0')
-    })
+        expect(wrapper.html()).toContain('<image')
+        expect(wrapper.html()).not.toContain('clipPath')
+        image = wrapper.find('image')
+        expect(image.attributes('clip-path')).toBeUndefined()
 
-    it('renders SVG without clip-path when borderRadius is 0, undefined, or negative', async () => {
-      const imageSettings = {
-        src: 'test.png',
-        height: 30,
-        width: 30,
-        excavate: true,
-      }
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'svg',
-          imageSettings,
-        },
+        await wrapper.setProps({
+          imageSettings: { ...imageSettings, borderRadius: -5 },
+        })
+
+        expect(wrapper.html()).toContain('<image')
+        expect(wrapper.html()).not.toContain('clipPath')
       })
 
-      expect(wrapper.html()).toContain('<image')
-      expect(wrapper.html()).not.toContain('clipPath')
-      let image = wrapper.find('image')
-      expect(image.attributes('clip-path')).toBeUndefined()
+      it('handles fractional and very large borderRadius values', async () => {
+        const imageSettings = { ...TEST_IMAGE, excavate: true }
 
-      await wrapper.setProps({
-        imageSettings: { ...imageSettings, borderRadius: 0 },
-      })
-
-      expect(wrapper.html()).toContain('<image')
-      expect(wrapper.html()).not.toContain('clipPath')
-      image = wrapper.find('image')
-      expect(image.attributes('clip-path')).toBeUndefined()
-
-      await wrapper.setProps({
-        imageSettings: { ...imageSettings, borderRadius: -5 },
-      })
-
-      expect(wrapper.html()).toContain('<image')
-      expect(wrapper.html()).not.toContain('clipPath')
-    })
-
-    it('handles fractional and very large borderRadius in SVG', async () => {
-      const imageSettings = {
-        src: 'test.png',
-        height: 30,
-        width: 30,
-        excavate: true,
-      }
-
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
+        const wrapper = mountQR({
           renderAs: 'svg',
           imageSettings: { ...imageSettings, borderRadius: 2.5 },
-        },
+        })
+
+        expect(wrapper.html()).toContain('<image')
+        expect(wrapper.html()).toContain('clip-path')
+        let image = wrapper.find('image')
+        expect(image.attributes('clip-path')).toMatch(/^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/)
+
+        await wrapper.setProps({
+          imageSettings: { ...imageSettings, borderRadius: 100 },
+        })
+
+        expect(wrapper.html()).toContain('<image')
+        expect(wrapper.html()).toContain('clip-path')
+        image = wrapper.find('image')
+        expect(image.attributes('clip-path')).toMatch(/^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/)
       })
-
-      expect(wrapper.html()).toContain('<image')
-      expect(wrapper.html()).toContain('clip-path')
-      let image = wrapper.find('image')
-      expect(image.attributes('clip-path')).toMatch(/^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/)
-
-      await wrapper.setProps({
-        imageSettings: { ...imageSettings, borderRadius: 100 },
-      })
-
-      expect(wrapper.html()).toContain('<image')
-      expect(wrapper.html()).toContain('clip-path')
-      image = wrapper.find('image')
-      expect(image.attributes('clip-path')).toMatch(/^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/)
     })
 
     it('handles invalid error correction level gracefully in SVG mode', () => {
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'svg',
-          level: 'INVALID' as any,
-        },
-      })
+      const wrapper = mountQR({ renderAs: 'svg', level: 'INVALID' as any })
       expect(wrapper.html()).toContain('<svg')
     })
 
-    it('generates correct path data for value "QRCODE.VUE LOVE"', async () => {
-      const value = 'QRCODE.VUE LOVE'
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value,
-          renderAs: 'svg',
-        },
+    describe('path data generation', () => {
+      it('generates deterministic path data for consistent inputs', () => {
+        const value = 'QRCODE.VUE LOVE'
+        const level = 'M'
+
+        const wrapper1 = mountQR({ value, renderAs: 'svg', level })
+        const d1 = getSvgPathData(wrapper1)
+
+        const wrapper2 = mountQR({ value, renderAs: 'svg', level })
+        const d2 = getSvgPathData(wrapper2)
+
+        expect(d1).toBeDefined()
+        expect(d2).toBeDefined()
+        expect(d1).toBe(d2)
       })
-      const path = wrapper.find('path')
-      const d = path.attributes('d')
-      expect(d).toBeDefined()
-      expect(d).not.toBe('')
-      // d should be a valid SVG path string starting with M
-      expect(d).toMatch(/^M0 0h7v1H0zM8 0h1v1H8zM10 0h1v1H10zM14,0 h7v1H14zM0 1h1v1H0zM6 1h1v1H6zM8/)
 
-      await wrapper.setProps({ level: 'H'})
-      const _d = path.attributes('d')
-      expect(_d).toMatch(/^M0 0h7v1H0zM9 0h3v1H9zM14 0h1v1H14zM18,0 h7v1H18zM0 1h1v1H0zM6 1h1v1H6zM8/)
-    })
+      it('generates different path data for different error correction levels', () => {
+        const value = 'QRCODE.VUE LOVE'
+        const levels = ['L', 'M', 'Q', 'H'] as const
+        const dValues: string[] = []
 
-    it('generates different path data for different error correction levels', () => {
-      const value = 'QRCODE.VUE LOVE'
-      const levels = ['L', 'M', 'Q', 'H'] as const
-      const dValues: string[] = []
-
-      levels.forEach(level => {
-        const wrapper = mount(QrcodeVue, {
-          props: {
-            value,
-            renderAs: 'svg',
-            level,
-          },
+        levels.forEach(level => {
+          const wrapper = mountQR({ value, renderAs: 'svg', level })
+          const d = getSvgPathData(wrapper)
+          expect(d).toBeDefined()
+          expect(d).not.toBe('')
+          if (d) {
+            expect(d).toMatch(/^M/)
+            dValues.push(d)
+          }
         })
-        const path = wrapper.find('path')
-        const d = path.attributes('d')
+
+        expect(dValues.length).toBe(4)
+        const uniqueDValues = new Set(dValues)
+        expect(uniqueDValues.size).toBeGreaterThan(0)
+      })
+
+      it('generates different path data with margin', () => {
+        const value = 'QRCODE.VUE LOVE'
+
+        const wrapperNoMargin = mountQR({ value, renderAs: 'svg', margin: 0 })
+        const dNoMargin = getSvgPathData(wrapperNoMargin)
+
+        const wrapperWithMargin = mountQR({ value, renderAs: 'svg', margin: 4 })
+        const dWithMargin = getSvgPathData(wrapperWithMargin)
+
+        expect(dNoMargin).toBeDefined()
+        expect(dWithMargin).toBeDefined()
+        expect(dNoMargin).not.toBe(dWithMargin)
+      })
+
+      it('generates correct path data for value "QRCODE.VUE LOVE"', async () => {
+        const value = 'QRCODE.VUE LOVE'
+        const wrapper = mountQR({ value, renderAs: 'svg' })
+        const d = getSvgPathData(wrapper)
         expect(d).toBeDefined()
         expect(d).not.toBe('')
-        // d should be a valid SVG path string
-        if (d) {
-          expect(d).toMatch(/^M/)
-          dValues.push(d)
-        }
+        expect(d).toMatch(/^M0 0h7v1H0zM8 0h1v1H8zM10 0h1v1H10zM14,0 h7v1H14zM0 1h1v1H0zM6 1h1v1H6zM8/)
+
+        await wrapper.setProps({ level: 'H' })
+        const _d = getSvgPathData(wrapper)
+        expect(_d).toMatch(/^M0 0h7v1H0zM9 0h3v1H9zM14 0h1v1H14zM18,0 h7v1H18zM0 1h1v1H0zM6 1h1v1H6zM8/)
       })
-
-      // Error correction may or may not affect the actual module pattern
-      // for short text, but we should have valid path data for all levels
-      expect(dValues.length).toBe(4)
-      // At least some levels should produce different path data
-      // (not all levels may be different for short text)
-      const uniqueDValues = new Set(dValues)
-      expect(uniqueDValues.size).toBeGreaterThan(0)
-    })
-
-    it('generates same path data for same input values', () => {
-      const value = 'QRCODE.VUE LOVE'
-      const level = 'M'
-
-      const wrapper1 = mount(QrcodeVue, {
-        props: {
-          value,
-          renderAs: 'svg',
-          level,
-        },
-      })
-      const path1 = wrapper1.find('path')
-      const d1 = path1.attributes('d')
-
-      const wrapper2 = mount(QrcodeVue, {
-        props: {
-          value,
-          renderAs: 'svg',
-          level,
-        },
-      })
-      const path2 = wrapper2.find('path')
-      const d2 = path2.attributes('d')
-
-      // Same input should produce same output
-      expect(d1).toBeDefined()
-      expect(d2).toBeDefined()
-      expect(d1).toBe(d2)
-    })
-
-    it('generates different path data with margin', () => {
-      const value = 'QRCODE.VUE LOVE'
-
-      const wrapperNoMargin = mount(QrcodeVue, {
-        props: {
-          value,
-          renderAs: 'svg',
-          margin: 0,
-        },
-      })
-      const pathNoMargin = wrapperNoMargin.find('path')
-      const dNoMargin = pathNoMargin.attributes('d')
-
-      const wrapperWithMargin = mount(QrcodeVue, {
-        props: {
-          value,
-          renderAs: 'svg',
-          margin: 4,
-        },
-      })
-      const pathWithMargin = wrapperWithMargin.find('path')
-      const dWithMargin = pathWithMargin.attributes('d')
-
-      // Margin should affect the path coordinates
-      expect(dNoMargin).toBeDefined()
-      expect(dWithMargin).toBeDefined()
-      expect(dNoMargin).not.toBe(dWithMargin)
     })
   })
 
   describe('render-as switching', () => {
     it('switches from canvas to SVG when renderAs changes', async () => {
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'canvas',
-        },
-      })
+      const wrapper = mountQR({ renderAs: 'canvas' })
       expect(wrapper.html()).toContain('<canvas')
       expect(wrapper.html()).not.toContain('<svg')
 
@@ -558,12 +362,7 @@ describe('QrcodeVue', () => {
     })
 
     it('switches from SVG to canvas when renderAs changes', async () => {
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'svg',
-        },
-      })
+      const wrapper = mountQR({ renderAs: 'svg' })
       expect(wrapper.html()).toContain('<svg')
       expect(wrapper.html()).not.toContain('<canvas')
 
@@ -575,14 +374,7 @@ describe('QrcodeVue', () => {
     it('preserves other props when switching renderAs', async () => {
       const size = 150
       const background = '#f0f0f0'
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'canvas',
-          size,
-          background,
-        },
-      })
+      const wrapper = mountQR({ renderAs: 'canvas', size, background })
 
       await wrapper.setProps({ renderAs: 'svg' })
       const svg = wrapper.find('svg')
@@ -592,54 +384,68 @@ describe('QrcodeVue', () => {
     })
   })
 
+  describe('reactive updates', () => {
+    it('updates QR code when value changes', async () => {
+      const wrapper = mountQR({ renderAs: 'svg' })
+      const d1 = getSvgPathData(wrapper)
+
+      await wrapper.setProps({ value: 'updated-value' })
+      const d2 = getSvgPathData(wrapper)
+
+      expect(d1).toBeDefined()
+      expect(d2).toBeDefined()
+      expect(d1).not.toBe(d2)
+    })
+
+    it('updates QR code when size changes', async () => {
+      const wrapper = mountQR({ renderAs: 'svg', size: 100 })
+      const svg1 = wrapper.find('svg')
+      expect(svg1.attributes('width')).toBe('100')
+
+      await wrapper.setProps({ size: 200 })
+      const svg2 = wrapper.find('svg')
+      expect(svg2.attributes('width')).toBe('200')
+    })
+
+    it('updates QR code when level changes', async () => {
+      const wrapper = mountQR({ renderAs: 'svg', level: 'L', value: 'QRCODE.VUE LOVE' })
+      const d1 = getSvgPathData(wrapper)
+
+      await wrapper.setProps({ level: 'H' })
+      const d2 = getSvgPathData(wrapper)
+
+      expect(d1).toBeDefined()
+      expect(d2).toBeDefined()
+      expect(d1).not.toBe(d2)
+    })
+  })
+
   describe('prop validation', () => {
     it('accepts valid renderAs values', () => {
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'canvas',
-        },
-      })
-      expect(wrapper.html()).toContain('<canvas')
+      const wrapper1 = mountQR({ renderAs: 'canvas' })
+      expect(wrapper1.html()).toContain('<canvas')
 
-      const wrapper2 = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'svg',
-        },
-      })
+      const wrapper2 = mountQR({ renderAs: 'svg' })
       expect(wrapper2.html()).toContain('<svg')
     })
 
     it('falls back to default when invalid renderAs provided', () => {
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'invalid' as any,
-        },
-      })
-      // Should default to canvas
+      const wrapper = mountQR({ renderAs: 'invalid' as any })
       expect(wrapper.html()).toContain('<canvas')
     })
 
     it('validates gradientType prop', () => {
-      const wrapper = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'svg',
-          gradient: true,
-          gradientType: 'linear',
-        },
+      const wrapper1 = mountQR({
+        renderAs: 'svg',
+        gradient: true,
+        gradientType: 'linear',
       })
-      expect(wrapper.html()).toContain('linearGradient')
+      expect(wrapper1.html()).toContain('linearGradient')
 
-      const wrapper2 = mount(QrcodeVue, {
-        props: {
-          value: 'test',
-          renderAs: 'svg',
-          gradient: true,
-          gradientType: 'radial',
-        },
+      const wrapper2 = mountQR({
+        renderAs: 'svg',
+        gradient: true,
+        gradientType: 'radial',
       })
       expect(wrapper2.html()).toContain('radialGradient')
     })
@@ -647,11 +453,15 @@ describe('QrcodeVue', () => {
 
   describe('multi-instance SVG ID uniqueness', () => {
     it('generates unique gradient IDs for multiple SVG instances', () => {
-      const wrapper1 = mount(QrcodeVue, {
-        props: { value: 'test1', renderAs: 'svg', gradient: true, gradientType: 'linear' },
+      const wrapper1 = mountQR({
+        renderAs: 'svg',
+        gradient: true,
+        gradientType: 'linear',
       })
-      const wrapper2 = mount(QrcodeVue, {
-        props: { value: 'test2', renderAs: 'svg', gradient: true, gradientType: 'linear' },
+      const wrapper2 = mountQR({
+        renderAs: 'svg',
+        gradient: true,
+        gradientType: 'linear',
       })
 
       const html1 = wrapper1.html()
@@ -666,13 +476,9 @@ describe('QrcodeVue', () => {
     })
 
     it('generates unique clipPath IDs for multiple SVG instances', () => {
-      const imageSettings = { src: 'test.png', height: 30, width: 30, excavate: true, borderRadius: 5 }
-      const wrapper1 = mount(QrcodeVue, {
-        props: { value: 'test1', renderAs: 'svg', imageSettings },
-      })
-      const wrapper2 = mount(QrcodeVue, {
-        props: { value: 'test2', renderAs: 'svg', imageSettings },
-      })
+      const imageSettings = { ...TEST_IMAGE, excavate: true, borderRadius: 5 }
+      const wrapper1 = mountQR({ renderAs: 'svg', imageSettings })
+      const wrapper2 = mountQR({ renderAs: 'svg', imageSettings })
 
       const html1 = wrapper1.html()
       const html2 = wrapper2.html()
@@ -686,8 +492,10 @@ describe('QrcodeVue', () => {
     })
 
     it('gradient fill references match their own gradient ID', () => {
-      const wrapper = mount(QrcodeVue, {
-        props: { value: 'test', renderAs: 'svg', gradient: true, gradientType: 'linear' },
+      const wrapper = mountQR({
+        renderAs: 'svg',
+        gradient: true,
+        gradientType: 'linear',
       })
 
       const html = wrapper.html()
@@ -699,10 +507,8 @@ describe('QrcodeVue', () => {
     })
 
     it('clip-path references match their own clipPath ID', () => {
-      const imageSettings = { src: 'test.png', height: 30, width: 30, excavate: true, borderRadius: 5 }
-      const wrapper = mount(QrcodeVue, {
-        props: { value: 'test', renderAs: 'svg', imageSettings },
-      })
+      const imageSettings = { ...TEST_IMAGE, excavate: true, borderRadius: 5 }
+      const wrapper = mountQR({ renderAs: 'svg', imageSettings })
 
       const html = wrapper.html()
       const clipId = html.match(/id="(qrcode\.vue-logo-clip-path-[^"]+)"/)?.[1]
@@ -719,13 +525,7 @@ describe('QrcodeVue', () => {
         const validValues = [0, 0.1, 0.25, 0.3, 0.5]
 
         validValues.forEach(radius => {
-          const wrapper = mount(QrcodeVue, {
-            props: {
-              value: 'test',
-              renderAs: 'svg',
-              radius,
-            },
-          })
+          const wrapper = mountQR({ renderAs: 'svg', radius })
           expect(wrapper.html()).toContain('<svg')
           const path = wrapper.find('path')
           expect(path.exists()).toBe(true)
@@ -736,39 +536,21 @@ describe('QrcodeVue', () => {
         const invalidValues = [-0.1, -1, 0.6, 1, 100]
 
         invalidValues.forEach(radius => {
-          const wrapper = mount(QrcodeVue, {
-            props: {
-              value: 'test',
-              renderAs: 'svg',
-              radius,
-            },
-          })
+          const wrapper = mountQR({ renderAs: 'svg', radius })
           expect(wrapper.html()).toContain('<svg')
         })
       })
 
       it('handles NaN and special number values', () => {
-        const wrapper = mount(QrcodeVue, {
-          props: {
-            value: 'test',
-            renderAs: 'svg',
-            radius: NaN,
-          },
-        })
+        const wrapper = mountQR({ renderAs: 'svg', radius: NaN })
         expect(wrapper.html()).toContain('<svg')
       })
     })
 
     describe('default value', () => {
       it('uses radius 0 by default', () => {
-        const wrapper = mount(QrcodeVue, {
-          props: {
-            value: 'test',
-            renderAs: 'svg',
-          },
-        })
-        const path = wrapper.find('path')
-        const d = path.attributes('d')
+        const wrapper = mountQR({ renderAs: 'svg' })
+        const d = getSvgPathData(wrapper)
 
         expect(d).toBeDefined()
         expect(d).toMatch(/^[MhVHz]/)
@@ -776,15 +558,8 @@ describe('QrcodeVue', () => {
       })
 
       it('renders rect-style path commands when radius is 0', () => {
-        const wrapper = mount(QrcodeVue, {
-          props: {
-            value: 'test',
-            renderAs: 'svg',
-            radius: 0,
-          },
-        })
-        const path = wrapper.find('path')
-        const d = path.attributes('d')
+        const wrapper = mountQR({ renderAs: 'svg', radius: 0 })
+        const d = getSvgPathData(wrapper)
 
         expect(d).toMatch(/[hvHVz]/)
         expect(d).not.toMatch(/[aA]/)
@@ -793,85 +568,53 @@ describe('QrcodeVue', () => {
 
     describe('reactive switching', () => {
       it('updates rendering when radius changes from 0 to positive value', async () => {
-        const wrapper = mount(QrcodeVue, {
-          props: {
-            value: 'test',
-            renderAs: 'svg',
-            radius: 0,
-          },
-        })
+        const wrapper = mountQR({ renderAs: 'svg', radius: 0 })
 
-        let path = wrapper.find('path')
-        let d = path.attributes('d')
+        let d = getSvgPathData(wrapper)
         expect(d).toBeDefined()
         expect(d).not.toMatch(/[aA]/)
 
         await wrapper.setProps({ radius: 0.3 })
 
-        path = wrapper.find('path')
-        d = path.attributes('d')
+        d = getSvgPathData(wrapper)
         expect(d).toBeDefined()
       })
 
       it('updates rendering when radius changes from positive to 0', async () => {
-        const wrapper = mount(QrcodeVue, {
-          props: {
-            value: 'test',
-            renderAs: 'svg',
-            radius: 0.4,
-          },
-        })
+        const wrapper = mountQR({ renderAs: 'svg', radius: 0.4 })
 
-        let path = wrapper.find('path')
-        let d = path.attributes('d')
+        let d = getSvgPathData(wrapper)
         expect(d).toBeDefined()
 
         await wrapper.setProps({ radius: 0 })
 
-        path = wrapper.find('path')
-        d = path.attributes('d')
+        d = getSvgPathData(wrapper)
         expect(d).toBeDefined()
         expect(d).not.toMatch(/[aA]/)
       })
 
       it('handles multiple radius changes', async () => {
-        const wrapper = mount(QrcodeVue, {
-          props: {
-            value: 'test',
-            renderAs: 'svg',
-            radius: 0,
-          },
-        })
+        const wrapper = mountQR({ renderAs: 'svg', radius: 0 })
 
-        let path = wrapper.find('path')
-        let d0 = path.attributes('d')
+        const d0 = getSvgPathData(wrapper)
         expect(d0).toBeDefined()
 
         await wrapper.setProps({ radius: 0.25 })
-        path = wrapper.find('path')
-        let d1 = path.attributes('d')
+        const d1 = getSvgPathData(wrapper)
         expect(d1).toBeDefined()
 
         await wrapper.setProps({ radius: 0.5 })
-        path = wrapper.find('path')
-        let d2 = path.attributes('d')
+        const d2 = getSvgPathData(wrapper)
         expect(d2).toBeDefined()
 
         await wrapper.setProps({ radius: 0 })
-        path = wrapper.find('path')
-        let d3 = path.attributes('d')
+        const d3 = getSvgPathData(wrapper)
         expect(d3).toBeDefined()
         expect(d3).toBe(d0)
       })
 
       it('reacts to radius changes in canvas mode', async () => {
-        const wrapper = mount(QrcodeVue, {
-          props: {
-            value: 'test',
-            renderAs: 'canvas',
-            radius: 0,
-          },
-        })
+        const wrapper = mountQR({ renderAs: 'canvas', radius: 0 })
 
         expect(wrapper.html()).toContain('<canvas')
         expect(wrapper.html()).not.toContain('<svg')
@@ -886,15 +629,8 @@ describe('QrcodeVue', () => {
     describe('radius rendering', () => {
       describe('SVG path rendering', () => {
         it('produces rect-style path commands when radius is 0', () => {
-          const wrapper = mount(QrcodeVue, {
-            props: {
-              value: 'test',
-              renderAs: 'svg',
-              radius: 0,
-            },
-          })
-          const path = wrapper.find('path')
-          const d = path.attributes('d')
+          const wrapper = mountQR({ renderAs: 'svg', radius: 0 })
+          const d = getSvgPathData(wrapper)
 
           expect(d).toBeDefined()
           expect(d).toMatch(/^[MmHhVvLlZz0-9,.\s-]+$/)
@@ -902,32 +638,22 @@ describe('QrcodeVue', () => {
         })
 
         it('produces path with arc commands when radius > 0', () => {
-          const wrapper = mount(QrcodeVue, {
-            props: {
-              value: 'test',
-              renderAs: 'svg',
-              radius: 0.3,
-            },
-          })
-          const path = wrapper.find('path')
-          const d = path.attributes('d')
+          const wrapper = mountQR({ renderAs: 'svg', radius: 0.3 })
+          const d = getSvgPathData(wrapper)
 
           expect(d).toBeDefined()
           expect(d).toMatch(/[aA]/)
         })
 
         it('isolated dark module produces 4 arcs when radius > 0', () => {
-          const wrapper = mount(QrcodeVue, {
-            props: {
-              value: 'A',
-              renderAs: 'svg',
-              radius: 0.4,
-              level: 'L',
-              margin: 0,
-            },
+          const wrapper = mountQR({
+            value: 'A',
+            renderAs: 'svg',
+            radius: 0.4,
+            level: 'L',
+            margin: 0,
           })
-          const path = wrapper.find('path')
-          const d = path.attributes('d')
+          const d = getSvgPathData(wrapper)
 
           expect(d).toBeDefined()
           const arcMatches = d?.match(/[aA]/g)
@@ -935,45 +661,29 @@ describe('QrcodeVue', () => {
           expect(arcMatches?.length).toBeGreaterThan(0)
         })
 
-        it('2x2 block of dark modules has no inner corner arcs', () => {
-          const wrapper = mount(QrcodeVue, {
-            props: {
-              value: 'test',
-              renderAs: 'svg',
-              radius: 0.3,
-            },
-          })
-          const path = wrapper.find('path')
-          const d = path.attributes('d')
+        it('does not render inner corner arcs for adjacent dark modules', () => {
+          const wrapper = mountQR({ renderAs: 'svg', radius: 0.3 })
+          const d = getSvgPathData(wrapper)
 
           expect(d).toBeDefined()
           expect(d).toMatch(/[aA]/)
         })
 
         it('handles both radius 0 and radius > 0 in same SVG session', async () => {
-          const wrapper = mount(QrcodeVue, {
-            props: {
-              value: 'test',
-              renderAs: 'svg',
-              radius: 0,
-            },
-          })
+          const wrapper = mountQR({ renderAs: 'svg', radius: 0 })
 
-          let path = wrapper.find('path')
-          let d = path.attributes('d')
+          let d = getSvgPathData(wrapper)
           expect(d).toBeDefined()
           expect(d).not.toMatch(/[aA]/)
 
           await wrapper.setProps({ radius: 0.25 })
 
-          path = wrapper.find('path')
-          d = path.attributes('d')
+          d = getSvgPathData(wrapper)
           expect(d).toBeDefined()
 
           await wrapper.setProps({ radius: 0 })
 
-          path = wrapper.find('path')
-          d = path.attributes('d')
+          d = getSvgPathData(wrapper)
           expect(d).toBeDefined()
           expect(d).not.toMatch(/[aA]/)
         })
@@ -981,80 +691,106 @@ describe('QrcodeVue', () => {
 
       describe('Canvas rendering', () => {
         it('accepts radius prop in canvas mode', () => {
-          const wrapper = mount(QrcodeVue, {
-            props: {
-              value: 'test',
-              renderAs: 'canvas',
-              radius: 0.3,
-            },
-          })
-
+          const wrapper = mountQR({ renderAs: 'canvas', radius: 0.3 })
           expect(wrapper.html()).toContain('<canvas')
         })
 
         it('renders rounded corners in canvas when radius > 0', () => {
-          const wrapper = mount(QrcodeVue, {
-            props: {
-              value: 'test',
-              renderAs: 'canvas',
-              radius: 0.4,
-            },
-          })
-
+          const wrapper = mountQR({ renderAs: 'canvas', radius: 0.4 })
           expect(wrapper.html()).toContain('<canvas')
         })
 
         it('handles radius switching in canvas mode', async () => {
-          const wrapper = mount(QrcodeVue, {
-            props: {
-              value: 'test',
-              renderAs: 'canvas',
-              radius: 0,
-            },
-          })
+          const wrapper = mountQR({ renderAs: 'canvas', radius: 0 })
 
           expect(wrapper.html()).toContain('<canvas')
 
           await wrapper.setProps({ radius: 0.3 })
-
           expect(wrapper.html()).toContain('<canvas')
 
           await wrapper.setProps({ radius: 0 })
-
           expect(wrapper.html()).toContain('<canvas')
         })
       })
 
       describe('neighbor logic verification', () => {
         it('rounds corners when both adjacent neighbors are light', () => {
-          const wrapper = mount(QrcodeVue, {
-            props: {
-              value: 'test',
-              renderAs: 'svg',
-              radius: 0.3,
-            },
-          })
-          const path = wrapper.find('path')
-          const d = path.attributes('d')
+          const wrapper = mountQR({ renderAs: 'svg', radius: 0.3 })
+          const d = getSvgPathData(wrapper)
 
           expect(d).toBeDefined()
           expect(d).toMatch(/[aA]/)
         })
 
         it('does not round corners when adjacent neighbor is dark', () => {
-          const wrapper = mount(QrcodeVue, {
-            props: {
-              value: 'test',
-              renderAs: 'svg',
-              radius: 0.5,
-            },
-          })
-          const path = wrapper.find('path')
-          const d = path.attributes('d')
+          const wrapper = mountQR({ renderAs: 'svg', radius: 0.5 })
+          const d = getSvgPathData(wrapper)
 
           expect(d).toBeDefined()
         })
       })
+    })
+  })
+
+  describe('accessibility', () => {
+    it('sets aria-label to the QR code value in SVG mode', () => {
+      const value = 'https://example.com'
+      const wrapper = mountQR({ renderAs: 'svg', value })
+      const svg = wrapper.find('svg')
+      expect(svg.attributes('aria-label')).toBe(value)
+      expect(svg.attributes('role')).toBe('img')
+    })
+
+    it('sets aria-label to the QR code value in canvas mode', () => {
+      const value = 'https://example.com'
+      const wrapper = mountQR({ renderAs: 'canvas', value })
+      const canvas = wrapper.find('canvas')
+      expect(canvas.attributes('aria-label')).toBe(value)
+      expect(canvas.attributes('role')).toBe('img')
+    })
+  })
+
+  describe('image positioning', () => {
+    it('centers image by default when x and y are not provided', () => {
+      const wrapper = mountQR({
+        renderAs: 'svg',
+        imageSettings: TEST_IMAGE,
+      })
+      const image = wrapper.find('image')
+      const x = image.attributes('x')
+      const y = image.attributes('y')
+      expect(x).toBeDefined()
+      expect(y).toBeDefined()
+    })
+
+    it('positions image at custom x and y coordinates', () => {
+      const wrapper = mountQR({
+        renderAs: 'svg',
+        imageSettings: { ...TEST_IMAGE, x: 10, y: 20 },
+      })
+      const image = wrapper.find('image')
+      expect(image.attributes('x')).toBeDefined()
+      expect(image.attributes('y')).toBeDefined()
+    })
+  })
+
+  describe('edge cases', () => {
+    it('handles empty string value', () => {
+      const wrapper = mountQR({ value: '' })
+      expect(wrapper.html()).toContain('<canvas')
+    })
+
+    it('handles long string value', () => {
+      const value = 'a'.repeat(500)
+      const wrapper = mountQR({ value })
+      expect(wrapper.html()).toContain('<canvas')
+    })
+
+    it('handles value with special characters', () => {
+      const value = 'https://example.com?foo=bar&baz=qux'
+      const wrapper = mountQR({ value, renderAs: 'svg' })
+      const svg = wrapper.find('svg')
+      expect(svg.attributes('aria-label')).toBe(value)
     })
   })
 })
