@@ -15,6 +15,7 @@
   --radius-lg: 0.75rem;
   --max-width: 960px;
   --gap: 1.5rem;
+  --padding-md: 1.5rem;
 }
 
 [data-bs-theme="dark"] {
@@ -63,7 +64,7 @@ a:hover {
 .app-header {
   background: var(--bg-card);
   border-bottom: 1px solid var(--border-color);
-  padding: 2.5rem 1.5rem 2rem;
+  padding: 2.5rem var(--padding-md) 2rem;
 }
 
 .app-header-inner {
@@ -178,7 +179,7 @@ a:hover {
 .app-main {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 2rem 1.5rem 4rem;
+  padding: 2rem var(--padding-md);
 }
 
 /* Tabs */
@@ -576,4 +577,11 @@ input[type='range']::-moz-range-thumb {
 /* v-cloak */
 [v-cloak] {
   display: none !important;
+}
+
+
+.footer-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 1rem var(--padding-md) 2rem;
 }
