@@ -1,176 +1,80 @@
-# Agent Guidelines for qrcode.vue
+# AGENTS.md — qrcode.vue
 
-This document provides guidelines for AI agents working on the qrcode.vue repository.
-It includes build/test commands, code style conventions, and project-specific patterns.
-
-## Build and Development Commands
-
-The project uses npm scripts defined in `package.json`:
+## Commands
 
 | Command | Purpose |
 |---------|---------|
-| `npm run dev` | Start development server with hot reload (rsbuild) |
-| `npm run build` | Build production bundles using Rollup (CommonJS, ES module, UMD) |
-| `npm test` | Run all tests using rstest |
+| `npm run dev` | Dev server (rsbuild, hot reload, serves `example/`) |
+| `npm run build` | Production build via Rollup → CJS + ESM + UMD (minified) into `dist/` |
+| `npm test` | Run tests with rstest |
 
-### Running a Single Test
+**CI uses yarn**, not npm (`yarn install && yarn build`). Both work locally.
 
-Use the rstest CLI directly:
+### Single test / test pattern
 
 ```bash
-# Run a specific test file
-npx rstest test/index.test.ts
-
-# Run tests matching a pattern
-npx rstest --testNamePattern="renders SVG"
+npx rstest test/index.test.ts                  # specific file
+npx rstest --testNamePattern="renders SVG"     # pattern match
 ```
 
-### Type Checking
+### Type checking
 
-TypeScript with strict mode enabled. Type checking runs during Rollup build (ES modules only). Manual check:
+TypeScript type-checking only runs during the ES module Rollup build (`rollup -c`). For a standalone check:
 
 ```bash
 npx tsc --noEmit
 ```
 
-## Code Style Guidelines
+`tsconfig.json` is minimal: `strict: true`, `moduleResolution: "bundler"`, `skipLibCheck: true`.
 
-### Indentation and Formatting
+## Architecture
 
-- **Indentation**: 2 spaces (no tabs) – enforced by `.editorconfig`
-- **Line endings**: LF (Unix)
-- **Trailing whitespace**: Trimmed
-- **Final newline**: Yes (except for *.md files)
+Single-file Vue 3 component library. No router, no store, no monorepo.
 
-### TypeScript Conventions
+- **`src/index.ts`** — Everything: `QrcodeVue` (default export, switches canvas/svg), `QrcodeSvg`, `QrcodeCanvas`, shared props, `useQRCode()` composable, SVG path generators, exported types (`Level`, `RenderAs`, `GradientType`, `ImageSettings`)
+- **`src/qrcodegen.ts`** — Third-party QR encoder (Project Nayuki). **Do not modify.**
+- **`test/index.test.ts`** — All tests, single file. Uses `@rstest/core` + `@vue/test-utils` + `happy-dom`
+- **`example/`** — Demo app built by rsbuild, deployed to GitHub Pages on release
+- **`typings/index.d.ts`** — Vue SFC/CSS module shims (for example app, not the library)
+- **`dist/`** — Build output. 4 files: `.cjs.js`, `.esm.js`, `.browser.js`, `.browser.min.js`
 
-- **Strict mode**: Always enabled (`strict: true`)
-- **Type annotations**: Prefer explicit types for function parameters and return types
-- **Interfaces vs Types**: Use `type` for simple aliases, `interface` for extensible object shapes
-- **Import style**: ES6 imports; group Vue imports first, then local imports
+### Build gotchas
 
-Example:
-```ts
-import { defineComponent, Fragment, h, PropType, ref } from 'vue'
-import QR from './qrcodegen'
-```
+- Rollup produces **4 bundles** (CJS, ESM, UMD, UMD-minified). Only the ESM build runs type-checking and generates `.d.ts` declarations.
+- A custom Rollup plugin (`cleanExtraDts`) deletes `dist/qrcodegen.d.ts` after build — don't be surprised.
+- `vue` is **external** (peerDependency `^3.0.0`), never bundled.
+- Package uses `"type": "module"` (ESM by default).
 
-### Naming Conventions
+### Rendering approach
 
-- **Component names**: PascalCase (e.g., `QrcodeVue`, `QrcodeSvg`, `QrcodeCanvas`)
-- **Variable/function names**: camelCase
-- **Constants**: UPPER_SNAKE_CASE for true constants, otherwise camelCase
-- **Private fields**: No special prefix; use TypeScript's `private` modifier
+Components use **render functions with `h()`**, not `<template>` SFC syntax. All component logic lives in `setup()` with Composition API (`defineComponent`, `ref`, `computed`, `watchEffect`).
 
-### Vue Component Patterns
+Two renderers:
+- **Canvas** — draws via `CanvasRenderingContext2D` + `Path2D` (falls back to per-cell `fillRect` when `Path2D` unsupported)
+- **SVG** — generates SVG path data strings, outputs `<svg>` with `<path>`, `<defs>` for gradients/clip-paths
 
-- Use Composition API with `defineComponent`
-- Props defined as objects with `PropType` annotations
-- Reactive state managed with `ref` and `computed`
-- Lifecycle hooks: `onMounted`, `onUpdated`, etc.
-- Render function using `h()` (hyperscript) – no template DSL
-- Component `name` property set to PascalCase string
+## Code Style
 
-Example prop definition:
-```ts
-const QRCodeProps = {
-  value: {
-    type: String,
-    required: true,
-    default: '',
-  },
-  size: {
-    type: Number,
-    default: 100,
-  },
-  // ...
-}
-```
-
-### Error Handling
-
-- Use `throw new RangeError` for invalid arguments (see `qrcodegen.ts`)
-- Validate props with validator functions
-- Graceful fallbacks for unsupported browser features (e.g., `Path2D` detection)
-
-### Imports Order
-
-1. Vue framework imports
-2. Third‑party libraries
-3. Local modules (relative paths)
-
-### Semicolons
-
-Follow existing file's style:
-- `qrcodegen.ts` uses semicolons consistently (legacy TypeScript/JavaScript)
-- `index.ts` uses semicolons mostly for statements but not after function declarations
+- 2-space indent, LF, no tabs (`.editorconfig`)
+- No linter — TypeScript strict mode is the only enforcement
+- **No semicolons** in `index.ts` (the main source). `qrcodegen.ts` uses semicolons (third-party, different style — don't change it)
+- No `<template>` blocks — all rendering via `h()` hyperscript calls
+- Props: plain objects with `PropType<T>` annotations and `validator` functions
 
 ## Testing
 
-- Tests written with `@rstest/core` and `@vue/test-utils`
-- Test files in `test/` directory with `.test.ts` extension
-- Use `describe`/`it` pattern
-- Mount components with `mount()` from `@vue/test-utils`
-- Assertions use `expect()` from `@rstest/core`
+- Runner: `@rstest/core` (not Jest, not Vitest). API is `describe`/`it`/`expect` — familiar but the import is from `@rstest/core`.
+- Environment: `happy-dom` (not jsdom)
+- Mounting: `@vue/test-utils` `mount()`
+- All tests in one file: `test/index.test.ts`
+- Tests cover canvas mode, SVG mode, prop switching, gradients, image overlay, radius, accessibility, edge cases
 
-Example:
-```ts
-import { describe, expect, it } from '@rstest/core'
-import { mount } from '@vue/test-utils'
-import QrcodeVue from '../src'
+## CI / Release
 
-describe('QrcodeVue', () => {
-  it('renders correctly with default props', () => {
-    const wrapper = mount(QrcodeVue, {
-      props: { value: 'test' },
-    })
-    expect(wrapper.html()).toContain('<canvas')
-  })
-})
-```
+- **Publish**: triggered by `v*` tags → `yarn install && yarn build && npm publish --access public` (Node 24)
+- **Demo deploy**: triggered by GitHub releases → `yarn install && yarn rsbuild build` → deploys `example/dist/` to `gh-pages` branch
 
-## Build Configuration
+## What not to touch
 
-- **Rollup**: Bundles for CommonJS, ES module, and UMD (see `rollup.config.js`)
-- **Rsbuild**: Development and example building (see `rsbuild.config.js`)
-- **TypeScript**: Minimal strict config (see `tsconfig.json`)
-- **No separate linting tool** (relies on TypeScript strict checks and editorconfig)
-
-## Project Structure
-
-```
-src/
-  index.ts          # Main Vue component (exports QrcodeVue, QrcodeSvg, QrcodeCanvas)
-  qrcodegen.ts      # QR code generator library (external, Project Nayuki)
-test/
-  index.test.ts     # Component tests
-example/           # Demo application
-  webpack-entry.ts  # Entry point for dev server
-  webpack.html      # HTML template
-  styles.scss       # Demo styles
-typings/           # TypeScript declarations
-dist/              # Built artifacts (ignored in git)
-```
-
-## Notes for Agents
-
-- **Vue 3 only**: peerDependencies specifies `vue: ^3.0.0`
-- The QR code generator (`qrcodegen.ts`) is a third‑party library – avoid modifications unless absolutely necessary
-- Component supports both canvas and SVG rendering, with gradient and image overlay features
-- When adding new props, maintain the existing prop definition pattern with appropriate validators
-
-## Commit Guidelines
-
-- Use conventional commit messages (feat, fix, chore, docs, test, etc.)
-- Reference GitHub issues when applicable
-- Keep commits focused; one logical change per commit
-
-## Resources
-
-- [Vue 3 Composition API](https://vuejs.org/guide/extras/composition-api-faq)
-- [Rollup documentation](https://rollupjs.org/)
-- [rstest documentation](https://github.com/rsuite/rstest)
-- [QR Code Generator Library](https://www.nayuki.io/page/qr-code-generator-library)
-
----
-*This file was generated for agentic coding assistants. Update it as the project evolves.*
+- `src/qrcodegen.ts` — third-party Nayuki QR library, vendored as-is
+- `example/dist/` — built artifacts, regenerated by rsbuild
