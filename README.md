@@ -203,6 +203,28 @@ The rounding is context-aware: inner corners between adjacent dark modules remai
 <qrcode-vue value="test" :radius="0.35" />
 ```
 
+### `id`
+
+- Type: `string`
+- Default: `undefined`
+
+Custom ID for SVG internal elements (gradients, clip-paths). Required for SSR hydration consistency — pass `useId()` to ensure server and client generate matching IDs.
+
+```html
+<script setup>
+  // vue 3.5+ only
+  import { useId } from 'vue'
+  const uid = useId()
+
+  // older vue versions (3.4 and below)
+  // const uid = 'qrcode-1'
+  // const uid2 = 'qrcode-2'
+</script>
+<qrcode-svg value="test" :id="uid" render-as="svg" />
+```
+
+When omitted, a module-level counter is used, which is not SSR-safe across multiple requests.
+
 ### `gradient`
 
 - Type: `boolean`

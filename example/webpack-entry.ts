@@ -70,20 +70,20 @@ const App = defineComponent({
       code += `
 
 <${renderAs.value === 'svg' ? 'qrcode-svg' : 'qrcode-canvas'}
-  :value="${value.value}"
+  value="${value.value}"
   :size="${size.value}"
-  :level="${level.value}"
-  :background="${background.value}"
-  :foreground="${foreground.value}"
-  :render-as="${renderAs.value}"
+  level="${level.value}"
+  background="${background.value}"
+  foreground="${foreground.value}"
   :margin="${margin.value}"
   :radius="${radius.value}"
 `
 
       if (gradient.value) {
-        code += `  :gradient-type="${gradientType.value}"
-  :gradient-start-color="${gradientStartColor.value}"
-  :gradient-end-color="${gradientEndColor.value}"
+        code += `  :gradient="${gradient.value}"
+  gradient-type="${gradientType.value}"
+  gradient-start-color="${gradientStartColor.value}"
+  gradient-end-color="${gradientEndColor.value}"
 `
       }
 

@@ -205,6 +205,28 @@ createApp({
 <qrcode-vue value="test" :radius="0.35" />
 ```
 
+### `id`
+
+- 类型：`string`
+- 默认值：`undefined`
+
+自定义 SVG 内部元素（渐变、裁剪路径）的 ID。SSR 水合一致性需要此属性 — 传入 `useId()` 以确保服务端和客户端生成匹配的 ID。
+
+```html
+<script setup>
+  // 仅 vue 3.5+
+  import { useId } from 'vue'
+  const uid = useId()
+
+  // vue 3.4 及以下版本
+  // const uid = 'qrcode-1'
+  // const uid2 = 'qrcode-2'
+</script>
+<qrcode-svg value="test" :id="uid" render-as="svg" />
+```
+
+省略时使用模块级计数器，该计数器在多请求的 SSR 环境中不安全。
+
 ### `gradient`
 
 - 类型: `boolean`

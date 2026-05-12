@@ -204,6 +204,28 @@ The settings to support qrcode image logo.
 <qrcode-vue value="test" :radius="0.35" />
 ```
 
+### `id`
+
+- タイプ：`string`
+- デフォルト：`undefined`
+
+SVG内部要素（グラデーション、クリップパス）のカスタムID。SSRハイドレーションの一貫性に必要です。`useId()` を渡して、サーバーとクライアントで一致するIDを生成してください。
+
+```html
+<script setup>
+  // Vue 3.5+ のみ
+  import { useId } from 'vue'
+  const uid = useId()
+
+  // 古いバージョン（3.4以下）
+  // const uid = 'qrcode-1'
+  // const uid2 = 'qrcode-2'
+</script>
+<qrcode-svg value="test" :id="uid" render-as="svg" />
+```
+
+省略した場合、モジュールレベルのカウンターが使用されますが、複数リクエストのSSR環境では安全ではありません。
+
 ### `gradient`
 
 - タイプ：`boolean`

@@ -1,4 +1,4 @@
-import { computed, defineComponent, ExtractPropTypes, Fragment, h, onMounted, PropType, ref, useId, watchEffect } from 'vue'
+import { computed, defineComponent, ExtractPropTypes, Fragment, h, onMounted, PropType, ref, watchEffect } from 'vue'
 import QR from './qrcodegen'
 
 type Modules = ReturnType<QR.QrCode['getModules']>
@@ -17,11 +17,9 @@ export type ImageSettings = {
 
 let _uid = 0
 
-function getUid(): string {
-  if (typeof useId === 'function') {
-    return `${useId()}-${_uid++}`
-  }
-  return `vue-${Math.random().toString(36).slice(2)}-${_uid++}`
+function getUid(id?: string): string {
+  if (id) return id
+  return `v-${_uid++}`
 }
 
 const defaultErrorCorrectLevel: Level = 'L'
@@ -288,6 +286,10 @@ const QRCodeProps = {
     default: 0,
     validator: (r: any) => !isNaN(r) && r >= 0 && r <= 0.5,
   },
+  id: {
+    type: String,
+    required: false,
+  },
 }
 
 const QRCodeVueProps = {
@@ -305,7 +307,7 @@ export const QrcodeSvg = defineComponent({
   props: QRCodeProps,
   setup(props) {
     const { numCells, fgPath, imageProps, imageBorderProps } = useQRCode(props)
-    const uid = getUid()
+    const uid = getUid(props.id)
     const qrGradientId = `qrcode.vue-gradient-${uid}`
     const qrLogoClipPathId = `qrcode.vue-logo-clip-path-${uid}`
     const gradientVNode = computed(() => {
@@ -594,6 +596,7 @@ const QrcodeVue = defineComponent({
         gradientStartColor: props.gradientStartColor,
         gradientEndColor: props.gradientEndColor,
         radius: props.radius,
+        id: props.id,
       },
     )
   },

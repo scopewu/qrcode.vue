@@ -1,3 +1,13 @@
+## [3.9.1]
+
+### Bugfix
+
+- Remove static `useId` import to fix build errors for Vue < 3.5 (`No matching export for import "useId"`).
+
+### Feature
+
+- Add `id` prop for SSR hydration consistency. Pass `useId()` to ensure matching IDs between server and client.
+
 ## [3.9.0]
 
 ### Feature
