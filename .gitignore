@@ -49,3 +49,4 @@ jspm_packages
 dist/
 
 .sisyphus/
+example/.generated/

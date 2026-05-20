@@ -1,12 +1,50 @@
 import { computed, createApp, defineComponent, nextTick, onMounted, ref, watch } from 'vue'
 import QrcodeVue from '../src'
 import type { Level, RenderAs, GradientType, ImageSettings } from '../src'
+import { getLang, t, LANGUAGES } from './i18n'
 import './styles.css'
 
-const App = defineComponent({
-  components: { QrcodeVue },
+const LangSwitcher = defineComponent({
+  name: 'LangSwitcher',
   setup() {
-    const value = ref('QRCODE.VUE ❤️ Thanks. 感谢. ありがたい. 감사. Reconnaissant. Dankbar. berterima kasih.')
+    const lang = getLang()
+    const languages = LANGUAGES
+    const currentLabel = LANGUAGES.find(l => l.key === lang)?.label ?? ''
+
+    return { lang, languages, currentLabel, t }
+  },
+  template: `
+    <div class="lang-dropdown">
+      <button type="button" class="lang-trigger"
+        aria-haspopup="true"
+        :aria-label="t('langSwitcher.label')">
+        <svg class="lang-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        <span class="lang-current">{{ currentLabel }}</span>
+        <svg class="lang-chevron" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+      <ul class="lang-menu" role="menu" :aria-label="t('langSwitcher.label')">
+        <li v-for="l in languages" :key="l.key" role="none">
+          <a :href="l.href" class="lang-option" :class="{ 'lang-option-active': l.key === lang }"
+            role="menuitem" :lang="l.htmlLang" :aria-current="l.key === lang ? 'true' : undefined">
+            <svg class="lang-check" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            <span>{{ l.label }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  `,
+})
+
+const App = defineComponent({
+  components: { QrcodeVue, LangSwitcher },
+  setup() {
+    const value = ref(t('defaultValue'))
     const size = ref(135)
     const level = ref<Level>('L')
     const background = ref('#ffffff')
@@ -132,6 +170,7 @@ const App = defineComponent({
       gradientEndColor,
       usageExample,
       radius,
+      t,
     }
   }
 })
