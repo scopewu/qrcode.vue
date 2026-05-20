@@ -31,7 +31,7 @@ jobs:
         run: yarn install
 
       - name: Build GitHub Pages
-        run: yarn rsbuild build
+        run: yarn run build:example
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4

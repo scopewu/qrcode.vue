@@ -6,6 +6,8 @@ export default defineConfig({
   source: {
     entry: {
       index: './example/webpack-entry.ts',
+      'zh/index': './example/webpack-entry.ts',
+      'zh-hk/index': './example/webpack-entry.ts',
     },
   },
   resolve: {
@@ -23,7 +25,11 @@ export default defineConfig({
     inlineStyles: true,
   },
   html: {
-    template: './example/webpack.html',
+    template({ entryName }) {
+      const langMap = { index: 'en', 'zh/index': 'zh', 'zh-hk/index': 'zh-hk' }
+      const lang = langMap[entryName] || 'en'
+      return `./example/.generated/webpack.${lang}.html`
+    },
     scriptLoading: 'module',
   },
   server: {
