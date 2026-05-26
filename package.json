@@ -52,8 +52,8 @@
   "dependencies": {},
   "devDependencies": {
     "@rollup/plugin-terser": "^1.0.0",
-    "@rsbuild/core": "^2.0.6",
-    "@rstest/core": "^0.10.1",
+    "@rsbuild/core": "^2.0.7",
+    "@rstest/core": "^0.10.2",
     "@vue/test-utils": "^2.4.10",
     "happy-dom": "^20.9.0",
     "rollup": "^4.60.4",
