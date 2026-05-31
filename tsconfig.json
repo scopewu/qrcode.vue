@@ -3,6 +3,7 @@
     "strict": true,
     "esModuleInterop": true,
     "moduleResolution": "bundler",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "rootDir": "./"
   }
 }

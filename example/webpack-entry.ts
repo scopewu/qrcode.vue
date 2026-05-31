@@ -45,7 +45,7 @@ const App = defineComponent({
   components: { QrcodeVue, LangSwitcher },
   setup() {
     const value = ref(t('defaultValue'))
-    const size = ref(135)
+    const size = ref(220)
     const level = ref<Level>('L')
     const background = ref('#ffffff')
     const foreground = ref('#000000')

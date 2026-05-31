@@ -18,10 +18,10 @@
     "./package": "./package.json"
   },
   "scripts": {
-    "dev": "npx tsx example/scripts/generate-i18n.mjs && rsbuild dev",
+    "dev": "node example/scripts/generate-i18n.mjs && rsbuild dev",
     "build": "rollup -c",
-    "build:example": "npx tsx example/scripts/generate-i18n.mjs && rsbuild build",
-    "generate:i18n": "npx tsx example/scripts/generate-i18n.mjs",
+    "build:example": "node example/scripts/generate-i18n.mjs && rsbuild build",
+    "generate:i18n": "node example/scripts/generate-i18n.mjs",
     "test": "rstest"
   },
   "repository": "https://github.com/scopewu/qrcode.vue.git",
@@ -52,13 +52,13 @@
   "dependencies": {},
   "devDependencies": {
     "@rollup/plugin-terser": "^1.0.0",
-    "@rsbuild/core": "^2.0.7",
-    "@rstest/core": "^0.10.2",
+    "@rsbuild/core": "^2.0.9",
+    "@rstest/core": "^0.10.3",
     "@vue/test-utils": "^2.4.10",
     "happy-dom": "^20.9.0",
     "rollup": "^4.60.4",
     "rollup-plugin-typescript2": "^0.37.0",
     "typescript": "^5.9.3",
-    "vue": "^3.5.34"
+    "vue": "^3.5.35"
   }
 }
