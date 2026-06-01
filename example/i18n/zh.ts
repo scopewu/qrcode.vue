@@ -1,21 +1,21 @@
 export default {
+  author: 'https://tie.pub/me/',
   defaultValue: 'QRCODE.VUE ❤️ 感谢使用。',
-  title: 'qrcode.vue - 用于生成二维码的 Vue.js 组件。',
+  title: 'qrcode.vue - 用于生成二维码的 Vue 组件。',
   description:
-    'qrcode.vue - 用于生成二维码的 Vue.js 组件。同时支持 Vue 2 和 Vue 3。提供 canvas 和 svg 两种二维码格式，可自定义尺寸、边距、纠错级别、前景色和背景色、Logo 图片以及渐变效果。',
+    'qrcode.vue - 用于生成二维码的 Vue 组件。同时支持 Vue 2 和 Vue 3。提供 canvas 和 svg 两种二维码格式，可自定义尺寸、边距、纠错级别、前景色和背景色、Logo 图片以及渐变效果。',
   ogTitle: 'QRCode Vue',
-  ogDescription: 'qrcode.vue - 用于生成二维码的 Vue.js 组件',
+  ogDescription: 'qrcode.vue - 用于生成二维码的 Vue 组件',
   ogLocale: 'zh_CN',
   viewOnGitHub: '在 GitHub 上查看 →',
   subtitle:
-    '用于生成二维码的 Vue.js 组件。同时支持 Vue 2 和 Vue 3。提供 canvas 和 svg 两种二维码格式。可自定义尺寸、边距、纠错级别、前景色和背景色、Logo 图片以及渐变效果。',
+    '用于生成二维码的 Vue 组件。同时支持 Vue 2 和 Vue 3。提供 canvas 和 svg 两种二维码格式。可自定义尺寸、边距、纠错级别、前景色和背景色、Logo 图片以及渐变效果。',
   tabs: {
     docs: '文档',
     playground: '演示',
   },
   docs: {
     installation: '安装',
-    installCmd: 'npm install --save qrcode.vue\n# or\nyarn add qrcode.vue',
     buildFormats: '该组件提供三种构建格式：',
     file: '文件',
     format: '格式',

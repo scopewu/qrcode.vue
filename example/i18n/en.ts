@@ -1,21 +1,21 @@
 export default {
+  author: 'https://tie.pub/en/me/',
   defaultValue: 'QRCODE.VUE ❤️ Thanks. 感谢. ありがたい. 감사. Reconnaissant. Dankbar. berterima kasih.',
-  title: 'qrcode.vue - A Vue.js component to generate QRCode.',
+  title: 'qrcode.vue - A Vue component to generate QRCode.',
   description:
-    'qrcode.vue - A Vue.js component for QRCode. QRCode vue supports both Vue 2 and Vue 3. It offers two QR code formats: canvas and svg. Customize QR code size, margins, error correction level, foreground and background colors, logo images, and gradient effects.',
+    'qrcode.vue - A Vue component for QRCode. QRCode vue supports both Vue 2 and Vue 3. It offers two QR code formats: canvas and svg. Customize QR code size, margins, error correction level, foreground and background colors, logo images, and gradient effects.',
   ogTitle: 'QRCode Vue',
-  ogDescription: 'qrcode.vue - A Vue.js component to generate QRCode',
+  ogDescription: 'qrcode.vue - A Vue component to generate QRCode',
   ogLocale: 'en_US',
   viewOnGitHub: 'View on GitHub →',
   subtitle:
-    'A Vue.js component for QRCode. Supports both Vue 2 and Vue 3. It offers two QR code formats: canvas and svg. Customize size, margins, error correction level, foreground and background colors, logo images, and gradient effects.',
+    'A Vue component for QRCode. Supports both Vue 2 and Vue 3. It offers two QR code formats: canvas and svg. Customize size, margins, error correction level, foreground and background colors, logo images, and gradient effects.',
   tabs: {
     docs: 'Documentation',
     playground: 'Playground',
   },
   docs: {
     installation: 'Installation',
-    installCmd: 'npm install --save qrcode.vue\n# or\nyarn add qrcode.vue',
     buildFormats: 'The component provides three build formats:',
     file: 'File',
     format: 'Format',

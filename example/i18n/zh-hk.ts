@@ -1,21 +1,21 @@
 export default {
+  author: 'https://tie.pub/zh-tw/me/',
   defaultValue: 'QRCODE.VUE ❤️ 感謝使用。',
-  title: 'qrcode.vue - 用於產生 QR Code 的 Vue.js 組件。',
+  title: 'qrcode.vue - 用於產生 QR Code 的 Vue 組件。',
   description:
-    'qrcode.vue - 用於產生 QR Code 的 Vue.js 組件。同時支援 Vue 2 與 Vue 3。提供 canvas 與 svg 兩種渲染格式，可自訂尺寸、邊距、容錯等級、前景色與背景色、Logo 圖片以及漸層效果。',
+    'qrcode.vue - 用於產生 QR Code 的 Vue 組件。同時支援 Vue 2 與 Vue 3。提供 canvas 與 svg 兩種渲染格式，可自訂尺寸、邊距、容錯等級、前景色與背景色、Logo 圖片以及漸層效果。',
   ogTitle: 'QRCode Vue',
-  ogDescription: 'qrcode.vue - 用於產生 QR Code 的 Vue.js 組件',
+  ogDescription: 'qrcode.vue - 用於產生 QR Code 的 Vue 組件',
   ogLocale: 'zh_HK',
   viewOnGitHub: '在 GitHub 上檢視 →',
   subtitle:
-    '用於產生 QR Code 的 Vue.js 組件。同時支援 Vue 2 與 Vue 3。提供 canvas 與 svg 兩種渲染格式。可自訂尺寸、邊距、容錯等級、前景色與背景色、Logo 圖片以及漸層效果。',
+    '用於產生 QR Code 的 Vue 組件。同時支援 Vue 2 與 Vue 3。提供 canvas 與 svg 兩種渲染格式。可自訂尺寸、邊距、容錯等級、前景色與背景色、Logo 圖片以及漸層效果。',
   tabs: {
     docs: '文檔',
     playground: '演示',
   },
   docs: {
     installation: '安裝',
-    installCmd: 'npm install --save qrcode.vue\n# or\nyarn add qrcode.vue',
     buildFormats: '此組件提供三種建置格式：',
     file: '檔案',
     format: '格式',
