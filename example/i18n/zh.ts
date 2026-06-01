@@ -7,7 +7,6 @@ export default {
   ogTitle: 'QRCode Vue',
   ogDescription: 'qrcode.vue - 用于生成二维码的 Vue 组件',
   ogLocale: 'zh_CN',
-  viewOnGitHub: '在 GitHub 上查看 →',
   subtitle:
     '用于生成二维码的 Vue 组件。同时支持 Vue 2 和 Vue 3。提供 canvas 和 svg 两种二维码格式。可自定义尺寸、边距、纠错级别、前景色和背景色、Logo 图片以及渐变效果。',
   tabs: {

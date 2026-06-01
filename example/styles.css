@@ -228,23 +228,6 @@ a:hover {
   line-height: 1.6;
 }
 
-.app-subtitle {
-  font-size: 0.875rem;
-  color: var(--text-muted);
-  margin: 0 0 0.5rem;
-}
-
-.app-subtitle a {
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.app-subtitle a:hover {
-  color: var(--accent-hover);
-  text-decoration: underline;
-}
-
 /* Widget / GitHub badge */
 .widget {
   display: inline-flex;
@@ -454,8 +437,6 @@ a:hover {
 }
 
 .doc-section table {
-  display: block;
-  overflow-x: auto;
   width: 100%;
   border-collapse: collapse;
   margin: 1rem 0;
@@ -477,6 +458,11 @@ a:hover {
 
 .doc-section tr:last-child td {
   border-bottom: none;
+}
+
+.table-container {
+  display: block;
+  overflow-x: auto;
 }
 
 /* Playground layout */

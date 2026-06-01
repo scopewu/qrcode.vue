@@ -7,7 +7,6 @@ export default {
   ogTitle: 'QRCode Vue',
   ogDescription: 'qrcode.vue - 用於產生 QR Code 的 Vue 組件',
   ogLocale: 'zh_HK',
-  viewOnGitHub: '在 GitHub 上檢視 →',
   subtitle:
     '用於產生 QR Code 的 Vue 組件。同時支援 Vue 2 與 Vue 3。提供 canvas 與 svg 兩種渲染格式。可自訂尺寸、邊距、容錯等級、前景色與背景色、Logo 圖片以及漸層效果。',
   tabs: {

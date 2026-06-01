@@ -42,7 +42,6 @@
           <lang-switcher />
         </div>
       </div>
-      <p class="app-subtitle"><a href="https://github.com/scopewu/qrcode.vue" target="_blank" rel="noopener">{{t('viewOnGitHub')}}</a></p>
       <p class="app-desc">{{t('subtitle')}}</p>
     </div>
   </header>
@@ -61,15 +60,16 @@
 pnpm add qrcode.vue
 yarn add qrcode.vue</code></pre>
         <p>{{t('docs.buildFormats')}}</p>
-        <table>
-          <thead><tr><th>{{t('docs.file')}}</th><th>{{t('docs.format')}}</th></tr></thead>
-          <tbody>
-            <tr><td><code>qrcode.vue.cjs.js</code></td><td>CommonJS</td></tr>
-            <tr><td><code>qrcode.vue.esm.js</code></td><td>ES module</td></tr>
-            <tr><td><code>qrcode.vue.browser.min.js</code></td><td>UMD (browser)</td></tr>
-          </tbody>
-        </table>
-      </div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>{{t('docs.file')}}</th><th>{{t('docs.format')}}</th></tr></thead>
+            <tbody>
+              <tr><td><code>qrcode.vue.cjs.js</code></td><td>CommonJS</td></tr>
+              <tr><td><code>qrcode.vue.esm.js</code></td><td>ES module</td></tr>
+              <tr><td><code>qrcode.vue.browser.min.js</code></td><td>UMD (browser)</td></tr>
+            </tbody>
+          </table>
+        </div>
 
       <div class="doc-section">
         <h2>{{t('docs.quickStart')}}</h2>
@@ -85,28 +85,30 @@ createApp({
 
       <div class="doc-section">
         <h2>{{t('docs.componentProps')}}</h2>
-        <table>
-          <thead>
-            <tr><th>{{t('docs.prop')}}</th><th>{{t('docs.type')}}</th><th>{{t('docs.default')}}</th><th>{{t('docs.description')}}</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>value</code></td><td><code>string</code></td><td><code>''</code></td><td>{{t('propDescriptions.value')}}</td></tr>
-            <tr><td><code>size</code></td><td><code>number</code></td><td><code>100</code></td><td>{{t('propDescriptions.size')}}</td></tr>
-            <tr><td><code>render-as</code></td><td><code>'canvas' | 'svg'</code></td><td><code>'canvas'</code></td><td>{{t('propDescriptions.renderAs')}}</td></tr>
-            <tr><td><code>margin</code></td><td><code>number</code></td><td><code>0</code></td><td>{{t('propDescriptions.margin')}}</td></tr>
-            <tr><td><code>level</code></td><td><code>'L' | 'M' | 'Q' | 'H'</code></td><td><code>'L'</code></td><td>{{t('propDescriptions.level')}}</td></tr>
-            <tr><td><code>background</code></td><td><code>string</code></td><td><code>'#ffffff'</code></td><td>{{t('propDescriptions.background')}}</td></tr>
-            <tr><td><code>foreground</code></td><td><code>string</code></td><td><code>'#000000'</code></td><td>{{t('propDescriptions.foreground')}}</td></tr>
-            <tr><td><code>radius</code></td><td><code>number</code></td><td><code>0</code></td><td>{{t('propDescriptions.radius')}}</td></tr>
-            <tr><td><code>gradient</code></td><td><code>boolean</code></td><td><code>false</code></td><td>{{t('propDescriptions.gradient')}}</td></tr>
-            <tr><td><code>gradient-type</code></td><td><code>'linear' | 'radial'</code></td><td><code>'linear'</code></td><td>{{t('propDescriptions.gradientType')}}</td></tr>
-            <tr><td><code>gradient-start-color</code></td><td><code>string</code></td><td><code>'#000000'</code></td><td>{{t('propDescriptions.gradientStartColor')}}</td></tr>
-            <tr><td><code>gradient-end-color</code></td><td><code>string</code></td><td><code>'#ffffff'</code></td><td>{{t('propDescriptions.gradientEndColor')}}</td></tr>
-            <tr><td><code>image-settings</code></td><td><code>ImageSettings</code></td><td><code>{}</code></td><td>{{t('propDescriptions.imageSettings')}}</td></tr>
-            <tr><td><code>id</code></td><td><code>string</code></td><td><code>undefined</code></td><td>{{t('propDescriptions.id')}}</td></tr>
-            <tr><td><code>class</code></td><td><code>string</code></td><td><code>''</code></td><td>{{t('propDescriptions.class')}}</td></tr>
-          </tbody>
-        </table>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr><th>{{t('docs.prop')}}</th><th>{{t('docs.type')}}</th><th>{{t('docs.default')}}</th><th>{{t('docs.description')}}</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>value</code></td><td><code>string</code></td><td><code>''</code></td><td>{{t('propDescriptions.value')}}</td></tr>
+              <tr><td><code>size</code></td><td><code>number</code></td><td><code>100</code></td><td>{{t('propDescriptions.size')}}</td></tr>
+              <tr><td><code>render-as</code></td><td><code>'canvas' | 'svg'</code></td><td><code>'canvas'</code></td><td>{{t('propDescriptions.renderAs')}}</td></tr>
+              <tr><td><code>margin</code></td><td><code>number</code></td><td><code>0</code></td><td>{{t('propDescriptions.margin')}}</td></tr>
+              <tr><td><code>level</code></td><td><code>'L' | 'M' | 'Q' | 'H'</code></td><td><code>'L'</code></td><td>{{t('propDescriptions.level')}}</td></tr>
+              <tr><td><code>background</code></td><td><code>string</code></td><td><code>'#ffffff'</code></td><td>{{t('propDescriptions.background')}}</td></tr>
+              <tr><td><code>foreground</code></td><td><code>string</code></td><td><code>'#000000'</code></td><td>{{t('propDescriptions.foreground')}}</td></tr>
+              <tr><td><code>radius</code></td><td><code>number</code></td><td><code>0</code></td><td>{{t('propDescriptions.radius')}}</td></tr>
+              <tr><td><code>gradient</code></td><td><code>boolean</code></td><td><code>false</code></td><td>{{t('propDescriptions.gradient')}}</td></tr>
+              <tr><td><code>gradient-type</code></td><td><code>'linear' | 'radial'</code></td><td><code>'linear'</code></td><td>{{t('propDescriptions.gradientType')}}</td></tr>
+              <tr><td><code>gradient-start-color</code></td><td><code>string</code></td><td><code>'#000000'</code></td><td>{{t('propDescriptions.gradientStartColor')}}</td></tr>
+              <tr><td><code>gradient-end-color</code></td><td><code>string</code></td><td><code>'#ffffff'</code></td><td>{{t('propDescriptions.gradientEndColor')}}</td></tr>
+              <tr><td><code>image-settings</code></td><td><code>ImageSettings</code></td><td><code>{}</code></td><td>{{t('propDescriptions.imageSettings')}}</td></tr>
+              <tr><td><code>id</code></td><td><code>string</code></td><td><code>undefined</code></td><td>{{t('propDescriptions.id')}}</td></tr>
+              <tr><td><code>class</code></td><td><code>string</code></td><td><code>''</code></td><td>{{t('propDescriptions.class')}}</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div class="doc-section">

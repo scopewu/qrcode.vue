@@ -7,7 +7,6 @@ export default {
   ogTitle: 'QRCode Vue',
   ogDescription: 'qrcode.vue - A Vue component to generate QRCode',
   ogLocale: 'en_US',
-  viewOnGitHub: 'View on GitHub →',
   subtitle:
     'A Vue component for QRCode. Supports both Vue 2 and Vue 3. It offers two QR code formats: canvas and svg. Customize size, margins, error correction level, foreground and background colors, logo images, and gradient effects.',
   tabs: {
