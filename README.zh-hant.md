@@ -1,16 +1,16 @@
 # qrcode.vue
 
-⚠️ 如果你正在使用 Vue 3，请升级 `qrcode.vue` 到 `3.x`;
+⚠️ 如果你正在使用 Vue 3，請升級 `qrcode.vue` 到 `3.x`;
 
-🔒 如果你正在使用 Vue 2，请保持 `qrcode.vue` 的版本为 `1.x`;
+🔒 如果你正在使用 Vue 2，請保持 `qrcode.vue` 的版本爲 `1.x`;
 
-一款 Vue.js 二维码组件，同时支援 Vue 2 和 Vue 3.
+一款 Vue.js 二維碼組件(QR Code)，同時支援 Vue 2 和 Vue 3.
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/scopewu/qrcode.vue/blob/main/LICENSE)
 
-## 快速开始
+## 快速開始
 
-快速添加 `qrcode.vue` 组件到项目中
+快速添加 `qrcode.vue` 組件到項目中
 
 ```bash
 npm install --save qrcode.vue # yarn add qrcode.vue
@@ -43,7 +43,7 @@ createApp({
 }).mount('#root')
 ```
 
-或者，在独有单文件扩展 `*.vue` 中使用：
+或者，在獨有單文件擴展 `*.vue` 中使用：
 
 ```html
 <template>
@@ -96,7 +96,7 @@ createApp({
   const foreground = ref('#000000')
   const margin = ref(0)
   
-  // 可传入二维码图片相关的属性，支持二维码 LOGO；
+  // 可傳入二維碼圖片相關的屬性，支持二維碼 LOGO；
   const imageSettings = ref<ImageSettings>({
     src: 'https://github.com/scopewu.png',
     width: 30,
@@ -106,12 +106,12 @@ createApp({
     excavate: true,
   })
 
-  // 可传入渐变相关的属性，支持渐变：
+  // 可傳入漸變相關的屬性，支持漸變：
   const gradient = ref(false)
   const gradientType = ref<GradientType>('linear')
   const gradientStartColor = ref('#000000')
   const gradientEndColor = ref('#38bdf8')
-  // 可传入圆角半径：
+  // 可傳入圓角半徑：
   const radius = ref(0)
 </script>
 ```
@@ -120,86 +120,86 @@ createApp({
 
 ### `value`
 
-- 类型：`string`
-- 默认值：`''`
+- 類型：`string`
+- 默認值：`''`
 
-二维码的内容值。
+二維碼的內容值。
 
 ### `size`
 
-- 类型：`number`
-- 默认值：`100`
+- 類型：`number`
+- 默認值：`100`
 
-二维码大小。
+二維碼大小。
 
 ### `render-as`
 
-- 类型：`RenderAs('canvas' | 'svg')`
-- 默认值：`canvas`
+- 類型：`RenderAs('canvas' | 'svg')`
+- 默認值：`canvas`
 
-生成二维码的 HTML 标签，可选 `canvas` 或 `svg`。其中 `svg` 可以用于 SSR。
+生成二維碼的 HTML 標籤，可選 `canvas` 或 `svg`。其中 `svg` 可以用於 SSR。
 
 ### `margin`
 
-- 类型：`number`
-- 默认值：`0`
+- 類型：`number`
+- 默認值：`0`
 
-定义空白区的宽度应该是多少。
+定義空白區的寬度應該是多少。
 
 ### `level`
 
-- 类型：`Level('L' | 'M' | 'Q' | 'H')`
-- 默认值：`L`
+- 類型：`Level('L' | 'M' | 'Q' | 'H')`
+- 默認值：`L`
 
-二维码的容错能力等级，取值为 'L', 'M', 'Q', 'H' 之一。了解更多，[维基百科：QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction)。
+二維碼的容錯能力等級，取值爲 'L', 'M', 'Q', 'H' 之一。瞭解更多，[維基百科：QR_code](https://en.wikipedia.org/wiki/QR_code#Error_correction)。
 
 ### `background`
 
-- 类型：`string`
-- 默认值：`#ffffff`
+- 類型：`string`
+- 默認值：`#ffffff`
 
-二维码背景颜色。
+二維碼背景顏色。
 
 ### `foreground`
 
-- 类型：`string`
-- 默认值：`#000000`
+- 類型：`string`
+- 默認值：`#000000`
 
-二维码前景颜色。
+二維碼前景顏色。
 
 ### `image-settings`
 
-- 类型: `ImageSettings`
-- 默认值: `{}`
+- 類型: `ImageSettings`
+- 默認值: `{}`
 
   ```ts
   export type ImageSettings = {
-    src: string, // 图片的地址。
-    x?: number,  // 水平横向偏移。没有设定值时，图片剧中
-    y?: number,  // 垂直竖向偏移。没有设定值时，图片剧中
-    height: number, // 图片的高度
-    width: number,  // 图片的宽度
-    // 是否“挖掘”图像周围的模块。
-    // 这意味着嵌入图像重叠的任何模块都将使用背景颜色。
-    // 使用此选项可确保图像周围的边缘清晰。嵌入透明图像时也很有用。
+    src: string, // 圖片的地址。
+    x?: number,  // 水平橫向偏移。沒有設定值時，圖片劇中
+    y?: number,  // 垂直豎向偏移。沒有設定值時，圖片劇中
+    height: number, // 圖片的高度
+    width: number,  // 圖片的寬度
+    // 是否“挖掘”圖像周圍的模塊。
+    // 這意味着嵌入圖像重疊的任何模塊都將使用背景顏色。
+    // 使用此選項可確保圖像周圍的邊緣清晰。嵌入透明圖像時也很有用。
     excavate?: boolean,
-    borderRadius?: number, // 图片的边框圆角。
+    borderRadius?: number, // 圖片的邊框圓角。
   }
   ```
 
-二维码图片 logo 配置。
+二維碼圖片 logo 配置。
 
 ### `radius`
 
-- 类型：`number`
-- 默认值：`0`
+- 類型：`number`
+- 默認值：`0`
 
-每个二维码模块的圆角半径，相对于模块宽度的比例。接受 `0` 到 `0.5` 的值。
+每個二維碼模塊的圓角半徑，相對於模塊寬度的比例。接受 `0` 到 `0.5` 的值。
 
-- `0`（默认）- 方形模块，直角
-- `0.5` - 最大圆角，模块变为圆形
+- `0`（默認）- 方形模塊，直角
+- `0.5` - 最大圓角，模塊變爲圓形
 
-圆角是上下文感知的：相邻深色模块之间的内角保持直角，外角则圆角化。
+圓角是上下文感知的：相鄰深色模塊之間的內角保持直角，外角則圓角化。
 
 ```html
 <qrcode-vue value="test" :radius="0.35" />
@@ -207,14 +207,14 @@ createApp({
 
 ### `id`
 
-- 类型：`string`
-- 默认值：`undefined`
+- 類型：`string`
+- 默認值：`undefined`
 
-自定义 SVG 内部元素（渐变、裁剪路径）的 ID。SSR 水合一致性需要此属性 — 传入 `useId()` 以确保服务端和客户端生成匹配的 ID。
+自定義 SVG 內部元素（漸變、裁剪路徑）的 ID。SSR 水合一致性需要此屬性 — 傳入 `useId()` 以確保服務端和客戶端生成匹配的 ID。
 
 ```html
 <script setup>
-  // 仅 vue 3.5+
+  // 僅 vue 3.5+
   import { useId } from 'vue'
   const uid = useId()
 
@@ -225,46 +225,46 @@ createApp({
 <qrcode-svg value="test" :id="uid" render-as="svg" />
 ```
 
-省略时使用模块级计数器，该计数器在多请求的 SSR 环境中不安全。
+省略時使用模塊級計數器，該計數器在多請求的 SSR 環境中不安全。
 
 ### `gradient`
 
-- 类型: `boolean`
-- 默认值: `false`
+- 類型: `boolean`
+- 默認值: `false`
 
-启用二维码的渐变填充。
+啓用二維碼的漸變填充。
 
 ### `gradient-type`
 
-- 类型: `GradientType('linear' | 'radial')`
-- 默认值: `linear`
+- 類型: `GradientType('linear' | 'radial')`
+- 默認值: `linear`
 
-指定渐变类型。
+指定漸變類型。
 
 ### `gradient-start-color`
 
-- 类型: `string`
-- 默认值: `#000000`
+- 類型: `string`
+- 默認值: `#000000`
 
-渐变的起始颜色。
+漸變的起始顏色。
 
 ### `gradient-end-color`
 
-- 类型: `string`
-- 默认值: `#ffffff`
+- 類型: `string`
+- 默認值: `#ffffff`
 
-渐变的结束颜色。
+漸變的結束顏色。
 
 ### `class`
 
-- 类型：`string`
-- 默认值：`''`
+- 類型：`string`
+- 默認值：`''`
 
-传递给二维码根元素的类名。
+傳遞給二維碼根元素的類名。
 
 ## `QrcodeVue` 3.5+
 
-`QrcodeVue` 3.5+ 后导出独立的 `QrcodeCanvas` 和 `QrcodeSvg` 组件，为此修改了 rollup 的配置：
+`QrcodeVue` 3.5+ 後導出獨立的 `QrcodeCanvas` 和 `QrcodeSvg` 組件，爲此修改了 rollup 的配置：
 
 ```
 // rollup.config.js
@@ -273,7 +273,7 @@ createApp({
 +    exports: 'named',
 ```
 
-现在在 common.js 和 cdn 直接引用 `QrcodeVue` 需要使用 `default` 字段：
+現在在 common.js 和 cdn 直接引用 `QrcodeVue` 需要使用 `default` 字段：
 
 ```js
 const QrcodeVue = require('qrcode.vue').default
@@ -305,6 +305,6 @@ Vue.createApp({
 </script>
 ```
 
-## 软件许可
+## 軟件許可
 
 copyright &copy; 2021 scopewu, license by [MIT](https://github.com/scopewu/qrcode.vue/blob/main/LICENSE)

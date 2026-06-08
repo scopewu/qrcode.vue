@@ -6,7 +6,7 @@
 
 A Vue.js component to generate [QRCode](https://en.wikipedia.org/wiki/QR_code). Both support Vue 2 and Vue 3.
 
-[中文](./README-zh_cn.md) | [日本語](./README-ja.md)
+[简体中文](./README-zh_cn.md) | [繁體中文](./README.zh-hant.md) | [日本語](./README-ja.md)
 
 ## install
 
