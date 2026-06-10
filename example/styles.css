@@ -17,6 +17,7 @@
   --max-width: 960px;
   --gap: 1.5rem;
   --padding-md: 1.5rem;
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC', 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -37,13 +38,18 @@
   }
 }
 
+:lang(zh-hant),
+:lang(zh-HK) {
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang TC", "PingFang HK", "Microsoft JhengHei", "WenQuanYi Micro Hei", "Noto Sans CJK TC", sans-serif;
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC', 'Microsoft YaHei', 'WenQuanYi Micro Hei', sans-serif;
+  font-family: var(--font-family);
   font-size: 0.9375rem;
   line-height: 1.6;
   color: var(--text-secondary);
