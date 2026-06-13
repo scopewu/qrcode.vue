@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <title>qrcode.vue - 用于生成二维码的 Vue 组件。</title>
+  <meta name="author" content="@scopewu" />
+  <link rel="author" href="https://tie.pub/me/" />
+  <meta name="description" content="qrcode.vue - 用于生成二维码的 Vue 组件。同时支持 Vue 2 和 Vue 3。提供 canvas 和 svg 两种二维码格式，可自定义尺寸、边距、纠错级别、前景色和背景色、Logo 图片以及渐变效果。" />
+  <link rel="canonical" href="https://qr-vue.tie.pub/zh/" />
+    <link rel="alternate" hreflang="en" href="https://qr-vue.tie.pub/" />
+  <link rel="alternate" hreflang="zh-HK" href="https://qr-vue.tie.pub/zh-hk/" />
+  <link rel="alternate" hreflang="zh-CN" href="https://qr-vue.tie.pub/zh/" />
+  <link rel="alternate" hreflang="x-default" href="https://qr-vue.tie.pub/" />
+  <meta property="og:site_name" content="qrcode.vue" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="QRCode Vue" />
+  <meta property="og:description" content="qrcode.vue - 用于生成二维码的 Vue 组件" />
+  <meta property="og:url" content="https://qr-vue.tie.pub/zh/" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta property="og:image" content="https://s.tie.pub/qrcode/qrcode.vue.png" />
+  <meta property="og:image:alt" content="link to qrcode.vue" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <style>[v-cloak]{display: none!important;}</style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+<script type="module" src="/static/js/94.5a81f87dd6.js"></script><script type="module" src="/static/js/631.9c40e470da.js"></script><script type="module" src="/static/js/zh/index.6a2777ab61.js"></script><style>:root{--lightningcss-light:initial;--lightningcss-dark: ;--lightningcss-light:initial;--lightningcss-dark: ;color-scheme:light dark;--bg-body:#f8fafc;--bg-card:#fff;--bg-code:#f1f5f9;--text-primary:#0f172a;--text-secondary:#475569;--text-muted:#94a3b8;--border-color:#e2e8f0;--accent:#0ea5e9;--accent-hover:#0284c7;--shadow-sm:0 1px 2px 0 #0000000a;--shadow:0 1px 3px 0 #00000014, 0 1px 2px -1px #00000014;--shadow-md:0 4px 6px -1px #0000000f, 0 2px 4px -2px #0000000f;--radius:.5rem;--radius-lg:.75rem;--max-width:960px;--gap:1.5rem;--padding-md:1.5rem;--font-family:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif}@media (prefers-color-scheme:dark){:root{--lightningcss-light: ;--lightningcss-dark:initial;--bg-body:#0f172a;--bg-card:#1e293b;--bg-code:#0f172a;--bg-code-inline:#1e293b;--text-primary:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#64748b;--border-color:#334155;--accent:#38bdf8;--accent-hover:#0ea5e9;--shadow-sm:0 1px 2px 0 #0003;--shadow:0 1px 3px 0 #0000004d, 0 1px 2px -1px #0000004d;--shadow-md:0 4px 6px -1px #0000004d, 0 2px 4px -2px #0000004d}}:lang(zh-hant),:lang(zh-HK){--font-family:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang TC", "PingFang HK", "Microsoft JhengHei", "WenQuanYi Micro Hei", "Noto Sans CJK TC", sans-serif}*{box-sizing:border-box}body{font-family:var(--font-family);color:var(--text-secondary);background-color:var(--bg-body);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;margin:0;font-size:.9375rem;line-height:1.6}a{color:var(--accent);text-decoration:none;transition:color .15s}a:hover{color:var(--accent-hover);text-decoration:underline}.app-header{background:var(--bg-card);border-bottom:1px solid var(--border-color);padding:2.5rem var(--padding-md) 2rem}.app-header-inner{max-width:var(--max-width);margin:0 auto}.app-header-top{flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.75rem;display:flex}.app-title{color:var(--text-primary);letter-spacing:-.025em;margin:0;font-size:1.75rem;font-weight:700}.app-meta{align-items:center;gap:1rem;display:flex}.lang-dropdown{display:inline-block;position:relative}.lang-trigger{color:var(--text-secondary);background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);cursor:pointer;align-items:center;gap:.375rem;padding:.375rem .625rem;font-family:inherit;font-size:.8125rem;font-weight:500;line-height:1.25rem;transition:border-color .15s,box-shadow .15s;display:inline-flex}.lang-trigger:hover{border-color:var(--accent);color:var(--text-primary)}.lang-trigger:focus-visible{border-color:var(--accent);outline:none;box-shadow:0 0 0 2px #0ea5e933}.lang-globe{opacity:.7;flex-shrink:0;width:1rem;height:1rem}.lang-trigger:hover .lang-globe{opacity:1}.lang-current{display:inline-block}.lang-chevron{opacity:.5;flex-shrink:0;width:.875rem;height:.875rem;transition:transform .2s}.lang-dropdown:hover .lang-chevron{opacity:.7;transform:rotate(180deg)}.lang-menu{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);min-width:10rem;box-shadow:var(--shadow-md);opacity:0;visibility:hidden;z-index:100;margin:0;padding:.375rem;list-style:none;transition:opacity .15s,transform .15s,visibility .15s;position:absolute;top:calc(100% + .25rem);right:0;transform:translateY(-4px)}.lang-dropdown:hover .lang-menu{opacity:1;visibility:visible;transform:translateY(0)}.lang-option{border-radius:var(--radius);color:var(--text-secondary);cursor:pointer;align-items:center;gap:.625rem;padding:.5rem .625rem;font-size:.8125rem;font-weight:500;text-decoration:none;transition:background-color .15s,color .15s;display:flex}.lang-option:hover{background:var(--bg-body);color:var(--text-primary);text-decoration:none}.lang-option-active{color:var(--accent);font-weight:600}.lang-check{opacity:0;flex-shrink:0;width:1rem;height:1rem}.lang-option-active .lang-check{opacity:1}.app-desc{color:var(--text-secondary);max-width:640px;margin:0;font-size:1rem;line-height:1.6}.widget{border-radius:var(--radius);border:1px solid var(--border-color);align-items:center;font-size:0;line-height:0;display:inline-flex;overflow:hidden}.widget a{outline:0;text-decoration:none}.gh-btn,.gh-star{vertical-align:middle;cursor:pointer;color:var(--text-primary);background-color:var(--bg-code);border-right:1px solid var(--border-color);align-items:center;gap:.375rem;padding:.375rem .75rem;font-size:.75rem;font-weight:600;line-height:1.25rem;transition:background-color .15s;display:inline-flex}.gh-btn:hover{background-color:var(--bg-body)}.gh-star{background-color:var(--bg-card);border-right:none;justify-content:center;min-width:2.5rem}.gh-star:hover{color:var(--accent)}.octicon{vertical-align:text-top;fill:currentColor;display:inline-block;overflow:visible}.app-main{max-width:var(--max-width);padding:2rem var(--padding-md);margin:0 auto}.tabs{border-bottom:1px solid var(--border-color);background:var(--bg-body);z-index:10;gap:0;margin-bottom:2rem;display:flex;position:sticky;top:0}.tab-btn{appearance:none;color:var(--text-muted);cursor:pointer;background:0 0;border:none;padding:.75rem 1.25rem;font-family:inherit;font-size:.9375rem;font-weight:500;transition:color .15s;position:relative}.tab-btn:hover{color:var(--text-secondary)}.tab-btn.active{color:var(--accent)}.tab-btn.active:after{content:"";background:var(--accent);border-radius:2px 2px 0 0;height:2px;position:absolute;bottom:-1px;left:0;right:0}.tab-panel{display:none}.tab-panel.active{animation:.25s fadeIn;display:block}@keyframes fadeIn{0%{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}.card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:1.5rem}.card+.card{margin-top:1.5rem}.card-title{color:var(--text-primary);margin:0 0 1rem;font-size:1.125rem;font-weight:600}.doc-section{margin-bottom:2.5rem}.doc-section h2{color:var(--text-primary);border-bottom:1px solid var(--border-color);margin:0 0 1rem;padding-bottom:.5rem;font-size:1.25rem;font-weight:600}.doc-section h3{color:var(--text-primary);margin:1.5rem 0 .5rem;font-size:1rem;font-weight:600}.doc-section p{margin:.5rem 0}.doc-section pre{background:var(--bg-code);border:1px solid var(--border-color);border-radius:var(--radius);color:var(--text-primary);padding:1rem;font-size:.875rem;line-height:1.6;overflow-x:auto}.doc-section code{background:var(--bg-code-inline,var(--bg-code));color:#c7254e;border-radius:.25rem;padding:.15em .4em;font-family:ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,monospace;font-size:.875em}.doc-section pre code{color:inherit;background:0 0;padding:0}.doc-section ul{margin:.5rem 0;padding-left:1.25rem}.doc-section li{margin:.25rem 0}.doc-section table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.875rem}.doc-section th,.doc-section td{text-align:left;border-bottom:1px solid var(--border-color);padding:.625rem .875rem}.doc-section th{color:var(--text-primary);background:var(--bg-code);font-weight:600}.doc-section tr:last-child td{border-bottom:none}.table-container{display:block;overflow-x:auto}.playground{grid-template-columns:1fr;gap:1.5rem;display:grid}@media (min-width:768px){.playground{grid-template-columns:1fr 280px}}@media (min-width:960px){.playground{grid-template-columns:1fr 320px}}.form-group{margin-bottom:1.25rem}.form-group:last-child{margin-bottom:0}.form-label{color:var(--text-primary);margin-bottom:.375rem;font-size:.8125rem;font-weight:500;display:block}.form-label .hint{color:var(--text-muted);margin-left:.25rem;font-weight:400}input[type=text],input[type=number],input[type=color],select,textarea{width:100%;color:var(--text-primary);background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);outline:none;padding:.5rem .75rem;font-family:inherit;font-size:.875rem;line-height:1.5;transition:border-color .15s,box-shadow .15s}input[type=text]:focus,input[type=number]:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px #0ea5e91a}input[type=color]{cursor:pointer;height:2.25rem;padding:.25rem}select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 20 20%27%3e%3cpath stroke=%27%2394a3b8%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27M6 8l4 4 4-4%27/%3e%3c/svg%3e");background-position:right .5rem center;background-repeat:no-repeat;background-size:1.25rem;padding-right:2.25rem}textarea{resize:vertical;min-height:4rem}input[type=range]{appearance:none;cursor:pointer;background:0 0;width:100%;height:1.25rem}input[type=range]::-webkit-slider-runnable-track{background:var(--border-color);border-radius:999px;width:100%;height:.375rem}input[type=range]::-webkit-slider-thumb{appearance:none;background:var(--accent);width:1rem;height:1rem;box-shadow:var(--shadow);border:2px solid #fff;border-radius:50%;margin-top:-.3125rem;transition:transform .15s,background .15s}input[type=range]::-webkit-slider-thumb:hover{background:var(--accent-hover);transform:scale(1.1)}input[type=range]::-moz-range-track{background:var(--border-color);border-radius:999px;width:100%;height:.375rem}input[type=range]::-moz-range-thumb{background:var(--accent);width:1rem;height:1rem;box-shadow:var(--shadow);border:2px solid #fff;border-radius:50%}.form-check{cursor:pointer;align-items:center;gap:.5rem;padding:.375rem 0;display:flex}.form-check input[type=checkbox]{width:1rem;height:1rem;accent-color:var(--accent);cursor:pointer;flex-shrink:0}.form-check .form-label{cursor:pointer;margin:0;font-size:.875rem}.fieldset-group{border:1px solid var(--border-color);border-radius:var(--radius);background:var(--bg-body);margin-top:1rem;padding:1rem}.fieldset-group legend{color:var(--text-primary);padding:0 .5rem;font-size:.8125rem;font-weight:600}.preview-wrap{background:var(--bg-body);border-radius:var(--radius);border:1px dashed var(--border-color);flex-direction:column;justify-content:center;align-items:center;min-height:280px;padding:1.5rem;display:flex}.preview-wrap .qrcode{max-width:100%;height:auto;display:block}.code-block{color:#e2e8f0;border-radius:var(--radius);white-space:pre-wrap;word-break:break-word;background:#0f172a;margin:0;padding:1rem;font-family:ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,monospace;font-size:.8125rem;line-height:1.6;overflow-x:auto}.form-row{grid-template-columns:1fr;gap:1.25rem;display:grid}@media (min-width:640px){.form-row{grid-template-columns:1fr 1fr}}[v-cloak]{display:none!important}.footer-inner{max-width:var(--max-width);padding:1rem var(--padding-md) 2rem;margin:0 auto}</style></head>
+<body>
+<div id="root">
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div class="app-header-top">
+        <h1 class="app-title">qrcode.vue</h1>
+        <div class="app-meta">
+          <div class="widget">
+            <a class="gh-btn" href="https://github.com/scopewu/qrcode.vue" rel="noopener nofollow" target="_blank" aria-label="Star qrcode.vue on GitHub">
+              <svg viewBox="0 0 16 16" width="14" height="14" class="octicon octicon-mark-github" aria-hidden="true">
+                <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+              </svg>
+              <span>Star</span>
+            </a>
+            <a class="gh-star" href="https://github.com/scopewu/qrcode.vue/stargazers" rel="noopener nofollow" target="_blank" :aria-label="`${stargazersCount} stargazers on GitHub`" v-cloak>{{ stargazersCount }}</a>
+          </div>
+          <lang-switcher />
+        </div>
+      </div>
+      <p class="app-desc">用于生成二维码的 Vue 组件。同时支持 Vue 2 和 Vue 3。提供 canvas 和 svg 两种二维码格式。可自定义尺寸、边距、纠错级别、前景色和背景色、Logo 图片以及渐变效果。</p>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <nav class="tabs">
+      <button class="tab-btn" :class="{ active: activeTab === 'docs' }" @click="switchTab('docs')" type="button">文档</button>
+      <button class="tab-btn" :class="{ active: activeTab === 'playground' }" @click="switchTab('playground')" type="button">演示</button>
+    </nav>
+
+    <section class="tab-panel" :class="{ active: activeTab === 'docs' }">
+      <div class="doc-section">
+        <h2>安装</h2>
+        <pre><code>npm install --save qrcode.vue
+# or
+pnpm add qrcode.vue
+yarn add qrcode.vue</code></pre>
+        <p>该组件提供三种构建格式：</p>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>文件</th><th>格式</th></tr></thead>
+            <tbody>
+              <tr><td><code>qrcode.vue.cjs.js</code></td><td>CommonJS</td></tr>
+              <tr><td><code>qrcode.vue.esm.js</code></td><td>ES module</td></tr>
+              <tr><td><code>qrcode.vue.browser.min.js</code></td><td>UMD (browser)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      <div class="doc-section">
+        <h2>快速开始</h2>
+        <pre><code>import { createApp } from 'vue'
+import QrcodeVue from 'qrcode.vue'
+
+createApp({
+  data: { value: 'https://example.com' },
+  template: '&lt;qrcode-vue :value="value"&gt;&lt;/qrcode-vue&gt;',
+  components: { QrcodeVue },
+}).mount('#root')</code></pre>
+      </div>
+
+      <div class="doc-section">
+        <h2>组件 Props</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr><th>属性</th><th>类型</th><th>默认值</th><th>说明</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>value</code></td><td><code>string</code></td><td><code>''</code></td><td>二维码编码的内容。</td></tr>
+              <tr><td><code>size</code></td><td><code>number</code></td><td><code>100</code></td><td>二维码元素的尺寸（宽和高），单位为像素。</td></tr>
+              <tr><td><code>render-as</code></td><td><code>'canvas' | 'svg'</code></td><td><code>'canvas'</code></td><td>渲染格式。使用 <code>svg</code> 以支持 SSR。</td></tr>
+              <tr><td><code>margin</code></td><td><code>number</code></td><td><code>0</code></td><td>二维码静默区（留白）宽度。</td></tr>
+              <tr><td><code>level</code></td><td><code>'L' | 'M' | 'Q' | 'H'</code></td><td><code>'L'</code></td><td>纠错级别。级别越高，可恢复的损坏越多。</td></tr>
+              <tr><td><code>background</code></td><td><code>string</code></td><td><code>'#ffffff'</code></td><td>二维码背景色。</td></tr>
+              <tr><td><code>foreground</code></td><td><code>string</code></td><td><code>'#000000'</code></td><td>二维码模块的前景色。</td></tr>
+              <tr><td><code>radius</code></td><td><code>number</code></td><td><code>0</code></td><td>模块圆角比例（0 到 0.5）。0.5 时模块变为圆形。</td></tr>
+              <tr><td><code>gradient</code></td><td><code>boolean</code></td><td><code>false</code></td><td>启用二维码模块的渐变填充。</td></tr>
+              <tr><td><code>gradient-type</code></td><td><code>'linear' | 'radial'</code></td><td><code>'linear'</code></td><td>启用 <code>gradient</code> 时使用的渐变类型。</td></tr>
+              <tr><td><code>gradient-start-color</code></td><td><code>string</code></td><td><code>'#000000'</code></td><td>渐变起始颜色。</td></tr>
+              <tr><td><code>gradient-end-color</code></td><td><code>string</code></td><td><code>'#ffffff'</code></td><td>渐变结束颜色。</td></tr>
+              <tr><td><code>image-settings</code></td><td><code>ImageSettings</code></td><td><code>{}</code></td><td>Logo 图片设置，详见下方说明。</td></tr>
+              <tr><td><code>id</code></td><td><code>string</code></td><td><code>undefined</code></td><td>SVG 内部元素的自定义 ID。传入 <code>useId()</code> 以确保 SSR 水合一致性。</td></tr>
+              <tr><td><code>class</code></td><td><code>string</code></td><td><code>''</code></td><td>二维码元素的 CSS 类名。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <h2>图片设置</h2>
+        <pre><code>type ImageSettings = {
+  src: string            // URL of the logo image
+  x?: number             // Horizontal offset (centers by default)
+  y?: number             // Vertical offset (centers by default)
+  height: number         // Height of the image in pixels
+  width: number          // Width of the image in pixels
+  excavate?: boolean     // Remove modules behind the image
+  borderRadius?: number  // Border radius of the image
+  crossOrigin?: 'anonymous' | 'use-credentials' | ''  // CORS attribute for the image
+}</code></pre>
+      </div>
+
+      <div class="doc-section">
+        <h2>TypeScript 示例</h2>
+        <pre><code>&lt;script setup lang="ts"&gt;
+import { ref } from 'vue'
+import QrcodeVue from 'qrcode.vue'
+import type { Level, RenderAs, GradientType, ImageSettings } from 'qrcode.vue'
+
+const value = ref('https://example.com')
+const level = ref&lt;Level&gt;('M')
+const renderAs = ref&lt;RenderAs&gt;('svg')
+const background = ref('#ffffff')
+const foreground = ref('#000000')
+const margin = ref(0)
+
+const imageSettings = ref&lt;ImageSettings&gt;({
+  src: 'https://github.com/scopewu.png',
+  width: 30,
+  height: 30,
+  excavate: true,
+  // crossOrigin: 'anonymous', // Set this when exporting canvas to image
+})
+
+const gradient = ref(false)
+const gradientType = ref&lt;GradientType&gt;('linear')
+const gradientStartColor = ref('#000000')
+const gradientEndColor = ref('#38bdf8')
+const radius = ref(0)
+&lt;/script&gt;</code></pre>
+      </div>
+
+      <div class="doc-section">
+        <h2>模板 Ref 方法</h2>
+        <p><code>QrcodeCanvas</code> 和 <code>QrcodeSvg</code> 都通过模板 ref 暴露以下方法。<code>QrcodeVue</code> 会根据当前的 <code>render-as</code> 转发这些方法：</p>
+
+        <h3>QrcodeCanvas</h3>
+        <pre><code>&lt;script setup lang="ts"&gt;
+import { ref } from 'vue'
+import { QrcodeCanvas } from 'qrcode.vue'
+
+const qrRef = ref()
+
+const handleDownload = () => {
+  qrRef.value?.download('my-qrcode.png')
+}
+&lt;/script&gt;
+
+&lt;qrcode-canvas ref="qrRef" value="https://example.com" /&gt;</code></pre>
+        <p><strong>CORS 注意：</strong>当二维码包含跨域 Logo 图片时，请确保设置 <code>imageSettings.crossOrigin: 'anonymous'</code>，且图片服务器返回 <code>Access-Control-Allow-Origin</code> 响应头。否则 canvas 会被"污染"，导致 <code>toDataURL</code> / <code>download</code> 抛出 <code>SecurityError</code>。</p>
+
+        <h3>QrcodeSvg</h3>
+        <pre><code>&lt;script setup lang="ts"&gt;
+import { ref } from 'vue'
+import { QrcodeSvg } from 'qrcode.vue'
+
+const qrRef = ref()
+
+const handleDownload = () => {
+  qrRef.value?.download('my-qrcode.svg')
+}
+&lt;/script&gt;
+
+&lt;qrcode-svg ref="qrRef" value="https://example.com" /&gt;</code></pre>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>组件</th><th>方法</th><th>签名</th><th>说明</th></tr>
+            </thead>
+            <tbody>
+              <tr><td rowspan="2"><code>QrcodeCanvas</code></td><td><code>toDataURL</code></td><td><code>(type?: string, quality?: number) => string | undefined</code></td><td>将二维码转换为 Data URL。</td></tr>
+              <tr><td><code>download</code></td><td><code>(filename?: string) => void</code></td><td>触发下载二维码图片。</td></tr>
+              <tr><td rowspan="2"><code>QrcodeSvg</code></td><td><code>toDataURL</code></td><td><code>() => string | undefined</code></td><td>将 SVG 元素转换为 Data URL。</td></tr>
+              <tr><td><code>download</code></td><td><code>(filename?: string) => void</code></td><td>触发下载二维码 SVG 图片。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <h2>命名导出 (v3.5+)</h2>
+        <p>从 v3.5 开始，单独导出了 <code>QrcodeCanvas</code> 和 <code>QrcodeSvg</code> 组件：</p>
+        <pre><code>import { QrcodeCanvas, QrcodeSvg } from 'qrcode.vue'
+
+// CommonJS / CDN usage
+const { default: QrcodeVue, QrcodeCanvas, QrcodeSvg } = require('qrcode.vue')</code></pre>
+      </div>
+    </section>
+
+    <section class="tab-panel" :class="{ active: activeTab === 'playground' }">
+      <div class="playground">
+        <div>
+          <div class="card">
+            <h3 class="card-title">预览</h3>
+            <div class="preview-wrap">
+              <qrcode-vue
+                class="qrcode"
+                :value="value"
+                :margin="Number(margin)"
+                :render-as="renderAs"
+                :size="Number(size)"
+                :level="level"
+                :background="background"
+                :foreground="foreground"
+                :gradient="gradient"
+                :gradient-type="gradientType"
+                :gradient-start-color="gradientStartColor"
+                :gradient-end-color="gradientEndColor"
+                :image-settings="imageSettings"
+                :radius="radius"
+              ></qrcode-vue>
+            </div>
+          </div>
+          <div class="card">
+            <h3 class="card-title">生成的代码</h3>
+            <pre class="code-block">{{ usageExample }}</pre>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <h3 class="card-title">设置</h3>
+            <div class="form-group">
+              <label for="value" class="form-label">内容</label>
+              <textarea v-model="value" id="value" rows="3" placeholder="输入要编码的内容"></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="size" class="form-label">尺寸 <span class="hint" v-cloak>{{ size }}px</span></label>
+                <input type="range" v-model="size" min="100" max="720" step="20" id="size" />
+              </div>
+              <div class="form-group">
+                <label for="margin" class="form-label">边距 <span class="hint" v-cloak>{{ margin }}px</span></label>
+                <input type="range" v-model="margin" min="0" max="10" step="1" id="margin" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="level" class="form-label">纠错级别</label>
+                <select v-model="level" id="level">
+                  <option value="L">L（低）</option>
+                  <option value="M">M（中）</option>
+                  <option value="Q">Q（四分位）</option>
+                  <option value="H">H（高）</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="renderAs" class="form-label">渲染方式</label>
+                <select v-model="renderAs" id="renderAs">
+                  <option value="svg">SVG</option>
+                  <option value="canvas">Canvas</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="background" class="form-label">背景色</label>
+                <input type="color" id="background" v-model="background">
+              </div>
+              <div class="form-group">
+                <label for="foreground" class="form-label">前景色</label>
+                <input type="color" id="foreground" v-model="foreground">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="radius" class="form-label">圆角 <span class="hint" v-cloak>{{ radius }}</span></label>
+                <input type="range" v-model.number="radius" min="0" max="0.5" step="0.1" id="radius" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">渐变</label>
+                <div class="form-check">
+                  <input type="checkbox" id="gradient" v-model="gradient">
+                  <label for="gradient" class="form-label">启用渐变填充</label>
+                </div>
+              </div>
+            </div>
+            <template v-if="gradient">
+              <div class="form-group">
+                <label for="gradient-type" class="form-label">渐变类型</label>
+                <select v-model="gradientType" id="gradient-type">
+                  <option value="linear">线性</option>
+                  <option value="radial">径向</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="gradientStartColor" class="form-label">起始颜色</label>
+                  <input type="color" id="gradientStartColor" v-model="gradientStartColor">
+                </div>
+                <div class="form-group">
+                  <label for="gradientEndColor" class="form-label">结束颜色</label>
+                  <input type="color" id="gradientEndColor" v-model="gradientEndColor">
+                </div>
+              </div>
+            </template>
+            <div class="form-group">
+              <label class="form-label">包含图片</label>
+              <div class="form-check">
+                <input type="checkbox" id="includeImage" v-model="includeImage">
+                <label for="includeImage" class="form-label">显示 Logo 图片</label>
+              </div>
+            </div>
+            <div class="fieldset-group" v-if="includeImage">
+              <legend>图片设置</legend>
+              <div class="form-group">
+                <label for="imageSrc" class="form-label">图片地址</label>
+                <input type="text" id="imageSrc" v-model="imageSettings.src" placeholder="Image URL">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="imageWidth" class="form-label">宽度</label>
+                  <input type="number" id="imageWidth" v-model.number="imageSettings.width" placeholder="Width in px">
+                </div>
+                <div class="form-group">
+                  <label for="imageHeight" class="form-label">高度</label>
+                  <input type="number" id="imageHeight" v-model.number="imageSettings.height" placeholder="Height in px">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="imageBorderRadius" class="form-label">圆角半径</label>
+                  <input type="number" id="imageBorderRadius" v-model.number="imageSettings.borderRadius" placeholder="Radius in px">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">镂空</label>
+                  <div class="form-check">
+                    <input type="checkbox" id="imageExcavate" v-model="imageSettings.excavate">
+                    <label for="imageExcavate" class="form-label">移除图片下方的模块</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="imageCrossOrigin" class="form-label">跨域属性</label>
+                  <select id="imageCrossOrigin" v-model="imageSettings.crossOrigin">
+                    <option value="">—</option>
+                    <option value="anonymous">anonymous</option>
+                    <option value="use-credentials">use-credentials</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="footer-inner">
+      <div class="copyright">&copy;2026 qrcode.vue. MIT License. By <a href="https://tie.pub/me/" rel="author me">Wú Wénjùn</a></div>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
