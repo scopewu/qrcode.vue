@@ -104,6 +104,7 @@ createApp({
     // x: 10,
     // y: 10,
     excavate: true,
+    // crossOrigin: 'anonymous', // 如需把 canvas 導出為圖片，請設置此項。
   })
 
   // 可傳入漸變相關的屬性，支持漸變：
@@ -184,6 +185,7 @@ createApp({
     // 使用此選項可確保圖像周圍的邊緣清晰。嵌入透明圖像時也很有用。
     excavate?: boolean,
     borderRadius?: number, // 圖片的邊框圓角。
+    crossOrigin?: 'anonymous' | 'use-credentials' | '', // 圖片的 CORS 屬性。如需導出 canvas 為圖片，請設置此項。
   }
   ```
 
@@ -261,6 +263,31 @@ createApp({
 - 默認值：`''`
 
 傳遞給二維碼根元素的類名。
+
+## 模板 Ref 方法（`QrcodeCanvas`）
+
+使用 `QrcodeCanvas`（或 `QrcodeVue` 且 `render-as="canvas"`）時，可以透過模板 ref 存取以下方法：
+
+```html
+<script setup>
+import { ref } from 'vue'
+import { QrcodeCanvas } from 'qrcode.vue'
+
+const qrRef = ref()
+const handleDownload = () => {
+  qrRef.value?.download('my-qrcode.png')
+}
+</script>
+
+<qrcode-canvas ref="qrRef" value="https://example.com" />
+```
+
+| 方法 | 簽名 | 說明 |
+|------|------|------|
+| `toDataURL` | `(type?: string, quality?: number) => string \| undefined` | 將 canvas 轉換為 Data URL。 |
+| `download` | `(filename?: string) => void` | 觸發下載二維碼 PNG 圖片。 |
+
+> **CORS 注意：** 當二維碼包含跨域 Logo 圖片時，請確保設置 `imageSettings.crossOrigin: 'anonymous'`，且圖片伺服器返回 `Access-Control-Allow-Origin` 響應頭。否則 canvas 會被「污染」，導致 `toDataURL` / `download` 拋出 `SecurityError`。
 
 ## `QrcodeVue` 3.5+
 

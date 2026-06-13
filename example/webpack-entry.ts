@@ -126,12 +126,15 @@ const App = defineComponent({
       }
 
       if (includeImage.value) {
+        const crossOriginLine = imageSettings.value.crossOrigin
+          ? `,\n      crossOrigin: '${imageSettings.value.crossOrigin}'`
+          : ''
         code += `  :image-settings="{
       src: '${imageSettings.value.src}',
       width: ${imageSettings.value.width},
       height: ${imageSettings.value.height},
       excavate: ${imageSettings.value.excavate},
-      borderRadius: ${imageSettings.value.borderRadius}
+      borderRadius: ${imageSettings.value.borderRadius}${crossOriginLine}
   }"
 `
       }

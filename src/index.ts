@@ -6,13 +6,14 @@ export type Level = 'L' | 'M' | 'Q' | 'H'
 export type RenderAs = 'canvas' | 'svg'
 export type GradientType = 'linear' | 'radial'
 export type ImageSettings = {
-  src: string,
-  x?: number,
-  y?: number,
-  height?: number,
-  width?: number,
-  excavate?: boolean,
-  borderRadius?: number,
+  src: string
+  x?: number
+  y?: number
+  height?: number
+  width?: number
+  excavate?: boolean
+  borderRadius?: number
+  crossOrigin?: 'anonymous' | 'use-credentials' | ''
 }
 
 let _uid = 0
@@ -168,7 +169,7 @@ function getImageSettings(
   y: number
   h: number
   w: number
-  borderRadius: number,
+  borderRadius: number
 } {
   const { width, height, x: imageX, y: imageY } = imageSettings
   const numCells = cells.length + margin * 2
@@ -251,38 +252,32 @@ const QRCodeProps = {
   },
   margin: {
     type: Number,
-    required: false,
     default: DEFAULT_MARGIN,
+    validator: (m: any) => m >=0,
   },
   imageSettings: {
     type: Object as PropType<ImageSettings>,
-    required: false,
     default: () => ({}),
   },
   gradient: {
     type: Boolean,
-    required: false,
     default: false,
   },
   gradientType: {
     type: String as PropType<GradientType>,
-    required: false,
     default: 'linear',
     validator: (t: any) => ['linear', 'radial'].indexOf(t) > -1,
   },
   gradientStartColor: {
     type: String,
-    required: false,
     default: '#000',
   },
   gradientEndColor: {
     type: String,
-    required: false,
     default: '#fff',
   },
   radius: {
     type: Number,
-    required: false,
     default: 0,
     validator: (r: any) => !isNaN(r) && r >= 0 && r <= 0.5,
   },
@@ -377,10 +372,9 @@ export const QrcodeSvg = defineComponent({
         xmlns: 'http://www.w3.org/2000/svg',
         viewBox: `0 0 ${numCells.value} ${numCells.value}`,
         role: 'img',
-        'aria-label': props.value,
       },
       [
-        h('defs', {}, [gradientVNode.value, clipPathVNode.value]),
+        h('defs', {}, [gradientVNode.value, clipPathVNode.value].filter(Boolean)),
         h('rect', {
           width: '100%',
           height: '100%',
@@ -401,8 +395,9 @@ export const QrcodeSvg = defineComponent({
         }),
         props.imageSettings.src && imageProps.value && h('image', {
           href: props.imageSettings.src,
+          crossorigin: props.imageSettings.crossOrigin,
+          'clip-path': imageProps.value.borderRadius > 0 ? `url(#${qrLogoClipPathId})` : void(0),
           ...imageProps.value,
-          ...(imageProps.value.borderRadius > 0 ? { 'clip-path': `url(#${qrLogoClipPathId})` } : {}),
         }),
       ]
     )
@@ -551,7 +546,22 @@ export const QrcodeCanvas = defineComponent({
     }
 
     onMounted(generate)
-    watchEffect(generate)
+    watchEffect(generate, { flush: 'post'})
+
+    ctx.expose({
+      toDataURL: (type?: string, quality?: number) => canvasEl.value?.toDataURL(type, quality),
+      download: (filename = 'qrcode.png') => {
+        const canvas = canvasEl.value
+        if (!canvas) return
+
+        const link = document.createElement('a')
+        link.href = canvas.toDataURL('image/png')
+        link.download = filename
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      },
+    })
 
     return () => h(
       Fragment,
@@ -562,13 +572,13 @@ export const QrcodeCanvas = defineComponent({
             ...ctx.attrs,
             ref: canvasEl,
             role: 'img',
-            'aria-label': props.value,
             style: { ...(ctx.attrs.style as Object), width: `${props.size}px`, height: `${props.size}px` },
           },
         ),
         props.imageSettings.src && h('img', {
           ref: imageEl,
           src: props.imageSettings.src,
+          crossorigin: props.imageSettings.crossOrigin,
           style: {display: 'none'},
           onLoad: generate,
         })
@@ -580,10 +590,18 @@ export const QrcodeCanvas = defineComponent({
 const QrcodeVue = defineComponent({
   name: 'Qrcode',
   props: QRCodeVueProps,
-  setup(props) {
+  setup(props, ctx) {
+    const childRef = ref()
+
+    ctx.expose({
+      toDataURL: (type?: string, quality?: number) => childRef.value?.toDataURL?.(type, quality),
+      download: (filename?: string) => childRef.value?.download?.(filename),
+    })
+
     return () => h(
       props.renderAs === 'svg' ? QrcodeSvg : QrcodeCanvas,
       {
+        ref: childRef,
         value: props.value,
         size: props.size,
         margin: props.margin,

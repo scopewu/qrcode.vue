@@ -107,6 +107,7 @@ When you use the component with Vue 3 with `TypeScript`:
     // x: 10,
     // y: 10,
     excavate: true,
+    // crossOrigin: 'anonymous', // Set this when you need to export the canvas to an image.
   })
 
   const gradient = ref(false)
@@ -182,6 +183,7 @@ The foreground color of qrcode.
     width: number,  // The height of image
     excavate?: boolean, // Whether or not to "excavate" the modules around the image.
     borderRadius?: number, // The border radius of image.
+    crossOrigin?: 'anonymous' | 'use-credentials' | '', // The CORS attribute for the image. Useful when exporting canvas to an image.
   }
   ```
 
@@ -259,6 +261,31 @@ The end color of the gradient.
 - Default: `''`
 
 The class name of qrcode element.
+
+## Template Ref Methods (`QrcodeCanvas`)
+
+When using `QrcodeCanvas` (or `QrcodeVue` with `render-as="canvas"`), you can access the following methods via template ref:
+
+```html
+<script setup>
+import { ref } from 'vue'
+import { QrcodeCanvas } from 'qrcode.vue'
+
+const qrRef = ref()
+const handleDownload = () => {
+  qrRef.value?.download('my-qrcode.png')
+}
+</script>
+
+<qrcode-canvas ref="qrRef" value="https://example.com" />
+```
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `toDataURL` | `(type?: string, quality?: number) => string \| undefined` | Convert the canvas to a data URL. |
+| `download` | `(filename?: string) => void` | Trigger a download of the QR code as a PNG image. |
+
+> **CORS note:** When the QR code includes a cross-origin logo image, make sure to set `imageSettings.crossOrigin: 'anonymous'` and that the image server responds with the `Access-Control-Allow-Origin` header. Otherwise the canvas becomes "tainted" and `toDataURL` / `download` will throw a `SecurityError`.
 
 ## `QrcodeVue` 3.5+
 

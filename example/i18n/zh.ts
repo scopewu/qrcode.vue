@@ -29,6 +29,15 @@ export default {
     namedExports: '命名导出 (v3.5+)',
     namedExportsDesc:
       '从 v3.5 开始，单独导出了 <code>QrcodeCanvas</code> 和 <code>QrcodeSvg</code> 组件：',
+    canvasMethods: 'Canvas 方法',
+    canvasMethodsDesc:
+      '使用 <code>QrcodeCanvas</code>（或 <code>QrcodeVue</code> 且 <code>render-as="canvas"</code>）时，可通过模板 ref 访问以下方法：',
+    canvasMethodsCorsNote:
+      '<strong>CORS 注意：</strong>当二维码包含跨域 Logo 图片时，请确保设置 <code>imageSettings.crossOrigin: \'anonymous\'</code>，且图片服务器返回 <code>Access-Control-Allow-Origin</code> 响应头。否则 canvas 会被"污染"，导致 <code>toDataURL</code> / <code>download</code> 抛出 <code>SecurityError</code>。',
+    method: '方法',
+    signature: '签名',
+    toDataURLDesc: '将 canvas 转换为 Data URL。',
+    downloadDesc: '触发下载二维码 PNG 图片。',
   },
   propDescriptions: {
     value: '二维码编码的内容。',
@@ -82,6 +91,7 @@ export default {
     borderRadius: '圆角半径',
     excavate: '镂空',
     removeModules: '移除图片下方的模块',
+    crossOrigin: '跨域属性',
   },
   footer: {
     copyright: 'qrcode.vue. MIT License. By',
