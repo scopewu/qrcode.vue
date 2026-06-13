@@ -1,3 +1,17 @@
+## [3.10.0] - 2026-06-13
+
+### Feature
+
+- Add `crossOrigin` support to `imageSettings` for both Canvas and SVG logo images.
+- Expose `toDataURL` and `download` methods via template ref on `QrcodeCanvas`.
+- Expose `toDataURL` and `download` methods via template ref on `QrcodeSvg`.
+- `QrcodeVue` now forwards the above template ref methods based on `render-as`.
+
+### Bugfix
+
+- Remove `aria-label` from rendered output to avoid leaking encoded `value`.
+- Fix declaration output path in Rollup build (`dist/src/index.d.ts` → `dist/index.d.ts`).
+
 ## [3.9.1]
 
 ### Bugfix

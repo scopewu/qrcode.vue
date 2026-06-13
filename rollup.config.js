@@ -25,7 +25,8 @@ function cleanExtraDts() {
       if (cleaned) return
       cleaned = true
       try {
-        fs.unlinkSync('dist/qrcodegen.d.ts')
+        fs.renameSync('dist/src/index.d.ts', 'dist/index.d.ts')
+        fs.rmSync('dist/src', { recursive: true })
       } catch (e) {}
     },
   }
