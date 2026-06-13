@@ -121,6 +121,7 @@ createApp({
   width: number          // Width of the image in pixels
   excavate?: boolean     // Remove modules behind the image
   borderRadius?: number  // Border radius of the image
+  crossOrigin?: 'anonymous' | 'use-credentials' | ''  // CORS attribute for the image
 }</code></pre>
       </div>
 
@@ -143,6 +144,7 @@ const imageSettings = ref&lt;ImageSettings&gt;({
   width: 30,
   height: 30,
   excavate: true,
+  // crossOrigin: 'anonymous', // Set this when exporting canvas to image
 })
 
 const gradient = ref(false)
@@ -151,6 +153,54 @@ const gradientStartColor = ref('#000000')
 const gradientEndColor = ref('#38bdf8')
 const radius = ref(0)
 &lt;/script&gt;</code></pre>
+      </div>
+
+      <div class="doc-section">
+        <h2>{{t('docs.canvasMethods')}}</h2>
+        <p>{{t('docs.canvasMethodsDesc')}}</p>
+
+        <h3>QrcodeCanvas</h3>
+        <pre><code>&lt;script setup lang="ts"&gt;
+import { ref } from 'vue'
+import { QrcodeCanvas } from 'qrcode.vue'
+
+const qrRef = ref()
+
+const handleDownload = () => {
+  qrRef.value?.download('my-qrcode.png')
+}
+&lt;/script&gt;
+
+&lt;qrcode-canvas ref="qrRef" value="https://example.com" /&gt;</code></pre>
+        <p>{{t('docs.canvasMethodsCorsNote')}}</p>
+
+        <h3>QrcodeSvg</h3>
+        <pre><code>&lt;script setup lang="ts"&gt;
+import { ref } from 'vue'
+import { QrcodeSvg } from 'qrcode.vue'
+
+const qrRef = ref()
+
+const handleDownload = () => {
+  qrRef.value?.download('my-qrcode.svg')
+}
+&lt;/script&gt;
+
+&lt;qrcode-svg ref="qrRef" value="https://example.com" /&gt;</code></pre>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>{{t('docs.component')}}</th><th>{{t('docs.method')}}</th><th>{{t('docs.signature')}}</th><th>{{t('docs.description')}}</th></tr>
+            </thead>
+            <tbody>
+              <tr><td rowspan="2"><code>QrcodeCanvas</code></td><td><code>toDataURL</code></td><td><code>(type?: string, quality?: number) => string | undefined</code></td><td>{{t('docs.toDataURLDesc')}}</td></tr>
+              <tr><td><code>download</code></td><td><code>(filename?: string) => void</code></td><td>{{t('docs.downloadDesc')}}</td></tr>
+              <tr><td rowspan="2"><code>QrcodeSvg</code></td><td><code>toDataURL</code></td><td><code>() => string | undefined</code></td><td>{{t('docs.svgToDataURLDesc')}}</td></tr>
+              <tr><td><code>download</code></td><td><code>(filename?: string) => void</code></td><td>{{t('docs.svgDownloadDesc')}}</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div class="doc-section">
@@ -169,7 +219,22 @@ const { default: QrcodeVue, QrcodeCanvas, QrcodeSvg } = require('qrcode.vue')</c
           <div class="card">
             <h3 class="card-title">{{t('playground.preview')}}</h3>
             <div class="preview-wrap">
-              <qrcode-vue class="qrcode" :value="value" :margin="Number(margin)" :render-as="renderAs" :size="Number(size)" :level="level" :background="background" :foreground="foreground" :gradient="gradient" :gradient-type="gradientType" :gradient-start-color="gradientStartColor" :gradient-end-color="gradientEndColor" :image-settings="imageSettings" :radius="radius"></qrcode-vue>
+              <qrcode-vue
+                class="qrcode"
+                :value="value"
+                :margin="Number(margin)"
+                :render-as="renderAs"
+                :size="Number(size)"
+                :level="level"
+                :background="background"
+                :foreground="foreground"
+                :gradient="gradient"
+                :gradient-type="gradientType"
+                :gradient-start-color="gradientStartColor"
+                :gradient-end-color="gradientEndColor"
+                :image-settings="imageSettings"
+                :radius="radius"
+              ></qrcode-vue>
             </div>
           </div>
           <div class="card">
@@ -288,6 +353,16 @@ const { default: QrcodeVue, QrcodeCanvas, QrcodeSvg } = require('qrcode.vue')</c
                     <input type="checkbox" id="imageExcavate" v-model="imageSettings.excavate">
                     <label for="imageExcavate" class="form-label">{{t('playground.removeModules')}}</label>
                   </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="imageCrossOrigin" class="form-label">{{t('playground.crossOrigin')}}</label>
+                  <select id="imageCrossOrigin" v-model="imageSettings.crossOrigin">
+                    <option value="">—</option>
+                    <option value="anonymous">anonymous</option>
+                    <option value="use-credentials">use-credentials</option>
+                  </select>
                 </div>
               </div>
             </div>

@@ -29,6 +29,18 @@ export default {
     namedExports: 'Named Exports (v3.5+)',
     namedExportsDesc:
       'Starting from v3.5, separate <code>QrcodeCanvas</code> and <code>QrcodeSvg</code> components are exported:',
+    canvasMethods: 'Template Ref Methods',
+    canvasMethodsDesc:
+      'Both <code>QrcodeCanvas</code> and <code>QrcodeSvg</code> expose the following methods via template ref. <code>QrcodeVue</code> forwards them based on the current <code>render-as</code>:',
+    canvasMethodsCorsNote:
+      '<strong>CORS note:</strong> When the QR code includes a cross-origin logo image, make sure to set <code>imageSettings.crossOrigin: \'anonymous\'</code> and that the image server responds with the <code>Access-Control-Allow-Origin</code> header. Otherwise the canvas becomes "tainted" and <code>toDataURL</code> / <code>download</code> will throw a <code>SecurityError</code>.',
+    component: 'Component',
+    method: 'Method',
+    signature: 'Signature',
+    toDataURLDesc: 'Convert the QR code to a data URL.',
+    downloadDesc: 'Trigger a download of the QR code image.',
+    svgToDataURLDesc: 'Convert the SVG element to a data URL.',
+    svgDownloadDesc: 'Trigger a download of the QR code as an SVG image.',
   },
   propDescriptions: {
     value: 'The content to encode in the QR code.',
@@ -82,6 +94,7 @@ export default {
     borderRadius: 'Border Radius',
     excavate: 'Excavate',
     removeModules: 'Remove modules behind image',
+    crossOrigin: 'Cross Origin',
   },
   footer: {
     copyright: 'qrcode.vue. MIT License. By',

@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@rstest/core'
 import { mount, VueWrapper } from '@vue/test-utils'
-import QrcodeVue from '../src'
+import QrcodeVue, { QrcodeCanvas } from '../src'
 
 // ─── Shared Test Data ───
 const DEFAULT_VALUE = 'test'
@@ -733,20 +733,18 @@ describe('QrcodeVue', () => {
   })
 
   describe('accessibility', () => {
-    it('sets aria-label to the QR code value in SVG mode', () => {
-      const value = 'https://example.com'
-      const wrapper = mountQR({ renderAs: 'svg', value })
+    it('sets role="img" on SVG element', () => {
+      const wrapper = mountQR({ renderAs: 'svg' })
       const svg = wrapper.find('svg')
-      expect(svg.attributes('aria-label')).toBe(value)
       expect(svg.attributes('role')).toBe('img')
+      expect(svg.attributes('aria-label')).toBeUndefined()
     })
 
-    it('sets aria-label to the QR code value in canvas mode', () => {
-      const value = 'https://example.com'
-      const wrapper = mountQR({ renderAs: 'canvas', value })
+    it('sets role="img" on canvas element', () => {
+      const wrapper = mountQR({ renderAs: 'canvas' })
       const canvas = wrapper.find('canvas')
-      expect(canvas.attributes('aria-label')).toBe(value)
       expect(canvas.attributes('role')).toBe('img')
+      expect(canvas.attributes('aria-label')).toBeUndefined()
     })
   })
 
@@ -774,6 +772,44 @@ describe('QrcodeVue', () => {
     })
   })
 
+  describe('image crossOrigin', () => {
+    it('renders canvas img with crossorigin attribute', () => {
+      const wrapper = mountQR({
+        renderAs: 'canvas',
+        imageSettings: { ...TEST_IMAGE, crossOrigin: 'anonymous' },
+      })
+      const img = wrapper.find('img')
+      expect(img.attributes('crossorigin')).toBe('anonymous')
+    })
+
+    it('does not render canvas img crossorigin attribute when not provided', () => {
+      const wrapper = mountQR({
+        renderAs: 'canvas',
+        imageSettings: TEST_IMAGE,
+      })
+      const img = wrapper.find('img')
+      expect(img.attributes('crossorigin')).toBeUndefined()
+    })
+
+    it('renders svg image with crossorigin attribute', () => {
+      const wrapper = mountQR({
+        renderAs: 'svg',
+        imageSettings: { ...TEST_IMAGE, crossOrigin: 'use-credentials' },
+      })
+      const image = wrapper.find('image')
+      expect(image.attributes('crossorigin')).toBe('use-credentials')
+    })
+
+    it('does not render svg image crossorigin attribute when not provided', () => {
+      const wrapper = mountQR({
+        renderAs: 'svg',
+        imageSettings: TEST_IMAGE,
+      })
+      const image = wrapper.find('image')
+      expect(image.attributes('crossorigin')).toBeUndefined()
+    })
+  })
+
   describe('edge cases', () => {
     it('handles empty string value', () => {
       const wrapper = mountQR({ value: '' })
@@ -789,8 +825,45 @@ describe('QrcodeVue', () => {
     it('handles value with special characters', () => {
       const value = 'https://example.com?foo=bar&baz=qux'
       const wrapper = mountQR({ value, renderAs: 'svg' })
-      const svg = wrapper.find('svg')
-      expect(svg.attributes('aria-label')).toBe(value)
+      expect(wrapper.html()).toContain('<svg')
+      expect(wrapper.find('svg').attributes('role')).toBe('img')
+    })
+  })
+
+  describe('canvas expose', () => {
+    it('exposes toDataURL and download methods on QrcodeCanvas', () => {
+      const wrapper = mount(QrcodeCanvas, {
+        props: { value: DEFAULT_VALUE },
+      })
+      const vm = wrapper.vm as unknown as {
+        toDataURL: () => string | undefined
+        download: () => void
+      }
+      expect(typeof vm.toDataURL).toBe('function')
+      expect(typeof vm.download).toBe('function')
+    })
+
+    it('forwards toDataURL and download methods through QrcodeVue when renderAs is canvas', () => {
+      const wrapper = mount(QrcodeVue, {
+        props: { value: DEFAULT_VALUE, renderAs: 'canvas' },
+      })
+      const vm = wrapper.vm as unknown as {
+        toDataURL: () => string | undefined
+        download: () => void
+      }
+      expect(typeof vm.toDataURL).toBe('function')
+      expect(typeof vm.download).toBe('function')
+    })
+
+    it('toDataURL returns a string without throwing', () => {
+      const wrapper = mount(QrcodeCanvas, {
+        props: { value: DEFAULT_VALUE },
+      })
+      const vm = wrapper.vm as unknown as {
+        toDataURL: () => string | undefined
+      }
+      const dataURL = vm.toDataURL()
+      expect(typeof dataURL).toBe('string')
     })
   })
 })
