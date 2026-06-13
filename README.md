@@ -262,9 +262,11 @@ The end color of the gradient.
 
 The class name of qrcode element.
 
-## Template Ref Methods (`QrcodeCanvas`)
+## Template Ref Methods (`QrcodeCanvas` / `QrcodeSvg`)
 
-When using `QrcodeCanvas` (or `QrcodeVue` with `render-as="canvas"`), you can access the following methods via template ref:
+Both `QrcodeCanvas` and `QrcodeSvg` expose the following methods via template ref. `QrcodeVue` forwards them based on the current `render-as`.
+
+### `QrcodeCanvas`
 
 ```html
 <script setup>
@@ -286,6 +288,27 @@ const handleDownload = () => {
 | `download` | `(filename?: string) => void` | Trigger a download of the QR code as a PNG image. |
 
 > **CORS note:** When the QR code includes a cross-origin logo image, make sure to set `imageSettings.crossOrigin: 'anonymous'` and that the image server responds with the `Access-Control-Allow-Origin` header. Otherwise the canvas becomes "tainted" and `toDataURL` / `download` will throw a `SecurityError`.
+
+### `QrcodeSvg`
+
+```html
+<script setup>
+import { ref } from 'vue'
+import { QrcodeSvg } from 'qrcode.vue'
+
+const qrRef = ref()
+const handleDownload = () => {
+  qrRef.value?.download('my-qrcode.svg')
+}
+</script>
+
+<qrcode-svg ref="qrRef" value="https://example.com" />
+```
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `toDataURL` | `() => string \| undefined` | Convert the SVG element to a data URL. |
+| `download` | `(filename?: string) => void` | Trigger a download of the QR code as an SVG image. |
 
 ## `QrcodeVue` 3.5+
 

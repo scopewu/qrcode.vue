@@ -263,9 +263,11 @@ QRコードのグラデーション塗りつぶしを有効にします。
 
 QRコード要素のクラス名。
 
-## Template Ref Methods (`QrcodeCanvas`)
+## Template Ref Methods (`QrcodeCanvas` / `QrcodeSvg`)
 
-`QrcodeCanvas`（または `render-as="canvas"` の `QrcodeVue`）を使用する場合、テンプレート ref を介して以下のメソッドにアクセスできます：
+`QrcodeCanvas` と `QrcodeSvg` の両方がテンプレート ref を介して以下のメソッドを公開しています。`QrcodeVue` は現在の `render-as` に応じてこれらを転送します。
+
+### `QrcodeCanvas`
 
 ```html
 <script setup>
@@ -287,6 +289,27 @@ const handleDownload = () => {
 | `download` | `(filename?: string) => void` | QR コードの PNG 画像をダウンロードします。 |
 
 > **CORS 注意:** QR コードにクロスオリジンのロゴ画像を含める場合、`imageSettings.crossOrigin: 'anonymous'` を設定し、画像サーバーが `Access-Control-Allow-Origin` ヘッダーを返すことを確認してください。そうでない場合、canvas が "tainted" になり、`toDataURL` / `download` が `SecurityError` をスローします。
+
+### `QrcodeSvg`
+
+```html
+<script setup>
+import { ref } from 'vue'
+import { QrcodeSvg } from 'qrcode.vue'
+
+const qrRef = ref()
+const handleDownload = () => {
+  qrRef.value?.download('my-qrcode.svg')
+}
+</script>
+
+<qrcode-svg ref="qrRef" value="https://example.com" />
+```
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `toDataURL` | `() => string \| undefined` | SVG 要素を Data URL に変換します。 |
+| `download` | `(filename?: string) => void` | QR コードの SVG 画像をダウンロードします。 |
 
 ## `QrcodeVue` 3.5+
 

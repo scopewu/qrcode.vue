@@ -227,6 +227,15 @@ function useQRCode(props: QRCodePropsType) {
   return { margin, numCells, cells, fgPath, imageProps, imageBorderProps }
 }
 
+function downloadDataURLAsFile(data: string, filename: string) {
+  const link = document.createElement('a')
+  link.download = filename
+  link.href = data
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
 const QRCodeProps = {
   value: {
     type: String,
@@ -300,8 +309,9 @@ const QRCodeVueProps = {
 export const QrcodeSvg = defineComponent({
   name: 'QRCodeSvg',
   props: QRCodeProps,
-  setup(props) {
+  setup(props, ctx) {
     const { numCells, fgPath, imageProps, imageBorderProps } = useQRCode(props)
+    const svgEl = ref<SVGElement>()
     const uid = getUid(props.id)
     const qrGradientId = `qrcode.vue-gradient-${uid}`
     const qrLogoClipPathId = `qrcode.vue-logo-clip-path-${uid}`
@@ -364,9 +374,27 @@ export const QrcodeSvg = defineComponent({
       )
     })
 
+    const getSvgDataURL = (svg: SVGElement) => 'data:image/svg+xml;charset=utf-8,' +
+      encodeURIComponent('<?xml version="1.0" standalone="no"?>' + new XMLSerializer().serializeToString(svg))
+    ctx.expose({
+      toDataURL: () => {
+        const svg = svgEl.value
+        if (!svg) return
+
+        return getSvgDataURL(svg)
+      },
+      download: (filename = 'qrcode.svg') => {
+        const svg = svgEl.value
+        if (!svg) return
+
+        downloadDataURLAsFile(getSvgDataURL(svg), filename)
+      },
+    })
+
     return () => h(
       'svg',
       {
+        ref: svgEl,
         width: props.size,
         height: props.size,
         xmlns: 'http://www.w3.org/2000/svg',
@@ -554,12 +582,7 @@ export const QrcodeCanvas = defineComponent({
         const canvas = canvasEl.value
         if (!canvas) return
 
-        const link = document.createElement('a')
-        link.href = canvas.toDataURL('image/png')
-        link.download = filename
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+        downloadDataURLAsFile(canvas.toDataURL('image/png'), filename)
       },
     })
 

@@ -264,9 +264,11 @@ createApp({
 
 传递给二维码根元素的类名。
 
-## 模板 Ref 方法（`QrcodeCanvas`）
+## 模板 Ref 方法（`QrcodeCanvas` / `QrcodeSvg`）
 
-使用 `QrcodeCanvas`（或 `QrcodeVue` 且 `render-as="canvas"`）时，可以通过模板 ref 访问以下方法：
+`QrcodeCanvas` 和 `QrcodeSvg` 都通过模板 ref 暴露以下方法。`QrcodeVue` 会根据当前的 `render-as` 转发这些方法。
+
+### `QrcodeCanvas`
 
 ```html
 <script setup>
@@ -288,6 +290,27 @@ const handleDownload = () => {
 | `download` | `(filename?: string) => void` | 触发下载二维码 PNG 图片。 |
 
 > **CORS 注意：** 当二维码包含跨域 Logo 图片时，请确保设置 `imageSettings.crossOrigin: 'anonymous'`，且图片服务器返回 `Access-Control-Allow-Origin` 响应头。否则 canvas 会被"污染"，导致 `toDataURL` / `download` 抛出 `SecurityError`。
+
+### `QrcodeSvg`
+
+```html
+<script setup>
+import { ref } from 'vue'
+import { QrcodeSvg } from 'qrcode.vue'
+
+const qrRef = ref()
+const handleDownload = () => {
+  qrRef.value?.download('my-qrcode.svg')
+}
+</script>
+
+<qrcode-svg ref="qrRef" value="https://example.com" />
+```
+
+| 方法 | 签名 | 说明 |
+|------|------|------|
+| `toDataURL` | `() => string \| undefined` | 将 SVG 元素转换为 Data URL。 |
+| `download` | `(filename?: string) => void` | 触发下载二维码 SVG 图片。 |
 
 ## `QrcodeVue` 3.5+
 

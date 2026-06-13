@@ -29,15 +29,18 @@ export default {
     namedExports: '具名匯出 (v3.5+)',
     namedExportsDesc:
       '從 v3.5 開始，單獨匯出了 <code>QrcodeCanvas</code> 與 <code>QrcodeSvg</code> 組件：',
-    canvasMethods: 'Canvas 方法',
+    canvasMethods: '模板 Ref 方法',
     canvasMethodsDesc:
-      '使用 <code>QrcodeCanvas</code>（或 <code>QrcodeVue</code> 且 <code>render-as="canvas"</code>）時，可透過模板 ref 存取以下方法：',
+      '<code>QrcodeCanvas</code> 與 <code>QrcodeSvg</code> 都透過模板 ref 暴露以下方法。<code>QrcodeVue</code> 會根據目前的 <code>render-as</code> 轉發這些方法：',
     canvasMethodsCorsNote:
       '<strong>CORS 注意：</strong>當二維碼包含跨域 Logo 圖片時，請確保設置 <code>imageSettings.crossOrigin: \'anonymous\'</code>，且圖片伺服器返回 <code>Access-Control-Allow-Origin</code> 響應頭。否則 canvas 會被「污染」，導致 <code>toDataURL</code> / <code>download</code> 拋出 <code>SecurityError</code>。',
+    component: '組件',
     method: '方法',
     signature: '簽名',
-    toDataURLDesc: '將 canvas 轉換為 Data URL。',
-    downloadDesc: '觸發下載二維碼 PNG 圖片。',
+    toDataURLDesc: '將 QR Code 轉換為 Data URL。',
+    downloadDesc: '觸發下載 QR Code 圖片。',
+    svgToDataURLDesc: '將 SVG 元素轉換為 Data URL。',
+    svgDownloadDesc: '觸發下載 QR Code SVG 圖片。',
   },
   propDescriptions: {
     value: 'QR Code 編碼的內容。',

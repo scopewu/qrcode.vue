@@ -29,15 +29,18 @@ export default {
     namedExports: '命名导出 (v3.5+)',
     namedExportsDesc:
       '从 v3.5 开始，单独导出了 <code>QrcodeCanvas</code> 和 <code>QrcodeSvg</code> 组件：',
-    canvasMethods: 'Canvas 方法',
+    canvasMethods: '模板 Ref 方法',
     canvasMethodsDesc:
-      '使用 <code>QrcodeCanvas</code>（或 <code>QrcodeVue</code> 且 <code>render-as="canvas"</code>）时，可通过模板 ref 访问以下方法：',
+      '<code>QrcodeCanvas</code> 和 <code>QrcodeSvg</code> 都通过模板 ref 暴露以下方法。<code>QrcodeVue</code> 会根据当前的 <code>render-as</code> 转发这些方法：',
     canvasMethodsCorsNote:
       '<strong>CORS 注意：</strong>当二维码包含跨域 Logo 图片时，请确保设置 <code>imageSettings.crossOrigin: \'anonymous\'</code>，且图片服务器返回 <code>Access-Control-Allow-Origin</code> 响应头。否则 canvas 会被"污染"，导致 <code>toDataURL</code> / <code>download</code> 抛出 <code>SecurityError</code>。',
+    component: '组件',
     method: '方法',
     signature: '签名',
-    toDataURLDesc: '将 canvas 转换为 Data URL。',
-    downloadDesc: '触发下载二维码 PNG 图片。',
+    toDataURLDesc: '将二维码转换为 Data URL。',
+    downloadDesc: '触发下载二维码图片。',
+    svgToDataURLDesc: '将 SVG 元素转换为 Data URL。',
+    svgDownloadDesc: '触发下载二维码 SVG 图片。',
   },
   propDescriptions: {
     value: '二维码编码的内容。',
