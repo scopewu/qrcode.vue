@@ -1,5 +1,4 @@
 import fs from 'fs'
-
 import ts from 'rollup-plugin-typescript2'
 import terser from '@rollup/plugin-terser'
 
@@ -27,7 +26,9 @@ function cleanExtraDts() {
       try {
         fs.renameSync('dist/src/index.d.ts', 'dist/index.d.ts')
         fs.rmSync('dist/src', { recursive: true })
-      } catch (e) {}
+      } catch (e) {
+        console.log(e)
+      }
     },
   }
 }
@@ -59,7 +60,6 @@ function createEntry(options) {
           exclude: ['example', 'test', '**/*.config.ts'],
         }
       }),
-      cleanExtraDts(),
     ],
   }
 
@@ -89,7 +89,7 @@ const browserPlugins = [
 
 export default [
   createEntry({ format: 'cjs', file: pkg.main }),
-  createEntry({ format: 'es', file: pkg.module }),
+  createEntry({ format: 'es', file: pkg.module, plugins: [cleanExtraDts()] }),
   createEntry({ format: 'umd', file: pkg.browser, }),
   createEntry({ format: 'umd', file: pkg.unpkg, plugins: browserPlugins }),
 ]

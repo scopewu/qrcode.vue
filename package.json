@@ -37,7 +37,6 @@
   "files": [
     "/dist",
     "CHANGELOG.md",
-    "README-zh_cn.md",
     "README.md"
   ],
   "author": "scope.wu <scope.wu@gmail.com>",
