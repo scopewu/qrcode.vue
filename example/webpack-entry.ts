@@ -67,8 +67,19 @@ const App = defineComponent({
     const gradientEndColor = ref('#38bdf8')
     const radius = ref(0)
 
-    const activeTab = ref<'docs' | 'playground'>('docs')
+    const urlTab = new URLSearchParams(window.location.search).get('tab')
+    const activeTab = ref<'docs' | 'playground'>(urlTab === 'playground' ? 'playground' : 'docs')
     const stargazersCount = ref(800)
+
+    watch(activeTab, (tab) => {
+      const url = new URL(window.location.href)
+      if (tab === 'docs') {
+        url.searchParams.delete('tab')
+      } else {
+        url.searchParams.set('tab', tab)
+      }
+      history.replaceState(null, '', url.toString())
+    })
 
     const switchTab = (tab: 'docs' | 'playground') => {
       activeTab.value = tab
