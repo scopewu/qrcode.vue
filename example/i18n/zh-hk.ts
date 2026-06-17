@@ -31,7 +31,7 @@ export default {
       '從 v3.5 開始，單獨匯出了 <code>QrcodeCanvas</code> 與 <code>QrcodeSvg</code> 組件：',
     canvasMethods: '模板 Ref 方法',
     canvasMethodsDesc:
-      '<code>QrcodeCanvas</code> 與 <code>QrcodeSvg</code> 都透過模板 ref 暴露以下方法。<code>QrcodeVue</code> 會根據目前的 <code>render-as</code> 轉發這些方法：',
+      '<code>QrcodeCanvas</code> 與 <code>QrcodeSvg</code> 都透過模板 ref 暴露以下方法。可以直接透過瀏覽器下載產生的二維碼。<code>QrcodeVue</code> 會根據目前的 <code>render-as</code> 轉發這些方法：',
     canvasMethodsCorsNote:
       '<strong>CORS 注意：</strong>當二維碼包含跨域 Logo 圖片時，請確保設置 <code>imageSettings.crossOrigin: \'anonymous\'</code>，且圖片伺服器返回 <code>Access-Control-Allow-Origin</code> 響應頭。否則 canvas 會被「污染」，導致 <code>toDataURL</code> / <code>download</code> 拋出 <code>SecurityError</code>。',
     component: '組件',
@@ -104,5 +104,6 @@ export default {
     en: 'English',
     zh: '简体中文',
     'zh-hk': '繁體中文',
+    ja: '日本語',
   },
 }

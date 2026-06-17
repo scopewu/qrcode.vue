@@ -31,7 +31,7 @@ export default {
       'Starting from v3.5, separate <code>QrcodeCanvas</code> and <code>QrcodeSvg</code> components are exported:',
     canvasMethods: 'Template Ref Methods',
     canvasMethodsDesc:
-      'Both <code>QrcodeCanvas</code> and <code>QrcodeSvg</code> expose the following methods via template ref. <code>QrcodeVue</code> forwards them based on the current <code>render-as</code>:',
+      'Both <code>QrcodeCanvas</code> and <code>QrcodeSvg</code> expose the following methods via template ref. Allowing users to download the generated QRCode directly from the browser.<code>QrcodeVue</code> forwards them based on the current <code>render-as</code>:',
     canvasMethodsCorsNote:
       '<strong>CORS note:</strong> When the QR code includes a cross-origin logo image, make sure to set <code>imageSettings.crossOrigin: \'anonymous\'</code> and that the image server responds with the <code>Access-Control-Allow-Origin</code> header. Otherwise the canvas becomes "tainted" and <code>toDataURL</code> / <code>download</code> will throw a <code>SecurityError</code>.',
     component: 'Component',
@@ -104,5 +104,6 @@ export default {
     en: 'English',
     zh: '简体中文',
     'zh-hk': '繁體中文',
+    ja: '日本語',
   },
 }

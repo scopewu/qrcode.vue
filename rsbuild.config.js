@@ -8,6 +8,7 @@ export default defineConfig({
       index: './example/webpack-entry.ts',
       'zh/index': './example/webpack-entry.ts',
       'zh-hk/index': './example/webpack-entry.ts',
+      'ja/index': './example/webpack-entry.ts',
     },
   },
   resolve: {
@@ -26,7 +27,7 @@ export default defineConfig({
   },
   html: {
     template({ entryName }) {
-      const langMap = { index: 'en', 'zh/index': 'zh', 'zh-hk/index': 'zh-hk' }
+      const langMap = { index: 'en', 'zh/index': 'zh', 'zh-hk/index': 'zh-hk', 'ja/index': 'ja' }
       const lang = langMap[entryName] || 'en'
       return `./example/.generated/webpack.${lang}.html`
     },

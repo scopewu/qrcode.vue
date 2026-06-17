@@ -25,6 +25,7 @@ const langConfig = {
   en: { htmlLang: 'en', path: '/', canonical: 'https://qr-vue.tie.pub/' },
   zh: { htmlLang: 'zh-CN', path: '/zh/', canonical: 'https://qr-vue.tie.pub/zh/' },
   'zh-hk': { htmlLang: 'zh-HK', path: '/zh-hk/', canonical: 'https://qr-vue.tie.pub/zh-hk/' },
+  ja: { htmlLang: 'ja', path: '/ja/', canonical: 'https://qr-vue.tie.pub/ja/' },
 }
 
 function t(lang, key) {

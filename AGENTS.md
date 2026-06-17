@@ -21,19 +21,13 @@ npx rstest --testNamePattern="renders SVG"     # pattern match
 
 ### Type checking
 
-TypeScript type-checking only runs during the ES module Rollup build (`rollup -c`). For a standalone check:
-
-```bash
-npx tsc --noEmit
-```
-
-`tsconfig.json` is minimal: `strict: true`, `moduleResolution: "bundler"`, `skipLibCheck: true`.
+TypeScript type-checking only runs during the ES module Rollup build (`npm run build`, via `rollup-plugin-typescript2` with `check: true` on the ESM bundle). `tsconfig.json` has `moduleResolution: "bundler"` but no `module` field, so **`npx tsc --noEmit` currently fails with TS5095** — don't try to "fix" tsconfig for this. Run `npm run build` to type-check (it also emits declarations).
 
 ## Architecture
 
 Single-file Vue 3 component library. No router, no store, no monorepo.
 
-- **`src/index.ts`** — Everything: `QrcodeVue` (default export, switches canvas/svg), `QrcodeSvg`, `QrcodeCanvas`, shared props, `useQRCode()` composable, SVG path generators, exported types (`Level`, `RenderAs`, `GradientType`, `ImageSettings`)
+- **`src/index.ts`** — Everything: `QrcodeVue` (default export, switches canvas/svg via `render-as`), `QrcodeSvg`, `QrcodeCanvas`, shared props, SVG path generators, exported types (`Level`, `RenderAs`, `GradientType`, `ImageSettings`)
 - **`src/qrcodegen.ts`** — Third-party QR encoder (Project Nayuki). **Do not modify.**
 - **`test/index.test.ts`** — All tests, single file. Uses `@rstest/core` + `@vue/test-utils` + `happy-dom`
 - **`typings/index.d.ts`** — Vue SFC/CSS module shims (for example app, not the library)
@@ -42,7 +36,7 @@ Single-file Vue 3 component library. No router, no store, no monorepo.
 ### Library build gotchas
 
 - Rollup produces **4 bundles** (CJS, ESM, UMD, UMD-minified). Only the ESM build runs type-checking and generates `.d.ts` declarations.
-- A custom Rollup plugin (`cleanExtraDts`) deletes `dist/qrcodegen.d.ts` after build — don't be surprised.
+- A custom Rollup plugin (`cleanExtraDts`) renames `dist/src/index.d.ts` → `dist/index.d.ts` and removes the `dist/src/` dir after build so the package `types` entry resolves — don't be surprised.
 - `vue` is **external** (peerDependency `^3.0.0`), never bundled.
 - Package uses `"type": "module"` (ESM by default).
 
@@ -56,7 +50,7 @@ Two renderers:
 
 ## Example app (i18n)
 
-Demo app with multi-language support (en, zh, zh-HK). Deployed to GitHub Pages on release.
+Demo app with multi-language support (en, zh, zh-HK, ja). Deployed to GitHub Pages on release.
 
 ### Architecture: SSG via template substitution
 
@@ -64,21 +58,21 @@ Build-time i18n — not client-side. A single HTML template gets translated into
 
 ```
 example/templates/base.html          ← single source-of-truth HTML with {{t('key')}} placeholders
-example/i18n/{en,zh,zh-hk}.ts       ← translation files (default export, nested keys)
+example/i18n/{en,zh,zh-hk,ja}.ts     ← translation files (default export, nested keys)
 example/i18n/index.ts                ← LANGUAGES array, getLang(), t() (runtime, for LangSwitcher only)
 example/scripts/generate-i18n.mjs    ← build script: template + translations → .generated/webpack.{lang}.html
 example/.generated/                  ← gitignored output, regenerated on every dev/build
 ```
 
-**Build flow**: `npx tsx generate-i18n.mjs` → `rsbuild build` (3 entry points mapped to generated templates)
+**Build flow**: `node example/scripts/generate-i18n.mjs` → `rsbuild build` (4 entry points mapped to generated templates; `.ts` translation files are imported natively via Node type-stripping).
 
-**Adding a new language**: add translation file → add entry to `LANGUAGES` in `i18n/index.ts` → add entry in `rsbuild.config.js` → add config in `generate-i18n.mjs` `langConfig`.
+**Adding a new language**: add translation file → add the new lang key (e.g. `ja: '日本語'`) to `langSwitcher` in **every** existing translation file (so it shows in all switchers) → add entry to `LANGUAGES` + `getLang()` in `i18n/index.ts` → add entry in `rsbuild.config.js` (`source.entry` + html `langMap`) → add config in `generate-i18n.mjs` `langConfig`.
 
 ### Key files
 
 - **`example/webpack-entry.ts`** — App entry: mounts Vue app + `LangSwitcher` component
 - **`example/styles.css`** — App styles including lang-dropdown
-- **`rsbuild.config.js`** — 3 rsbuild entries (`index`, `zh/index`, `zh-hk/index`), all pointing to same JS entry but different HTML templates via `template({ entryName })`
+- **`rsbuild.config.js`** — 4 rsbuild entries (`index`, `zh/index`, `zh-hk/index`, `ja/index`), all pointing to same JS entry but different HTML templates via `template({ entryName })`
 
 ### SEO
 
