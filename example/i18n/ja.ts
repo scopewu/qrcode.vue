@@ -31,7 +31,7 @@ export default {
       'v3.5から、<code>QrcodeCanvas</code> と <code>QrcodeSvg</code> コンポーネントが個別にエクスポートされます：',
     canvasMethods: 'テンプレート Ref メソッド',
     canvasMethodsDesc:
-      '<code>QrcodeCanvas</code> と <code>QrcodeSvg</code> の両方がテンプレート ref を介して以下のメソッドを公開しています。<code>QrcodeVue</code> は現在の <code>render-as</code> に応じてこれらを転送します：',
+      '<code>QrcodeCanvas</code> と <code>QrcodeSvg</code> の両方がテンプレート ref を介して以下のメソッドを公開しています。生成されたQRコードは、ブラウザから直接ダウンロードできます。<code>QrcodeVue</code> は現在の <code>render-as</code> に応じてこれらを転送します：',
     canvasMethodsCorsNote:
       '<strong>CORS 注意：</strong>QRコードにクロスオリジンのロゴ画像を含める場合、<code>imageSettings.crossOrigin: \'anonymous\'</code> を設定し、画像サーバーが <code>Access-Control-Allow-Origin</code> ヘッダーを返すことを確認してください。そうでない場合、canvas が「汚染」され、<code>toDataURL</code> / <code>download</code> が <code>SecurityError</code> をスローします。',
     canvasMethodsDownloadableNote:

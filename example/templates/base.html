@@ -163,6 +163,19 @@ const radius = ref(0)
         <h2>{{t('docs.canvasMethods')}}</h2>
         <p>{{t('docs.canvasMethodsDesc')}}</p>
 
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr><th>{{t('docs.component')}}</th><th>{{t('docs.method')}}</th><th>{{t('docs.signature')}}</th><th>{{t('docs.description')}}</th></tr>
+            </thead>
+            <tbody>
+              <tr><td rowspan="2"><code>QrcodeCanvas</code></td><td><code>toDataURL</code></td><td><code>(type?: string, quality?: number) => string | undefined</code></td><td>{{t('docs.toDataURLDesc')}}</td></tr>
+              <tr><td><code>download</code></td><td><code>(filename?: string) => void</code></td><td>{{t('docs.downloadDesc')}}</td></tr>
+              <tr><td rowspan="2"><code>QrcodeSvg</code></td><td><code>toDataURL</code></td><td><code>() => string | undefined</code></td><td>{{t('docs.svgToDataURLDesc')}}</td></tr>
+              <tr><td><code>download</code></td><td><code>(filename?: string) => void</code></td><td>{{t('docs.svgDownloadDesc')}}</td></tr>
+            </tbody>
+          </table>
+
         <h3>QrcodeCanvas</h3>
         <pre><code>&lt;script setup lang="ts"&gt;
 import { ref } from 'vue'
@@ -191,19 +204,6 @@ const handleDownload = () => {
 &lt;/script&gt;
 
 &lt;qrcode-svg ref="qrRef" value="https://example.com" /&gt;</code></pre>
-
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr><th>{{t('docs.component')}}</th><th>{{t('docs.method')}}</th><th>{{t('docs.signature')}}</th><th>{{t('docs.description')}}</th></tr>
-            </thead>
-            <tbody>
-              <tr><td rowspan="2"><code>QrcodeCanvas</code></td><td><code>toDataURL</code></td><td><code>(type?: string, quality?: number) => string | undefined</code></td><td>{{t('docs.toDataURLDesc')}}</td></tr>
-              <tr><td><code>download</code></td><td><code>(filename?: string) => void</code></td><td>{{t('docs.downloadDesc')}}</td></tr>
-              <tr><td rowspan="2"><code>QrcodeSvg</code></td><td><code>toDataURL</code></td><td><code>() => string | undefined</code></td><td>{{t('docs.svgToDataURLDesc')}}</td></tr>
-              <tr><td><code>download</code></td><td><code>(filename?: string) => void</code></td><td>{{t('docs.svgDownloadDesc')}}</td></tr>
-            </tbody>
-          </table>
         </div>
       </div>
 
