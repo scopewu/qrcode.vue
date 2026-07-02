@@ -1,6 +1,6 @@
 export default {
   author: 'https://tie.pub/en/me/',
-  defaultValue: 'QRCODE.VUE ❤️ Thanks. 感谢. ありがたい. 감사. Reconnaissant. Dankbar. berterima kasih.',
+  defaultValue: 'QRCODE.VUE ❤️ Thanks. 感谢. ありがたい. 감사. Reconnaissant. Dankbar. terima kasih.',
   title: 'qrcode.vue - QRコード生成用の Vue コンポーネント。',
   description:
     'qrcode.vue - QRコード生成用の Vue コンポーネント。Vue 2 と Vue 3 の両方をサポートします。canvas と svg の2種類の QRコード形式を提供し、サイズ、余白、誤り訂正レベル、前景色と背景色、ロゴ画像、グラデーション効果をカスタマイズできます。',
@@ -34,8 +34,6 @@ export default {
       '<code>QrcodeCanvas</code> と <code>QrcodeSvg</code> の両方がテンプレート ref を介して以下のメソッドを公開しています。生成されたQRコードは、ブラウザから直接ダウンロードできます。<code>QrcodeVue</code> は現在の <code>render-as</code> に応じてこれらを転送します：',
     canvasMethodsCorsNote:
       '<strong>CORS 注意：</strong>QRコードにクロスオリジンのロゴ画像を含める場合、<code>imageSettings.crossOrigin: \'anonymous\'</code> を設定し、画像サーバーが <code>Access-Control-Allow-Origin</code> ヘッダーを返すことを確認してください。そうでない場合、canvas が「汚染」され、<code>toDataURL</code> / <code>download</code> が <code>SecurityError</code> をスローします。',
-    canvasMethodsDownloadableNote:
-      'これらのメソッドは <code>QrcodeVue</code> を <code>render-as="canvas"</code> または <code>render-as="svg"</code> で使用する場合にも利用でき、ブラウザから直接 QRコードをダウンロードできます。',
     component: 'コンポーネント',
     method: 'メソッド',
     signature: 'シグネチャ',

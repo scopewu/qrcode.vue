@@ -194,25 +194,11 @@ createApp(App).mount('#root')
 function fetchGitHubRepoStarCount(callback: (detail: unknown) => void) {
   const repo = 'https://api.github.com/repos/scopewu/qrcode.vue'
 
-  try {
-    const xhr = new XMLHttpRequest();
-
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        callback(JSON.parse(xhr.responseText))
-      }
-    }
-
-    xhr.onerror = function (ev) {
-      console.error(ev)
+  fetch(repo)
+    .then((res) => res.json())
+    .then((data) => callback(data))
+    .catch((e) => {
+      console.error(e)
       callback({})
-    }
-
-    xhr.open('GET', repo)
-    xhr.withCredentials = false
-    xhr.send();
-  } catch (e) {
-    console.error(e)
-    callback({})
-  }
+    })
 }

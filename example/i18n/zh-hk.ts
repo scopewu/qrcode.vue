@@ -1,6 +1,6 @@
 export default {
   author: 'https://tie.pub/zh-tw/me/',
-  defaultValue: 'QRCODE.VUE ❤️ 感謝使用。',
+  defaultValue: 'QRCODE.VUE ❤️ Thanks. 感谢. ありがたい. 감사. Reconnaissant. Dankbar. terima kasih.',
   title: 'qrcode.vue - 用於產生 QR Code 的 Vue 組件。',
   description:
     'qrcode.vue - 用於產生 QR Code 的 Vue 組件。同時支援 Vue 2 與 Vue 3。提供 canvas 與 svg 兩種渲染格式，可自訂尺寸、邊距、容錯等級、前景色與背景色、Logo 圖片以及漸層效果。',

@@ -1,6 +1,6 @@
 export default {
   author: 'https://tie.pub/en/me/',
-  defaultValue: 'QRCODE.VUE ❤️ Thanks. 感谢. ありがたい. 감사. Reconnaissant. Dankbar. berterima kasih.',
+  defaultValue: 'QRCODE.VUE ❤️ Thanks. 感谢. ありがたい. 감사. Reconnaissant. Dankbar. terima kasih.',
   title: 'qrcode.vue - A Vue component to generate QRCode.',
   description:
     'qrcode.vue - A Vue component for QRCode. QRCode vue supports both Vue 2 and Vue 3. It offers two QR code formats: canvas and svg. Customize QR code size, margins, error correction level, foreground and background colors, logo images, and gradient effects.',
