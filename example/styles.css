@@ -633,6 +633,8 @@ input[type='range']::-moz-range-thumb {
 /* Fieldset */
 .fieldset-group {
   margin-top: 1rem;
+  margin-inline: 0;
+  min-width: 0;
   padding: 1rem;
   border: 1px solid var(--border-color);
   border-radius: var(--radius);

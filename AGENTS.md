@@ -76,7 +76,7 @@ example/.generated/                  ← gitignored output, regenerated on every
 
 ### SEO
 
-Each generated page includes: `<html lang>`, `hreflang` alternates, `canonical`, `og:locale`, `x-default`. LangSwitcher is runtime Vue — not part of SSG.
+Each generated page includes: `<html lang>`, `hreflang` alternates + `x-default`, `canonical`, `og:locale` + `og:locale:alternate` (auto-derived from each translation's `ogLocale`), JSON-LD (`SoftwareSourceCode`). LangSwitcher is runtime Vue — not part of SSG.
 
 ## Code Style
 

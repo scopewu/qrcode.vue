@@ -49,6 +49,15 @@ function generateHreflangs(currentLang) {
   return links.join('\n')
 }
 
+function generateOgLocaleAlternates(currentLang) {
+  return langs
+    .filter(l => l !== currentLang)
+    .map(l => translations[l]?.ogLocale)
+    .filter(Boolean)
+    .map(locale => `  <meta property="og:locale:alternate" content="${locale}" />`)
+    .join('\n')
+}
+
 for (const lang of langs) {
   const cfg = langConfig[lang]
   if (!cfg) {
@@ -61,6 +70,7 @@ for (const lang of langs) {
   html = html.replace(/\{\{lang\}\}/g, cfg.htmlLang)
   html = html.replace(/\{\{canonical\}\}/g, cfg.canonical)
   html = html.replace(/\{\{hreflangs\}\}/g, generateHreflangs(lang))
+  html = html.replace(/\{\{ogLocaleAlternates\}\}/g, generateOgLocaleAlternates(lang))
 
   html = html.replace(/\{\{\s*t\('([^']+)'\)\s*\}\}/g, (_, key) => {
     return t(lang, key)
