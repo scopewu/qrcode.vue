@@ -18,10 +18,10 @@
     "./package": "./package.json"
   },
   "scripts": {
-    "dev": "node example/scripts/generate-i18n.mjs && rsbuild dev",
+    "dev": "node example/scripts/generate-i18n.js && rsbuild dev",
     "build": "rollup -c",
-    "build:example": "node example/scripts/generate-i18n.mjs && rsbuild build",
-    "generate:i18n": "node example/scripts/generate-i18n.mjs",
+    "build:example": "node example/scripts/generate-i18n.js && rsbuild build",
+    "generate:i18n": "node example/scripts/generate-i18n.js",
     "test": "rstest"
   },
   "repository": "https://github.com/scopewu/qrcode.vue.git",

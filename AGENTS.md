@@ -60,13 +60,13 @@ Build-time i18n — not client-side. A single HTML template gets translated into
 example/templates/base.html          ← single source-of-truth HTML with {{t('key')}} placeholders
 example/i18n/{en,zh,zh-hk,ja}.ts     ← translation files (default export, nested keys)
 example/i18n/index.ts                ← LANGUAGES array, getLang(), t() (runtime, for LangSwitcher only)
-example/scripts/generate-i18n.mjs    ← build script: template + translations → .generated/webpack.{lang}.html
+example/scripts/generate-i18n.js    ← build script: template + translations → .generated/webpack.{lang}.html
 example/.generated/                  ← gitignored output, regenerated on every dev/build
 ```
 
-**Build flow**: `node example/scripts/generate-i18n.mjs` → `rsbuild build` (4 entry points mapped to generated templates; `.ts` translation files are imported natively via Node type-stripping).
+**Build flow**: `node example/scripts/generate-i18n.js` → `rsbuild build` (4 entry points mapped to generated templates; `.ts` translation files are imported natively via Node type-stripping, so **Node ≥ 23.6 / 22.18+ is required** — CI uses Node 24).
 
-**Adding a new language**: add translation file → add the new lang key (e.g. `ja: '日本語'`) to `langSwitcher` in **every** existing translation file (so it shows in all switchers) → add entry to `LANGUAGES` + `getLang()` in `i18n/index.ts` → add entry in `rsbuild.config.js` (`source.entry` + html `langMap`) → add config in `generate-i18n.mjs` `langConfig`.
+**Adding a new language**: add translation file → add the new lang key (e.g. `en: 'English'`) to `langSwitcher` in **every** existing translation file (so it shows in all switchers) → add entry to `LANGUAGES` + `getLang()` in `i18n/index.ts` → add entry in `rsbuild.config.js` (`source.entry` + html `langMap`) → add config in `generate-i18n.js` `langConfig`.
 
 ### Key files
 
@@ -88,9 +88,10 @@ Each generated page includes: `<html lang>`, `hreflang` alternates + `x-default`
 
 ## Testing
 
-- Runner: `@rstest/core` (not Jest, not Vitest). API is `describe`/`it`/`expect` — familiar but the import is from `@rstest/core`.
+- Runner: `@rstest/core` (not Jest, not Vitest). API is `describe`/`it`/`expect` — familiar but the import is from `@rstest/core`. `npm test` runs once; use `npx rstest watch` for watch mode.
 - Environment: `happy-dom` (not jsdom)
 - Mounting: `@vue/test-utils` `mount()`
+- `rstest.config.ts` aliases `@vue/test-utils` to its **CJS dist build** (`vue-test-utils.cjs.js`) — keep this alias if touching test config, or imports break.
 - All tests in one file: `test/index.test.ts`
 - Tests cover canvas mode, SVG mode, prop switching, gradients, image overlay, radius, accessibility, edge cases
 
