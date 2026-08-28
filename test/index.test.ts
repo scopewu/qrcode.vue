@@ -2,13 +2,11 @@ import { describe, expect, it } from '@rstest/core'
 import { mount, VueWrapper } from '@vue/test-utils'
 import QrcodeVue, { QrcodeCanvas, QrcodeSvg } from '../src'
 
-// ─── Shared Test Data ───
 const DEFAULT_VALUE = 'test'
 const TEST_IMAGE = { src: 'test.png', height: 30, width: 30 }
 const TEST_IMAGE_WITH_EXCAVATE = { ...TEST_IMAGE, excavate: true }
 const TEST_IMAGE_WITH_BORDER_RADIUS = { ...TEST_IMAGE, excavate: true, borderRadius: 5 }
 
-// ─── Helper Functions ───
 function mountQR(props: Record<string, unknown> = {}): VueWrapper {
   return mount(QrcodeVue, {
     props: {
@@ -125,7 +123,6 @@ describe('QrcodeVue', () => {
     })
 
     it('handles invalid error correction level gracefully in canvas mode', () => {
-      // @ts-expect-error testing invalid prop value
       const wrapper = mountQR({ level: 'INVALID' })
       expect(wrapper.html()).toContain('<canvas')
     })
@@ -328,7 +325,6 @@ describe('QrcodeVue', () => {
     })
 
     it('handles invalid error correction level gracefully in SVG mode', () => {
-      // @ts-expect-error testing invalid prop value
       const wrapper = mountQR({ renderAs: 'svg', level: 'INVALID' })
       expect(wrapper.html()).toContain('<svg')
     })
@@ -499,7 +495,6 @@ describe('QrcodeVue', () => {
     })
 
     it('falls back to default when invalid renderAs provided', () => {
-      // @ts-expect-error testing invalid prop value
       const wrapper = mountQR({ renderAs: 'invalid' })
       expect(wrapper.html()).toContain('<canvas')
     })
@@ -521,7 +516,6 @@ describe('QrcodeVue', () => {
     })
 
     it('falls back to default for invalid gradientType', () => {
-      // @ts-expect-error testing invalid prop value
       const wrapper = mountQR({
         renderAs: 'svg',
         gradient: true,
@@ -531,7 +525,6 @@ describe('QrcodeVue', () => {
     })
 
     it('rejects negative margin values', () => {
-      // @ts-expect-error testing invalid prop value
       const wrapper = mountQR({ margin: -4 })
       expect(wrapper.html()).toContain('<canvas')
     })

@@ -38,8 +38,7 @@
   }
 }
 
-:lang(zh-hant),
-:lang(zh-HK) {
+:root:is(:lang(zh-hant), :lang(zh-HK)) {
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang TC", "PingFang HK", "Microsoft JhengHei", "WenQuanYi Micro Hei", "Noto Sans CJK TC", sans-serif;
 }
 
