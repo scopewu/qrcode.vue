@@ -26,7 +26,6 @@
   <link rel="apple-touch-icon" sizes="180x180" href="https://s.tie.pub/qr-vue/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="https://s.tie.pub/qr-vue/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="https://s.tie.pub/qr-vue/favicon-16x16.png">
-  <style>[v-cloak]{display: none!important;}</style>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
@@ -400,7 +399,9 @@ const { default: QrcodeVue, QrcodeCanvas, QrcodeSvg } = require('qrcode.vue')</c
   </main>
   <footer>
     <div class="footer-inner">
-      <div class="copyright">&copy;2026 {{t('footer.copyright')}} <a href="{{t('author')}}" rel="author me">Wú Wénjùn</a></div>
+      <div class="copyright">&copy;2026 {{t('footer.copyright')}}
+        <a href="{{t('author')}}" rel="author me" target="_blank">Wú Wénjùn</a>
+      </div>
     </div>
   </footer>
 </div>

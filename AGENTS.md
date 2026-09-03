@@ -97,6 +97,7 @@ Each generated page includes: `<html lang>`, `hreflang` alternates + `x-default`
 
 ## CI / Release
 
+- **Test CI**: `.github/workflows/test.yml` — runs on push to `main` and on PRs: `yarn install --frozen-lockfile` → `yarn test`
 - **Publish**: triggered by `v*` tags → `yarn install && yarn build && npm publish --access public` (Node 24)
 - **Demo deploy**: triggered by GitHub releases → `yarn install && yarn build:example` → deploys `example/dist/` to `gh-pages` branch
 
