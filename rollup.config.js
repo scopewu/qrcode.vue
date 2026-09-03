@@ -5,15 +5,12 @@ import terser from '@rollup/plugin-terser'
 import pkg from './package.json' with { type: 'json' }
 
 const banner =
-  '/*!' +
-  '\n * qrcode.vue v' +
-  pkg.version +
-  '\n * ' +
-  pkg.description +
-  '\n * © 2017-PRESENT' +
-  ' @scopewu(https://github.com/scopewu)' +
-  '\n * MIT License.' +
-  '\n */'
+  `/*!
+ * qrcode.vue v${pkg.version}
+ * ${pkg.description}
+ * © 2017-PRESENT @scopewu(https://github.com/scopewu)
+ * @license MIT.
+ */`
 const sourcemap = false
 
 function cleanExtraDts() {
