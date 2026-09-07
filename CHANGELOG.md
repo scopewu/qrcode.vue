@@ -1,3 +1,11 @@
+## [3.11.0] - 2026-09-07
+
+### Feature
+
+- Add AI assistant resources: Agent Skills-format skill (`skills/qrcode-vue/SKILL.md`) and `llms.txt` (llmstxt.org format), both shipped in the npm package.
+- Serve `llms.txt` at the demo site root (`https://qr-vue.tie.pub/llms.txt`) via rsbuild `output.copy`.
+- Document the AI / LLM resources in all four READMEs (en, zh_cn, zh-hant, ja).
+
 ## [3.10.0] - 2026-06-13
 
 ### Feature
