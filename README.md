@@ -353,6 +353,15 @@ Vue.createApp({
 </script>
 ```
 
+## AI / LLM support
+
+qrcode.vue ships resources that help AI coding assistants use this library correctly:
+
+- [`llms.txt`](./llms.txt) — a compact, LLM-friendly summary of the library in [llmstxt.org](https://llmstxt.org) format.
+- [`skills/qrcode-vue/SKILL.md`](./skills/qrcode-vue/SKILL.md) — an [Agent Skills](https://agentskills.io)–format skill with the props table, recipes, and pitfalls. Copy it into your assistant's skills directory (e.g. `~/.agents/skills/` or `.claude/skills/`) to give the agent expert knowledge of qrcode.vue.
+
+Both files are also included in the npm package.
+
 ## License
 
 copyright &copy; 2021 @scopewu, license by [MIT](https://github.com/scopewu/qrcode.vue/blob/main/LICENSE)

@@ -354,6 +354,15 @@ Vue.createApp({
 </script>
 ```
 
+## AI / LLM サポート
+
+qrcode.vue には、AI コーディングアシスタントがこのライブラリを正しく使うためのリソースが同梱されています：
+
+- [`llms.txt`](./llms.txt) — [llmstxt.org](https://llmstxt.org) 形式の、LLM 向けに要約されたライブラリ概要。
+- [`skills/qrcode-vue/SKILL.md`](./skills/qrcode-vue/SKILL.md) — [Agent Skills](https://agentskills.io) 形式のスキルファイル。props 一覧、レシピ、注意点を収録しています。アシスタントのスキルディレクトリ（例：`~/.agents/skills/` や `.claude/skills/`）にコピーすると、AI アシスタントが qrcode.vue の使い方を理解できるようになります。
+
+どちらのファイルも npm パッケージに含まれています。
+
 ## ライセンス
 
 copyright &copy; 2021 @scopewu, license by [MIT](https://github.com/scopewu/qrcode.vue/blob/main/LICENSE)
