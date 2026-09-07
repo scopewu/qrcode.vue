@@ -1,0 +1,30 @@
+# qrcode.vue
+
+> A Vue.js component to generate QR codes. Version 3.x supports Vue 3 (peer dependency `vue@^3.0.0`, no runtime dependencies); Vue 2 apps use qrcode.vue 1.x. Renders to `<canvas>` or `<svg>`, with gradients, rounded modules, and embedded logo images. MIT licensed.
+
+Install: `npm install --save qrcode.vue`
+
+```ts
+import QrcodeVue, { QrcodeCanvas, QrcodeSvg } from 'qrcode.vue'
+```
+
+Key props: `value` (required), `size` (default 100), `render-as` (`canvas`|`svg`, svg works on SSR), `level` (L/M/Q/H, default L), `margin`, `background`/`foreground`, `gradient` + `gradient-type` + `gradient-start-color`/`gradient-end-color`, `radius` (0–0.5 rounded modules), `image-settings` (embedded logo: `src`, `x`/`y`, `width`/`height`, `excavate`, `borderRadius`, `crossOrigin`), `id` (SSR-safe internal SVG ids, pass `useId()`). Template-ref methods: `toDataURL()`, `download(filename)`.
+
+## Docs
+
+- [README (English)](https://github.com/scopewu/qrcode.vue/blob/main/README.md): install, usage, full props reference, template ref methods
+- [README (简体中文)](https://github.com/scopewu/qrcode.vue/blob/main/README-zh_cn.md)
+- [README (繁體中文)](https://github.com/scopewu/qrcode.vue/blob/main/README.zh-hant.md)
+- [README (日本語)](https://github.com/scopewu/qrcode.vue/blob/main/README-ja.md)
+- [CHANGELOG](https://github.com/scopewu/qrcode.vue/blob/main/CHANGELOG.md): version history and breaking changes
+
+## AI assistant resources
+
+- [SKILL.md](https://github.com/scopewu/qrcode.vue/blob/main/skills/qrcode-vue/SKILL.md): Agent Skills–format skill with props table, recipes, and pitfalls. Also shipped in the npm package at `node_modules/qrcode.vue/skills/qrcode-vue/SKILL.md`.
+- [Live demo](https://qr-vue.tie.pub): interactive playground for all props
+
+## Source
+
+- [src/index.ts](https://github.com/scopewu/qrcode.vue/blob/main/src/index.ts): the whole library — components, props, exported types (`Level`, `RenderAs`, `GradientType`, `ImageSettings`)
+- [npm package](https://www.npmjs.com/package/qrcode.vue)
+- [Repository](https://github.com/scopewu/qrcode.vue)
