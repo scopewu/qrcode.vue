@@ -24,6 +24,7 @@ export default defineConfig({
       root: './example/dist',
     },
     inlineStyles: true,
+    copy: [{ from: './llms.txt' }],
   },
   html: {
     template({ entryName }) {

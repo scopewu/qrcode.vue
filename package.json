@@ -36,8 +36,10 @@
   ],
   "files": [
     "/dist",
+    "/skills",
     "CHANGELOG.md",
-    "README.md"
+    "README.md",
+    "llms.txt"
   ],
   "author": "scope.wu <scope.wu@gmail.com>",
   "license": "MIT",

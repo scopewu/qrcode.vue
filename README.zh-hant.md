@@ -355,6 +355,15 @@ Vue.createApp({
 </script>
 ```
 
+## AI / 大模型支援
+
+qrcode.vue 提供了幫助 AI 編程助手正確使用本組件庫的資源：
+
+- [`llms.txt`](./llms.txt) — 遵循 [llmstxt.org](https://llmstxt.org) 格式的精簡版庫說明，適合大模型閱讀。
+- [`skills/qrcode-vue/SKILL.md`](./skills/qrcode-vue/SKILL.md) — 符合 [Agent Skills](https://agentskills.io) 規範的技能文件，包含 props 速查表、常用範例和常見坑。將其複製到助手的技能目錄（如 `~/.agents/skills/` 或 `.claude/skills/`），即可讓 AI 助手掌握 qrcode.vue 的用法。
+
+這兩個文件也隨 npm 套件一起發佈。
+
 ## 軟件許可
 
 copyright &copy; 2021 scopewu, license by [MIT](https://github.com/scopewu/qrcode.vue/blob/main/LICENSE)

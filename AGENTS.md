@@ -32,6 +32,8 @@ Single-file Vue 3 component library. No router, no store, no monorepo.
 - **`test/index.test.ts`** — All tests, single file. Uses `@rstest/core` + `@vue/test-utils` + `happy-dom`
 - **`typings/index.d.ts`** — Vue SFC/CSS module shims (for example app, not the library)
 - **`dist/`** — Library build output. 4 files: `.cjs.js`, `.esm.js`, `.browser.js`, `.browser.min.js`
+- **`skills/qrcode-vue/SKILL.md`** — Agent Skills–format usage skill for AI coding assistants (props table, recipes, pitfalls). Ships in the npm package via `files`. Keep it in sync with `src/index.ts` when props/API change.
+- **`llms.txt`** (root) — llmstxt.org-format library summary for LLMs. Shipped in the npm package, and copied to the demo site root (`https://qr-vue.tie.pub/llms.txt`) via `output.copy` in `rsbuild.config.js`.
 
 ### Library build gotchas
 
