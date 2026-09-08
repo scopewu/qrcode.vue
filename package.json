@@ -37,7 +37,6 @@
   "files": [
     "/dist",
     "/skills",
-    "CHANGELOG.md",
     "README.md",
     "llms.txt"
   ],
