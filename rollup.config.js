@@ -4,8 +4,7 @@ import terser from '@rollup/plugin-terser'
 
 import pkg from './package.json' with { type: 'json' }
 
-const banner =
-  `/*!
+const banner = `/*!
  * qrcode.vue v${pkg.version}
  * ${pkg.description}
  * © 2017-PRESENT @scopewu(https://github.com/scopewu)
@@ -41,7 +40,7 @@ function createEntry(options) {
       format: options.format,
       exports: 'named',
       globals: {
-        vue: 'Vue'
+        vue: 'Vue',
       },
       banner,
       indent: false,
@@ -55,7 +54,7 @@ function createEntry(options) {
             declaration: options.format === 'es',
           },
           exclude: ['example', 'test', '**/*.config.ts'],
-        }
+        },
       }),
     ],
   }
@@ -87,6 +86,6 @@ const browserPlugins = [
 export default [
   createEntry({ format: 'cjs', file: pkg.main }),
   createEntry({ format: 'es', file: pkg.module, plugins: [cleanExtraDts()] }),
-  createEntry({ format: 'umd', file: pkg.browser, }),
+  createEntry({ format: 'umd', file: pkg.browser }),
   createEntry({ format: 'umd', file: pkg.unpkg, plugins: browserPlugins }),
 ]

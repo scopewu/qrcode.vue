@@ -1,0 +1,5 @@
+dist/
+example/dist/
+example/.generated/
+src/qrcodegen.ts
+SKILL.md

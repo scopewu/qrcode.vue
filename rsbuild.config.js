@@ -15,7 +15,7 @@ export default defineConfig({
     alias: {
       vue$: isProd
         ? 'vue/dist/vue.esm-browser.prod.js'
-        : 'vue/dist/vue.esm-browser.js'
+        : 'vue/dist/vue.esm-browser.js',
     },
   },
   output: {
@@ -28,7 +28,12 @@ export default defineConfig({
   },
   html: {
     template({ entryName }) {
-      const langMap = { index: 'en', 'zh/index': 'zh', 'zh-hk/index': 'zh-hk', 'ja/index': 'ja' }
+      const langMap = {
+        index: 'en',
+        'zh/index': 'zh',
+        'zh-hk/index': 'zh-hk',
+        'ja/index': 'ja',
+      }
       const lang = langMap[entryName] || 'en'
       return `./example/.generated/webpack.${lang}.html`
     },

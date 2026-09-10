@@ -79,12 +79,12 @@ When you use the component with Vue 3 with `TypeScript`:
     :level="level"
     :render-as="renderAs"
     :background="background"
-    :foreground='foreground'
+    :foreground="foreground"
     :gradient="gradient"
     :gradient-type="gradientType"
     :gradient-start-color="gradientStartColor"
     :gradient-end-color="gradientEndColor"
-    :image-settings='imageSettings'
+    :image-settings="imageSettings"
     :radius="radius"
   />
 </template>
@@ -99,7 +99,7 @@ When you use the component with Vue 3 with `TypeScript`:
   const background = ref('#ffffff')
   const foreground = ref('#000000')
   const margin = ref(0)
-  
+
   const imageSettings = ref<ImageSettings>({
     src: 'https://github.com/scopewu.png',
     width: 30,
@@ -176,14 +176,14 @@ The foreground color of qrcode.
 
   ```ts
   export type ImageSettings = {
-    src: string, // The URL of image.
-    x?: number,  // The horizontal offset. When not specified, will center the image.
-    y?: number,  // The vertical offset. When not specified, will center the image.
-    height: number, // The height of image
-    width: number,  // The height of image
-    excavate?: boolean, // Whether or not to "excavate" the modules around the image.
-    borderRadius?: number, // The border radius of image.
-    crossOrigin?: 'anonymous' | 'use-credentials' | '', // The CORS attribute for the image. Useful when exporting canvas to an image.
+    src: string // The URL of image.
+    x?: number // The horizontal offset. When not specified, will center the image.
+    y?: number // The vertical offset. When not specified, will center the image.
+    height: number // The height of image
+    width: number // The height of image
+    excavate?: boolean // Whether or not to "excavate" the modules around the image.
+    borderRadius?: number // The border radius of image.
+    crossOrigin?: 'anonymous' | 'use-credentials' | '' // The CORS attribute for the image. Useful when exporting canvas to an image.
   }
   ```
 
@@ -270,22 +270,22 @@ Both `QrcodeCanvas` and `QrcodeSvg` expose the following methods via template re
 
 ```html
 <script setup>
-import { ref } from 'vue'
-import { QrcodeCanvas } from 'qrcode.vue'
+  import { ref } from 'vue'
+  import { QrcodeCanvas } from 'qrcode.vue'
 
-const qrRef = ref()
-const handleDownload = () => {
-  qrRef.value?.download('my-qrcode.png')
-}
+  const qrRef = ref()
+  const handleDownload = () => {
+    qrRef.value?.download('my-qrcode.png')
+  }
 </script>
 
 <qrcode-canvas ref="qrRef" value="https://example.com" />
 ```
 
-| Method | Signature | Description |
-|--------|-----------|-------------|
-| `toDataURL` | `(type?: string, quality?: number) => string \| undefined` | Convert the canvas to a data URL. |
-| `download` | `(filename?: string) => void` | Trigger a download of the QR code as a PNG image. |
+| Method      | Signature                                                  | Description                                       |
+| ----------- | ---------------------------------------------------------- | ------------------------------------------------- |
+| `toDataURL` | `(type?: string, quality?: number) => string \| undefined` | Convert the canvas to a data URL.                 |
+| `download`  | `(filename?: string) => void`                              | Trigger a download of the QR code as a PNG image. |
 
 > **CORS note:** When the QR code includes a cross-origin logo image, make sure to set `imageSettings.crossOrigin: 'anonymous'` and that the image server responds with the `Access-Control-Allow-Origin` header. Otherwise the canvas becomes "tainted" and `toDataURL` / `download` will throw a `SecurityError`.
 
@@ -293,22 +293,22 @@ const handleDownload = () => {
 
 ```html
 <script setup>
-import { ref } from 'vue'
-import { QrcodeSvg } from 'qrcode.vue'
+  import { ref } from 'vue'
+  import { QrcodeSvg } from 'qrcode.vue'
 
-const qrRef = ref()
-const handleDownload = () => {
-  qrRef.value?.download('my-qrcode.svg')
-}
+  const qrRef = ref()
+  const handleDownload = () => {
+    qrRef.value?.download('my-qrcode.svg')
+  }
 </script>
 
 <qrcode-svg ref="qrRef" value="https://example.com" />
 ```
 
-| Method | Signature | Description |
-|--------|-----------|-------------|
-| `toDataURL` | `() => string \| undefined` | Convert the SVG element to a data URL. |
-| `download` | `(filename?: string) => void` | Trigger a download of the QR code as an SVG image. |
+| Method      | Signature                     | Description                                        |
+| ----------- | ----------------------------- | -------------------------------------------------- |
+| `toDataURL` | `() => string \| undefined`   | Convert the SVG element to a data URL.             |
+| `download`  | `(filename?: string) => void` | Trigger a download of the QR code as an SVG image. |
 
 ## `QrcodeVue` 3.5+
 
@@ -332,8 +332,8 @@ const { default: QrcodeVue, QrcodeCanvas, QrcodeSvg } = require('qrcode.vue')
 <!--With HTML-->
 <div id="root">
   <p class="flex space-x">
-  <qrcode-vue :value="test" render-as="svg"></qrcode-vue>
-  <qrcode-canvas :value="test"></qrcode-canvas>
+    <qrcode-vue :value="test" render-as="svg"></qrcode-vue>
+    <qrcode-canvas :value="test"></qrcode-canvas>
   </p>
   <p><input v-model="test" /></p>
 </div>
@@ -341,15 +341,17 @@ const { default: QrcodeVue, QrcodeCanvas, QrcodeSvg } = require('qrcode.vue')
 <script src="https://cdn.jsdelivr.net/npm/qrcode.vue@3.5/dist/qrcode.vue.browser.min.js"></script>
 
 <script>
-Vue.createApp({
-  data() { return {
-    test: 'Hello World',
-  }},
-  components: {
-    QrcodeVue: QrcodeVue.default,
-    QrcodeCanvas: QrcodeVue.QrcodeCanvas,
-  },
-}).mount('#root')
+  Vue.createApp({
+    data() {
+      return {
+        test: 'Hello World',
+      }
+    },
+    components: {
+      QrcodeVue: QrcodeVue.default,
+      QrcodeCanvas: QrcodeVue.QrcodeCanvas,
+    },
+  }).mount('#root')
 </script>
 ```
 

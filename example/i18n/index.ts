@@ -20,7 +20,12 @@ export interface LangOption {
 export const LANGUAGES: LangOption[] = [
   { key: 'en', label: en.langSwitcher.en, href: '/', htmlLang: 'en' },
   { key: 'zh', label: zh.langSwitcher.zh, href: '/zh/', htmlLang: 'zh-CN' },
-  { key: 'zh-hk', label: zhHk.langSwitcher['zh-hk'], href: '/zh-hk/', htmlLang: 'zh-HK' },
+  {
+    key: 'zh-hk',
+    label: zhHk.langSwitcher['zh-hk'],
+    href: '/zh-hk/',
+    htmlLang: 'zh-HK',
+  },
   { key: 'ja', label: ja.langSwitcher.ja, href: '/ja/', htmlLang: 'ja' },
 ]
 

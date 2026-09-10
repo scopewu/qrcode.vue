@@ -22,7 +22,9 @@
     "build": "rollup -c",
     "build:example": "node example/scripts/generate-i18n.js && rsbuild build",
     "generate:i18n": "node example/scripts/generate-i18n.js",
-    "test": "rstest"
+    "test": "rstest",
+    "lint": "eslint .",
+    "format": "prettier --write --ignore-unknown ."
   },
   "repository": "https://github.com/scopewu/qrcode.vue.git",
   "keywords": [
@@ -51,14 +53,35 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@rollup/plugin-terser": "^1.0.0",
     "@rsbuild/core": "^2.2.1",
     "@rstest/core": "^0.11.10",
     "@vue/test-utils": "^2.5.0",
+    "eslint": "^10.10.0",
+    "globals": "^17.12.0",
     "happy-dom": "^20.11.12",
+    "lint-staged": "^17.5.0",
+    "prettier": "^3.9.6",
     "rollup": "^4.63.1",
     "rollup-plugin-typescript2": "^0.37.0",
+    "simple-git-hooks": "^2.14.0",
     "typescript": "^5.9.3",
+    "typescript-eslint": "^8.70.0",
     "vue": "^3.5.42"
+  },
+  "prettier": {
+    "printWidth": 80,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "always",
+    "semi": false
+  },
+  "simple-git-hooks": {
+    "pre-commit": "yarn lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --fix",
+    "*": "prettier --write --ignore-unknown"
   }
 }

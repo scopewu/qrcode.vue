@@ -75,12 +75,12 @@ createApp({
     :level="level"
     :render-as="renderAs"
     :background="background"
-    :foreground='foreground'
+    :foreground="foreground"
     :gradient="gradient"
     :gradient-type="gradientType"
     :gradient-start-color="gradientStartColor"
     :gradient-end-color="gradientEndColor"
-    :image-settings='imageSettings'
+    :image-settings="imageSettings"
     :radius="radius"
   />
 </template>
@@ -95,7 +95,7 @@ createApp({
   const background = ref('#ffffff')
   const foreground = ref('#000000')
   const margin = ref(0)
-  
+
   // 可传入二维码图片相关的属性，支持二维码 LOGO；
   const imageSettings = ref<ImageSettings>({
     src: 'https://github.com/scopewu.png',
@@ -175,17 +175,17 @@ createApp({
 
   ```ts
   export type ImageSettings = {
-    src: string, // 图片的地址。
-    x?: number,  // 水平横向偏移。没有设定值时，图片剧中
-    y?: number,  // 垂直竖向偏移。没有设定值时，图片剧中
-    height: number, // 图片的高度
-    width: number,  // 图片的宽度
+    src: string // 图片的地址。
+    x?: number // 水平横向偏移。没有设定值时，图片剧中
+    y?: number // 垂直竖向偏移。没有设定值时，图片剧中
+    height: number // 图片的高度
+    width: number // 图片的宽度
     // 是否“挖掘”图像周围的模块。
     // 这意味着嵌入图像重叠的任何模块都将使用背景颜色。
     // 使用此选项可确保图像周围的边缘清晰。嵌入透明图像时也很有用。
-    excavate?: boolean,
-    borderRadius?: number, // 图片的边框圆角。
-    crossOrigin?: 'anonymous' | 'use-credentials' | '', // 图片的 CORS 属性。如需导出 canvas 为图片，请设置此项。
+    excavate?: boolean
+    borderRadius?: number // 图片的边框圆角。
+    crossOrigin?: 'anonymous' | 'use-credentials' | '' // 图片的 CORS 属性。如需导出 canvas 为图片，请设置此项。
   }
   ```
 
@@ -272,22 +272,22 @@ createApp({
 
 ```html
 <script setup>
-import { ref } from 'vue'
-import { QrcodeCanvas } from 'qrcode.vue'
+  import { ref } from 'vue'
+  import { QrcodeCanvas } from 'qrcode.vue'
 
-const qrRef = ref()
-const handleDownload = () => {
-  qrRef.value?.download('my-qrcode.png')
-}
+  const qrRef = ref()
+  const handleDownload = () => {
+    qrRef.value?.download('my-qrcode.png')
+  }
 </script>
 
 <qrcode-canvas ref="qrRef" value="https://example.com" />
 ```
 
-| 方法 | 签名 | 说明 |
-|------|------|------|
+| 方法        | 签名                                                       | 说明                        |
+| ----------- | ---------------------------------------------------------- | --------------------------- |
 | `toDataURL` | `(type?: string, quality?: number) => string \| undefined` | 将 canvas 转换为 Data URL。 |
-| `download` | `(filename?: string) => void` | 触发下载二维码 PNG 图片。 |
+| `download`  | `(filename?: string) => void`                              | 触发下载二维码 PNG 图片。   |
 
 > **CORS 注意：** 当二维码包含跨域 Logo 图片时，请确保设置 `imageSettings.crossOrigin: 'anonymous'`，且图片服务器返回 `Access-Control-Allow-Origin` 响应头。否则 canvas 会被"污染"，导致 `toDataURL` / `download` 抛出 `SecurityError`。
 
@@ -295,22 +295,22 @@ const handleDownload = () => {
 
 ```html
 <script setup>
-import { ref } from 'vue'
-import { QrcodeSvg } from 'qrcode.vue'
+  import { ref } from 'vue'
+  import { QrcodeSvg } from 'qrcode.vue'
 
-const qrRef = ref()
-const handleDownload = () => {
-  qrRef.value?.download('my-qrcode.svg')
-}
+  const qrRef = ref()
+  const handleDownload = () => {
+    qrRef.value?.download('my-qrcode.svg')
+  }
 </script>
 
 <qrcode-svg ref="qrRef" value="https://example.com" />
 ```
 
-| 方法 | 签名 | 说明 |
-|------|------|------|
-| `toDataURL` | `() => string \| undefined` | 将 SVG 元素转换为 Data URL。 |
-| `download` | `(filename?: string) => void` | 触发下载二维码 SVG 图片。 |
+| 方法        | 签名                          | 说明                         |
+| ----------- | ----------------------------- | ---------------------------- |
+| `toDataURL` | `() => string \| undefined`   | 将 SVG 元素转换为 Data URL。 |
+| `download`  | `(filename?: string) => void` | 触发下载二维码 SVG 图片。    |
 
 ## `QrcodeVue` 3.5+
 
@@ -334,24 +334,26 @@ const { default: QrcodeVue, QrcodeCanvas, QrcodeSvg } = require('qrcode.vue')
 <!--With HTML-->
 <div id="root">
   <p class="flex space-x">
-  <qrcode-vue :value="test" render-as="svg"></qrcode-vue>
-  <qrcode-canvas :value="test"></qrcode-canvas>
+    <qrcode-vue :value="test" render-as="svg"></qrcode-vue>
+    <qrcode-canvas :value="test"></qrcode-canvas>
   </p>
-<p><input v-model="test" /></p>
+  <p><input v-model="test" /></p>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.global.prod.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode.vue@3.5/dist/qrcode.vue.browser.min.js"></script>
 
 <script>
-Vue.createApp({
-  data() { return {
-    test: 'Hello World',
-  }},
-  components: {
-    QrcodeVue: QrcodeVue.default,
-    QrcodeCanvas: QrcodeVue.QrcodeCanvas,
-  },
-}).mount('#root')
+  Vue.createApp({
+    data() {
+      return {
+        test: 'Hello World',
+      }
+    },
+    components: {
+      QrcodeVue: QrcodeVue.default,
+      QrcodeCanvas: QrcodeVue.QrcodeCanvas,
+    },
+  }).mount('#root')
 </script>
 ```
 

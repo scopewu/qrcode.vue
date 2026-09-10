@@ -2,13 +2,15 @@
 
 ## Commands
 
-| Command | Purpose |
-|---------|---------|
-| `npm run dev` | Generate i18n templates + rsbuild dev server (hot reload, serves `example/`) |
-| `npm run build` | Library production build via Rollup → CJS + ESM + UMD (minified) into `dist/` |
-| `npm run build:example` | Generate i18n templates + rsbuild build → `example/dist/` |
-| `npm run generate:i18n` | Regenerate per-language HTML templates from `example/templates/base.html` |
-| `npm test` | Run tests with rstest |
+| Command                 | Purpose                                                                       |
+| ----------------------- | ----------------------------------------------------------------------------- |
+| `npm run dev`           | Generate i18n templates + rsbuild dev server (hot reload, serves `example/`)  |
+| `npm run build`         | Library production build via Rollup → CJS + ESM + UMD (minified) into `dist/` |
+| `npm run build:example` | Generate i18n templates + rsbuild build → `example/dist/`                     |
+| `npm run generate:i18n` | Regenerate per-language HTML templates from `example/templates/base.html`     |
+| `npm test`              | Run tests with rstest                                                         |
+| `npm run lint`          | ESLint check (flat config: `eslint.config.js`)                                |
+| `npm run format`        | Prettier write across the repo                                                |
 
 **CI uses yarn**, not npm (`yarn install && yarn build`). Both work locally.
 
@@ -47,6 +49,7 @@ Single-file Vue 3 component library. No router, no store, no monorepo.
 Components use **render functions with `h()`**, not `<template>` SFC syntax. All component logic lives in `setup()` with Composition API (`defineComponent`, `ref`, `computed`, `watchEffect`).
 
 Two renderers:
+
 - **Canvas** — draws via `CanvasRenderingContext2D` + `Path2D` (falls back to per-cell `fillRect` when `Path2D` unsupported)
 - **SVG** — generates SVG path data strings, outputs `<svg>` with `<path>`, `<defs>` for gradients/clip-paths
 
@@ -83,8 +86,9 @@ Each generated page includes: `<html lang>`, `hreflang` alternates + `x-default`
 ## Code Style
 
 - 2-space indent, LF, no tabs (`.editorconfig`)
-- No linter — TypeScript strict mode is the only enforcement
-- **No semicolons** in `index.ts` (the main source). `qrcodegen.ts` uses semicolons (third-party, different style — don't change it)
+- Prettier for formatting (config in `package.json`, key `prettier`); `simple-git-hooks` + `lint-staged` run `prettier --write` on staged files at pre-commit (hook installed once via `npx simple-git-hooks`; re-run it if the `simple-git-hooks` config in `package.json` changes). `src/qrcodegen.ts` and build outputs are excluded via `.prettierignore`
+- ESLint for linting (flat config `eslint.config.js`: `@eslint/js` recommended + `typescript-eslint` recommended — no formatting rules, formatting is Prettier's job; no Prettier ESLint plugins). `lint-staged` runs `eslint --fix` on staged `*.{js,ts}` before Prettier. Same ignores as `.prettierignore` (`src/qrcodegen.ts`, build outputs)
+- **No semicolons** (Prettier `"semi": false`). `qrcodegen.ts` uses semicolons (third-party, different style — don't change it)
 - No `<template>` blocks — all rendering via `h()` hyperscript calls
 - Props: plain objects with `PropType<T>` annotations and `validator` functions
 

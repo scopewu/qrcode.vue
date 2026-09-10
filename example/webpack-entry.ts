@@ -1,4 +1,12 @@
-import { computed, createApp, defineComponent, nextTick, onMounted, ref, watch } from 'vue'
+import {
+  computed,
+  createApp,
+  defineComponent,
+  nextTick,
+  onMounted,
+  ref,
+  watch,
+} from 'vue'
 import QrcodeVue from '../src'
 import type { Level, RenderAs, GradientType, ImageSettings } from '../src'
 import { getLang, t, LANGUAGES } from './i18n'
@@ -9,7 +17,7 @@ const LangSwitcher = defineComponent({
   setup() {
     const lang = getLang()
     const languages = LANGUAGES
-    const currentLabel = LANGUAGES.find(l => l.key === lang)?.label ?? ''
+    const currentLabel = LANGUAGES.find((l) => l.key === lang)?.label ?? ''
 
     return { lang, languages, currentLabel, t }
   },
@@ -68,7 +76,9 @@ const App = defineComponent({
     const radius = ref(0)
 
     const urlTab = new URLSearchParams(window.location.search).get('tab')
-    const activeTab = ref<'docs' | 'playground'>(urlTab === 'playground' ? 'playground' : 'docs')
+    const activeTab = ref<'docs' | 'playground'>(
+      urlTab === 'playground' ? 'playground' : 'docs',
+    )
     const stargazersCount = ref(800)
 
     watch(activeTab, (tab) => {
@@ -111,9 +121,9 @@ const App = defineComponent({
       let code = ''
 
       if (renderAs.value === 'svg') {
-        code += 'import { QrcodeSvg } from \'qrcode.vue\''
+        code += "import { QrcodeSvg } from 'qrcode.vue'"
       } else {
-        code += 'import { QrcodeCanvas } from \'qrcode.vue\''
+        code += "import { QrcodeCanvas } from 'qrcode.vue'"
       }
 
       code += `
@@ -156,7 +166,7 @@ const App = defineComponent({
     })
 
     onMounted(() => {
-      fetchGitHubRepoStarCount((repoDetail: any) => {
+      fetchGitHubRepoStarCount((repoDetail: { stargazers_count?: unknown }) => {
         const { stargazers_count } = repoDetail
 
         if (typeof stargazers_count === 'number') {
@@ -186,7 +196,7 @@ const App = defineComponent({
       radius,
       t,
     }
-  }
+  },
 })
 
 createApp(App).mount('#root')

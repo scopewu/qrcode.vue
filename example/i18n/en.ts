@@ -1,6 +1,7 @@
 export default {
   author: 'https://tie.pub/en/me/',
-  defaultValue: 'QRCODE.VUE ❤️ Thanks. 感谢. ありがたい. 감사. Reconnaissant. Dankbar. terima kasih.',
+  defaultValue:
+    'QRCODE.VUE ❤️ Thanks. 感谢. ありがたい. 감사. Reconnaissant. Dankbar. terima kasih.',
   title: 'qrcode.vue - A Vue component to generate QRCode.',
   description:
     'qrcode.vue - A Vue component for QRCode. QRCode vue supports both Vue 2 and Vue 3. It offers two QR code formats: canvas and svg. Customize QR code size, margins, error correction level, foreground and background colors, logo images, and gradient effects.',
@@ -50,9 +51,10 @@ export default {
     level: 'Error correction level. Higher levels allow more damage recovery.',
     background: 'Background color of the QR code.',
     foreground: 'Foreground color of the QR code modules.',
-    radius: 'Corner radius ratio (0 to 0.5) for each module. 0.5 produces circles.',
+    radius:
+      'Corner radius ratio (0 to 0.5) for each module. 0.5 produces circles.',
     gradient: 'Enable gradient fill for the QR code modules.',
-    gradientType: "Type of gradient when <code>gradient</code> is enabled.",
+    gradientType: 'Type of gradient when <code>gradient</code> is enabled.',
     gradientStartColor: 'Start color of the gradient.',
     gradientEndColor: 'End color of the gradient.',
     imageSettings: 'Logo image settings. See details below.',

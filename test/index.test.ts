@@ -5,7 +5,11 @@ import QrcodeVue, { QrcodeCanvas, QrcodeSvg } from '../src'
 const DEFAULT_VALUE = 'test'
 const TEST_IMAGE = { src: 'test.png', height: 30, width: 30 }
 const TEST_IMAGE_WITH_EXCAVATE = { ...TEST_IMAGE, excavate: true }
-const TEST_IMAGE_WITH_BORDER_RADIUS = { ...TEST_IMAGE, excavate: true, borderRadius: 5 }
+const TEST_IMAGE_WITH_BORDER_RADIUS = {
+  ...TEST_IMAGE,
+  excavate: true,
+  borderRadius: 5,
+}
 
 function mountQR(props: Record<string, unknown> = {}): VueWrapper {
   return mount(QrcodeVue, {
@@ -39,7 +43,10 @@ function getSvgRectWithFill(wrapper: VueWrapper, fill: string) {
   const rects = svg.findAll('rect')
   for (let i = 0; i < rects.length; i++) {
     const rect = rects[i]
-    if (rect.attributes('fill') === fill && rect.attributes('x') !== undefined) {
+    if (
+      rect.attributes('fill') === fill &&
+      rect.attributes('x') !== undefined
+    ) {
       return rect
     }
   }
@@ -75,7 +82,7 @@ describe('QrcodeVue', () => {
 
     it('renders canvas with different error correction levels', () => {
       const levels = ['L', 'M', 'Q', 'H'] as const
-      levels.forEach(level => {
+      levels.forEach((level) => {
         const wrapper = mountQR({ level })
         expect(wrapper.html()).toContain('<canvas')
       })
@@ -159,7 +166,7 @@ describe('QrcodeVue', () => {
 
     it('renders SVG with different error correction levels', () => {
       const levels = ['L', 'M', 'Q', 'H'] as const
-      levels.forEach(level => {
+      levels.forEach((level) => {
         const wrapper = mountQR({ renderAs: 'svg', level })
         expect(wrapper.html()).toContain('<svg')
       })
@@ -187,7 +194,9 @@ describe('QrcodeVue', () => {
       })
       expect(wrapper.html()).toContain('linearGradient')
       const path = wrapper.find('path')
-      expect(path.attributes('fill')).toMatch(/^url\(#qrcode\.vue-gradient-[^"]+\)$/)
+      expect(path.attributes('fill')).toMatch(
+        /^url\(#qrcode\.vue-gradient-[^"]+\)$/,
+      )
     })
 
     it('renders SVG with radial gradient', () => {
@@ -261,7 +270,9 @@ describe('QrcodeVue', () => {
         expect(wrapper.html()).toContain('clipPath')
 
         const image = wrapper.find('image')
-        expect(image.attributes('clip-path')).toMatch(/^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/)
+        expect(image.attributes('clip-path')).toMatch(
+          /^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/,
+        )
 
         const borderRect = getSvgRectWithFill(wrapper, '#fff')
         expect(borderRect).toBeDefined()
@@ -311,7 +322,9 @@ describe('QrcodeVue', () => {
         expect(wrapper.html()).toContain('<image')
         expect(wrapper.html()).toContain('clip-path')
         let image = wrapper.find('image')
-        expect(image.attributes('clip-path')).toMatch(/^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/)
+        expect(image.attributes('clip-path')).toMatch(
+          /^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/,
+        )
 
         await wrapper.setProps({
           imageSettings: { ...imageSettings, borderRadius: 100 },
@@ -320,7 +333,9 @@ describe('QrcodeVue', () => {
         expect(wrapper.html()).toContain('<image')
         expect(wrapper.html()).toContain('clip-path')
         image = wrapper.find('image')
-        expect(image.attributes('clip-path')).toMatch(/^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/)
+        expect(image.attributes('clip-path')).toMatch(
+          /^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/,
+        )
       })
     })
 
@@ -350,7 +365,7 @@ describe('QrcodeVue', () => {
         const levels = ['L', 'M', 'Q', 'H'] as const
         const dValues: string[] = []
 
-        levels.forEach(level => {
+        levels.forEach((level) => {
           const wrapper = mountQR({ value, renderAs: 'svg', level })
           const d = getSvgPathData(wrapper)
           expect(d).toBeDefined()
@@ -386,11 +401,15 @@ describe('QrcodeVue', () => {
         const d = getSvgPathData(wrapper)
         expect(d).toBeDefined()
         expect(d).not.toBe('')
-        expect(d).toMatch(/^M0 0h7v1H0zM8 0h1v1H8zM10 0h1v1H10zM14,0 h7v1H14zM0 1h1v1H0zM6 1h1v1H6zM8/)
+        expect(d).toMatch(
+          /^M0 0h7v1H0zM8 0h1v1H8zM10 0h1v1H10zM14,0 h7v1H14zM0 1h1v1H0zM6 1h1v1H6zM8/,
+        )
 
         await wrapper.setProps({ level: 'H' })
         const _d = getSvgPathData(wrapper)
-        expect(_d).toMatch(/^M0 0h7v1H0zM9 0h3v1H9zM14 0h1v1H14zM18,0 h7v1H18zM0 1h1v1H0zM6 1h1v1H6zM8/)
+        expect(_d).toMatch(
+          /^M0 0h7v1H0zM9 0h3v1H9zM14 0h1v1H14zM18,0 h7v1H18zM0 1h1v1H0zM6 1h1v1H6zM8/,
+        )
       })
     })
   })
@@ -453,7 +472,11 @@ describe('QrcodeVue', () => {
     })
 
     it('updates QR code when level changes', async () => {
-      const wrapper = mountQR({ renderAs: 'svg', level: 'L', value: 'QRCODE.VUE LOVE' })
+      const wrapper = mountQR({
+        renderAs: 'svg',
+        level: 'L',
+        value: 'QRCODE.VUE LOVE',
+      })
       const d1 = getSvgPathData(wrapper)
 
       await wrapper.setProps({ level: 'H' })
@@ -477,7 +500,9 @@ describe('QrcodeVue', () => {
       expect(image.attributes('x')).toBe('10')
       expect(image.attributes('y')).toBe('20')
 
-      await wrapper.setProps({ imageSettings: { ...TEST_IMAGE, excavate: true } })
+      await wrapper.setProps({
+        imageSettings: { ...TEST_IMAGE, excavate: true },
+      })
       expect(getSvgRectWithFill(wrapper, '#fff')).toBeDefined()
 
       await wrapper.setProps({ imageSettings: {} })
@@ -562,8 +587,12 @@ describe('QrcodeVue', () => {
       const html1 = wrapper1.html()
       const html2 = wrapper2.html()
 
-      const clipId1 = html1.match(/id="(qrcode\.vue-logo-clip-path-[^"]+)"/)?.[1]
-      const clipId2 = html2.match(/id="(qrcode\.vue-logo-clip-path-[^"]+)"/)?.[1]
+      const clipId1 = html1.match(
+        /id="(qrcode\.vue-logo-clip-path-[^"]+)"/,
+      )?.[1]
+      const clipId2 = html2.match(
+        /id="(qrcode\.vue-logo-clip-path-[^"]+)"/,
+      )?.[1]
 
       expect(clipId1).toBeDefined()
       expect(clipId2).toBeDefined()
@@ -618,7 +647,7 @@ describe('QrcodeVue', () => {
       it('accepts valid radius values within range [0, 0.5]', () => {
         const validValues = [0, 0.1, 0.25, 0.3, 0.5]
 
-        validValues.forEach(radius => {
+        validValues.forEach((radius) => {
           const wrapper = mountQR({ renderAs: 'svg', radius })
           expect(wrapper.html()).toContain('<svg')
           const path = wrapper.find('path')
@@ -629,7 +658,7 @@ describe('QrcodeVue', () => {
       it('rejects invalid radius values outside range [0, 0.5]', () => {
         const invalidValues = [-0.1, -1, 0.6, 1, 100]
 
-        invalidValues.forEach(radius => {
+        invalidValues.forEach((radius) => {
           const wrapper = mountQR({ renderAs: 'svg', radius })
           expect(wrapper.html()).toContain('<svg')
         })

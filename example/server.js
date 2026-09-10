@@ -9,12 +9,13 @@ const app = createSSRApp({
   data: () => ({ value: 'Hello QrcodeVue', size: 100 }),
   components: { QrcodeVue },
   template: '<QrcodeVue :value="value" :size="size" render-as="svg" />',
-});
+})
 
-http.createServer(async (request, response) => {
-  const _html = await renderToString(app)
+http
+  .createServer(async (request, response) => {
+    const _html = await renderToString(app)
 
-  const html = `
+    const html = `
     <!DOCTYPE html>
     <html lang='en'>
       <head>
@@ -27,11 +28,12 @@ http.createServer(async (request, response) => {
     </html>
     `
 
-  response.writeHead(200, {
-    'Content-Type': 'text/html',
-  })
+    response.writeHead(200, {
+      'Content-Type': 'text/html',
+    })
 
-  response.end(html)
-}).listen(PORT)
+    response.end(html)
+  })
+  .listen(PORT)
 
 console.log(`The server running at http://localhost:${PORT}`)

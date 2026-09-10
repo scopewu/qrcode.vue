@@ -83,32 +83,34 @@ const { default: QrcodeVue, QrcodeCanvas, QrcodeSvg } = require('qrcode.vue')
 <!--With HTML-->
 <div id="root">
   <p class="flex space-x">
-  <qrcode-vue :value="test" render-as="svg"></qrcode-vue>
-<qrcode-canvas :value="test"></qrcode-canvas>
-<qrcode-svg :value="test" :image-settings="imageSettings"></qrcode-svg>
-</p>
-<p><input v-model="test" /></p>
+    <qrcode-vue :value="test" render-as="svg"></qrcode-vue>
+    <qrcode-canvas :value="test"></qrcode-canvas>
+    <qrcode-svg :value="test" :image-settings="imageSettings"></qrcode-svg>
+  </p>
+  <p><input v-model="test" /></p>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.global.prod.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode.vue@3.5/dist/qrcode.vue.browser.min.js"></script>
 
 <script>
-Vue.createApp({
-  data() { return {
-    test: 'Hello World',
-    imageSettings: {
-      src: 'https://avatars.githubusercontent.com/u/15811268',
-      width: 30,
-      height: 30,
-      excavate: true,
+  Vue.createApp({
+    data() {
+      return {
+        test: 'Hello World',
+        imageSettings: {
+          src: 'https://avatars.githubusercontent.com/u/15811268',
+          width: 30,
+          height: 30,
+          excavate: true,
+        },
+      }
     },
-  }},
-  components: {
-    QrcodeVue: QrcodeVue.default,
-    QrcodeCanvas: QrcodeVue.QrcodeCanvas,
-    QrcodeSvg: QrcodeVue.QrcodeSvg,
-  },
-}).mount('#root')
+    components: {
+      QrcodeVue: QrcodeVue.default,
+      QrcodeCanvas: QrcodeVue.QrcodeCanvas,
+      QrcodeSvg: QrcodeVue.QrcodeSvg,
+    },
+  }).mount('#root')
 </script>
 ```
 

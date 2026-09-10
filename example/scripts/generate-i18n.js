@@ -12,8 +12,10 @@ fs.mkdirSync(outputDir, { recursive: true })
 
 const baseTemplate = fs.readFileSync(templatePath, 'utf-8')
 
-const langFiles = fs.readdirSync(i18nDir).filter(f => f.endsWith('.ts') && f !== 'index.ts')
-const langs = langFiles.map(f => f.replace(/\.ts$/, ''))
+const langFiles = fs
+  .readdirSync(i18nDir)
+  .filter((f) => f.endsWith('.ts') && f !== 'index.ts')
+const langs = langFiles.map((f) => f.replace(/\.ts$/, ''))
 
 const translations = {}
 for (const lang of langs) {
@@ -23,8 +25,16 @@ for (const lang of langs) {
 
 const langConfig = {
   en: { htmlLang: 'en', path: '/', canonical: 'https://qr-vue.tie.pub/' },
-  zh: { htmlLang: 'zh-CN', path: '/zh/', canonical: 'https://qr-vue.tie.pub/zh/' },
-  'zh-hk': { htmlLang: 'zh-HK', path: '/zh-hk/', canonical: 'https://qr-vue.tie.pub/zh-hk/' },
+  zh: {
+    htmlLang: 'zh-CN',
+    path: '/zh/',
+    canonical: 'https://qr-vue.tie.pub/zh/',
+  },
+  'zh-hk': {
+    htmlLang: 'zh-HK',
+    path: '/zh-hk/',
+    canonical: 'https://qr-vue.tie.pub/zh-hk/',
+  },
   ja: { htmlLang: 'ja', path: '/ja/', canonical: 'https://qr-vue.tie.pub/ja/' },
 }
 
@@ -37,24 +47,31 @@ function t(lang, key) {
   return typeof value === 'string' ? value : key
 }
 
-function generateHreflangs(currentLang) {
+function generateHreflangs() {
   const links = []
   for (const lang of langs) {
     const cfg = langConfig[lang]
     if (!cfg) continue
     const hreflang = lang === 'en' ? 'en' : cfg.htmlLang
-    links.push(`  <link rel="alternate" hreflang="${hreflang}" href="${cfg.canonical}" />`)
+    links.push(
+      `  <link rel="alternate" hreflang="${hreflang}" href="${cfg.canonical}" />`,
+    )
   }
-  links.push(`  <link rel="alternate" hreflang="x-default" href="https://qr-vue.tie.pub/" />`)
+  links.push(
+    `  <link rel="alternate" hreflang="x-default" href="https://qr-vue.tie.pub/" />`,
+  )
   return links.join('\n')
 }
 
 function generateOgLocaleAlternates(currentLang) {
   return langs
-    .filter(l => l !== currentLang)
-    .map(l => translations[l]?.ogLocale)
+    .filter((l) => l !== currentLang)
+    .map((l) => translations[l]?.ogLocale)
     .filter(Boolean)
-    .map(locale => `  <meta property="og:locale:alternate" content="${locale}" />`)
+    .map(
+      (locale) =>
+        `  <meta property="og:locale:alternate" content="${locale}" />`,
+    )
     .join('\n')
 }
 
@@ -70,7 +87,10 @@ for (const lang of langs) {
   html = html.replace(/\{\{lang\}\}/g, cfg.htmlLang)
   html = html.replace(/\{\{canonical\}\}/g, cfg.canonical)
   html = html.replace(/\{\{hreflangs\}\}/g, generateHreflangs(lang))
-  html = html.replace(/\{\{ogLocaleAlternates\}\}/g, generateOgLocaleAlternates(lang))
+  html = html.replace(
+    /\{\{ogLocaleAlternates\}\}/g,
+    generateOgLocaleAlternates(lang),
+  )
 
   html = html.replace(/\{\{\s*t\('([^']+)'\)\s*\}\}/g, (_, key) => {
     return t(lang, key)

@@ -1,6 +1,7 @@
 export default {
   author: 'https://tie.pub/zh-tw/me/',
-  defaultValue: 'QRCODE.VUE ❤️ Thanks. 感谢. ありがたい. 감사. Reconnaissant. Dankbar. terima kasih.',
+  defaultValue:
+    'QRCODE.VUE ❤️ Thanks. 感谢. ありがたい. 감사. Reconnaissant. Dankbar. terima kasih.',
   title: 'qrcode.vue - 用於產生 QR Code 的 Vue 組件。',
   description:
     'qrcode.vue - 用於產生 QR Code 的 Vue 組件。同時支援 Vue 2 與 Vue 3。提供 canvas 與 svg 兩種渲染格式，可自訂尺寸、邊距、容錯等級、前景色與背景色、Logo 圖片以及漸層效果。',
@@ -33,7 +34,7 @@ export default {
     canvasMethodsDesc:
       '<code>QrcodeCanvas</code> 與 <code>QrcodeSvg</code> 都透過模板 ref 暴露以下方法。可以直接透過瀏覽器下載產生的二維碼。<code>QrcodeVue</code> 會根據目前的 <code>render-as</code> 轉發這些方法：',
     canvasMethodsCorsNote:
-      '<strong>CORS 注意：</strong>當二維碼包含跨域 Logo 圖片時，請確保設置 <code>imageSettings.crossOrigin: \'anonymous\'</code>，且圖片伺服器返回 <code>Access-Control-Allow-Origin</code> 響應頭。否則 canvas 會被「污染」，導致 <code>toDataURL</code> / <code>download</code> 拋出 <code>SecurityError</code>。',
+      "<strong>CORS 注意：</strong>當二維碼包含跨域 Logo 圖片時，請確保設置 <code>imageSettings.crossOrigin: 'anonymous'</code>，且圖片伺服器返回 <code>Access-Control-Allow-Origin</code> 響應頭。否則 canvas 會被「污染」，導致 <code>toDataURL</code> / <code>download</code> 拋出 <code>SecurityError</code>。",
     component: '組件',
     method: '方法',
     signature: '簽名',
