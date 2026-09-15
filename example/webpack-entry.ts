@@ -151,11 +151,11 @@ const App = defineComponent({
           ? `,\n      crossOrigin: '${imageSettings.value.crossOrigin}'`
           : ''
         code += `  :image-settings="{
-      src: '${imageSettings.value.src}',
-      width: ${imageSettings.value.width},
-      height: ${imageSettings.value.height},
-      excavate: ${imageSettings.value.excavate},
-      borderRadius: ${imageSettings.value.borderRadius}${crossOriginLine}
+    src: '${imageSettings.value.src}',
+    width: ${imageSettings.value.width},
+    height: ${imageSettings.value.height},
+    excavate: ${imageSettings.value.excavate},
+    borderRadius: ${imageSettings.value.borderRadius}${crossOriginLine}
   }"
 `
       }
@@ -166,7 +166,7 @@ const App = defineComponent({
     })
 
     onMounted(() => {
-      fetchGitHubRepoStarCount((repoDetail: { stargazers_count?: unknown }) => {
+      fetchGitHubRepoStarCount((repoDetail) => {
         const { stargazers_count } = repoDetail
 
         if (typeof stargazers_count === 'number') {
@@ -201,14 +201,20 @@ const App = defineComponent({
 
 createApp(App).mount('#root')
 
-function fetchGitHubRepoStarCount(callback: (detail: unknown) => void) {
+type GitHubRepoDetail = {
+  stargazers_count?: number
+}
+
+function fetchGitHubRepoStarCount(
+  callback: (detail: GitHubRepoDetail) => void,
+) {
   const repo = 'https://api.github.com/repos/scopewu/qrcode.vue'
 
   fetch(repo)
     .then((res) => res.json())
     .then((data) => callback(data))
     .catch((e) => {
-      console.error(e)
       callback({})
+      console.error(e)
     })
 }
