@@ -14,7 +14,7 @@ Key props: `value` (required), `size` (default 100), `render-as` (`canvas`|`svg`
 
 - [README (English)](https://github.com/scopewu/qrcode.vue/blob/main/README.md): install, usage, full props reference, template ref methods
 - [README (简体中文)](https://github.com/scopewu/qrcode.vue/blob/main/README-zh_cn.md)
-- [README (繁體中文)](https://github.com/scopewu/qrcode.vue/blob/main/README.zh-hant.md)
+- [README (繁體中文)](https://github.com/scopewu/qrcode.vue/blob/main/README-zh-hant.md)
 - [README (日本語)](https://github.com/scopewu/qrcode.vue/blob/main/README-ja.md)
 - [CHANGELOG](https://github.com/scopewu/qrcode.vue/blob/main/CHANGELOG.md): version history and breaking changes
 
