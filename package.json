@@ -21,6 +21,7 @@
     "dev": "node example/scripts/generate-i18n.js && rsbuild dev",
     "build": "rollup -c",
     "build:example": "node example/scripts/generate-i18n.js && rsbuild build",
+    "example:ssr": "npm run build && node example/server.js",
     "generate:i18n": "node example/scripts/generate-i18n.js",
     "test": "rstest",
     "lint": "eslint .",
