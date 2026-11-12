@@ -174,18 +174,20 @@ The foreground color of qrcode.
 - Type: `ImageSettings`
 - Default: `{}`
 
-  ```ts
-  export type ImageSettings = {
-    src: string // The URL of image.
-    x?: number // The horizontal offset. When not specified, will center the image.
-    y?: number // The vertical offset. When not specified, will center the image.
-    height: number // The height of image
-    width: number // The height of image
-    excavate?: boolean // Whether or not to "excavate" the modules around the image.
-    borderRadius?: number // The border radius of image.
-    crossOrigin?: 'anonymous' | 'use-credentials' | '' // The CORS attribute for the image. Useful when exporting canvas to an image.
-  }
-  ```
+Type declaration:
+
+```ts
+export type ImageSettings = {
+  src: string // The URL of image.
+  x?: number // The horizontal offset. When not specified, will center the image.
+  y?: number // The vertical offset. When not specified, will center the image.
+  height: number // The height of image
+  width: number // The height of image
+  excavate?: boolean // Whether or not to "excavate" the modules around the image.
+  borderRadius?: number // The border radius of image.
+  crossOrigin?: 'anonymous' | 'use-credentials' | '' // The CORS attribute for the image. Useful when exporting canvas to an image.
+}
+```
 
 The settings to support qrcode image logo.
 

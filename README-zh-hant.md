@@ -173,21 +173,23 @@ createApp({
 - 類型: `ImageSettings`
 - 默認值: `{}`
 
-  ```ts
-  export type ImageSettings = {
-    src: string // 圖片的地址。
-    x?: number // 水平橫向偏移。沒有設定值時，圖片劇中
-    y?: number // 垂直豎向偏移。沒有設定值時，圖片劇中
-    height: number // 圖片的高度
-    width: number // 圖片的寬度
-    // 是否“挖掘”圖像周圍的模塊。
-    // 這意味着嵌入圖像重疊的任何模塊都將使用背景顏色。
-    // 使用此選項可確保圖像周圍的邊緣清晰。嵌入透明圖像時也很有用。
-    excavate?: boolean
-    borderRadius?: number // 圖片的邊框圓角。
-    crossOrigin?: 'anonymous' | 'use-credentials' | '' // 圖片的 CORS 屬性。如需導出 canvas 為圖片，請設置此項。
-  }
-  ```
+類型聲明：
+
+```ts
+export type ImageSettings = {
+  src: string // 圖片的地址。
+  x?: number // 水平橫向偏移。沒有設定值時，圖片劇中
+  y?: number // 垂直豎向偏移。沒有設定值時，圖片劇中
+  height: number // 圖片的高度
+  width: number // 圖片的寬度
+  // 是否“挖掘”圖像周圍的模塊。
+  // 這意味着嵌入圖像重疊的任何模塊都將使用背景顏色。
+  // 使用此選項可確保圖像周圍的邊緣清晰。嵌入透明圖像時也很有用。
+  excavate?: boolean
+  borderRadius?: number // 圖片的邊框圓角。
+  crossOrigin?: 'anonymous' | 'use-credentials' | '' // 圖片的 CORS 屬性。如需導出 canvas 為圖片，請設置此項。
+}
+```
 
 二維碼圖片 logo 配置。
 
