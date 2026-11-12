@@ -218,13 +218,14 @@ Custom ID for SVG internal elements (gradients, clip-paths). Required for SSR hy
 <script setup>
   // vue 3.5+ only
   import { useId } from 'vue'
+  import { QrcodeSvg } from 'qrcode.vue'
   const uid = useId()
 
   // older vue versions (3.4 and below)
   // const uid = 'qrcode-1'
   // const uid2 = 'qrcode-2'
 </script>
-<qrcode-svg value="test" :id="uid" render-as="svg" />
+<qrcode-svg value="test" :id="uid" />
 ```
 
 When omitted, a module-level counter is used, which is not SSR-safe across multiple requests.

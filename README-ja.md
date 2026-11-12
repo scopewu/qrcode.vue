@@ -219,13 +219,14 @@ SVG内部要素（グラデーション、クリップパス）のカスタムID
 <script setup>
   // Vue 3.5+ のみ
   import { useId } from 'vue'
+  import { QrcodeSvg } from 'qrcode.vue'
   const uid = useId()
 
   // 古いバージョン（3.4以下）
   // const uid = 'qrcode-1'
   // const uid2 = 'qrcode-2'
 </script>
-<qrcode-svg value="test" :id="uid" render-as="svg" />
+<qrcode-svg value="test" :id="uid" />
 ```
 
 省略した場合、モジュールレベルのカウンターが使用されますが、複数リクエストのSSR環境では安全ではありません。

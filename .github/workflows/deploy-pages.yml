@@ -27,11 +27,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v7
 
-      - name: Install dependencies
-        run: yarn install
-
-      - name: Build GitHub Pages
-        run: yarn run build:example
+      - name: Install and Build
+        run: |
+          yarn install
+          yarn run build:example
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4

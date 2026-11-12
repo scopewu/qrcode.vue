@@ -220,13 +220,14 @@ export type ImageSettings = {
 <script setup>
   // 僅 vue 3.5+
   import { useId } from 'vue'
+  import { QrcodeSvg } from 'qrcode.vue'
   const uid = useId()
 
   // vue 3.4 及以下版本
   // const uid = 'qrcode-1'
   // const uid2 = 'qrcode-2'
 </script>
-<qrcode-svg value="test" :id="uid" render-as="svg" />
+<qrcode-svg value="test" :id="uid" />
 ```
 
 省略時使用模塊級計數器，該計數器在多請求的 SSR 環境中不安全。
