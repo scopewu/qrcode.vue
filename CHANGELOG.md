@@ -1,3 +1,10 @@
+## [3.11.1] - 2026-11-19
+
+### Bugfix
+
+- Clamp `margin` with `Math.max(0, …)`: negative values were previously wrapped to ~4.29e9 by the unsigned bit-shift once prop validators are stripped in production builds.
+- Only pass `x`/`y`/`width`/`height` to the SVG `<image>` element so `borderRadius` no longer leaks as an invalid SVG attribute.
+
 ## [3.11.0] - 2026-09-07
 
 ### Feature
