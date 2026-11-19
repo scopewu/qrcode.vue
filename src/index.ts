@@ -4,7 +4,6 @@ import {
   ExtractPropTypes,
   Fragment,
   h,
-  onMounted,
   PropType,
   ref,
   watchEffect,
@@ -209,7 +208,9 @@ function getImageSettings(
 type QRCodePropsType = ExtractPropTypes<typeof QRCodeProps>
 
 function useQRCode(props: QRCodePropsType) {
-  const margin = computed(() => (props.margin ?? DEFAULT_MARGIN) >>> 0)
+  // Clamp instead of `>>> 0`: validators are stripped in production builds,
+  // and a negative margin would coerce to ~4294967291, blowing up numCells.
+  const margin = computed(() => Math.max(0, props.margin ?? DEFAULT_MARGIN))
   const cells = computed(() => {
     const level = validErrorCorrectLevel(props.level)
       ? props.level
@@ -466,11 +467,14 @@ export const QrcodeSvg = defineComponent({
             h('image', {
               href: props.imageSettings.src,
               crossorigin: props.imageSettings.crossOrigin,
+              x: imageProps.value.x,
+              y: imageProps.value.y,
+              width: imageProps.value.width,
+              height: imageProps.value.height,
               'clip-path':
                 imageProps.value.borderRadius > 0
                   ? `url(#${qrLogoClipPathId})`
                   : void 0,
-              ...imageProps.value,
             }),
         ],
       )
@@ -629,7 +633,8 @@ export const QrcodeCanvas = defineComponent({
       }
     }
 
-    onMounted(generate)
+    // `flush: 'post'` watchEffect also runs its first pass after mount, so it
+    // covers the initial draw — an extra onMounted here would draw twice.
     watchEffect(generate, { flush: 'post' })
 
     ctx.expose({

@@ -273,6 +273,14 @@ describe('QrcodeVue', () => {
         expect(image.attributes('clip-path')).toMatch(
           /^url\(#qrcode\.vue-logo-clip-path-[^"]+\)$/,
         )
+        // borderRadius is not a valid SVG attribute and must not leak
+        // onto the <image> element (it only drives the clip-path above)
+        expect(image.attributes('borderRadius')).toBeUndefined()
+        expect(image.attributes('border-radius')).toBeUndefined()
+        expect(image.attributes('x')).toBeDefined()
+        expect(image.attributes('y')).toBeDefined()
+        expect(image.attributes('width')).toBeDefined()
+        expect(image.attributes('height')).toBeDefined()
 
         const borderRect = getSvgRectWithFill(wrapper, '#fff')
         expect(borderRect).toBeDefined()
@@ -552,6 +560,13 @@ describe('QrcodeVue', () => {
     it('rejects negative margin values', () => {
       const wrapper = mountQR({ margin: -4 })
       expect(wrapper.html()).toContain('<canvas')
+
+      // negative margin is clamped to 0 instead of coercing to a huge number
+      const clamped = mountQR({ renderAs: 'svg', margin: -4 })
+      const zero = mountQR({ renderAs: 'svg', margin: 0 })
+      expect(clamped.find('svg').attributes('viewBox')).toBe(
+        zero.find('svg').attributes('viewBox'),
+      )
     })
   })
 
